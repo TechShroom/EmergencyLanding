@@ -1,0 +1,9 @@
+One Time Things (Do these and mark them as complete):
+- Implement Entity, World, Render, etc. to full classes (Currently mostly empty)
+- Add GUI system
+
+Continuing check (Keep checking these during development):
+- Optimize render
+- Ensure thread safety: we will be using threads for ticking at some point
+
+Ideas? Put here:
