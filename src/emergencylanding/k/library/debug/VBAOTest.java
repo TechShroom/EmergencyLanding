@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.lwjgl.opengl.Display;
 
-import emergencylanding.k.imported.Sync;
 import emergencylanding.k.imported.Sync.RunningAvg;
 import emergencylanding.k.library.internalstate.Entity;
 import emergencylanding.k.library.lwjgl.DisplayLayer;

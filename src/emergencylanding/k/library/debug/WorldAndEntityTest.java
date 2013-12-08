@@ -1,6 +1,5 @@
 package emergencylanding.k.library.debug;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.lwjgl.opengl.Display;

@@ -1,14 +1,11 @@
 package emergencylanding.k.library.lwjgl;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import k.core.util.Helper;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.glu.Sphere;
