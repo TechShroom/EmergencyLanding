@@ -29,8 +29,8 @@ public class DisplayLayer {
 	private static boolean wasResizable;
 	private static LWJGLRenderer renderer;
 	public static String VERSION = "1.0";
-	private static String crashCoursePrintStr = String.format(
-			"[CrashCourse-%s]", VERSION);
+	private static String elPrintStr = String.format("[EmergencyLanding-%s]",
+			VERSION);
 
 	/**
 	 * Initializes the display and KMain instance. Parameter notes are found on
@@ -273,6 +273,6 @@ public class DisplayLayer {
 			throw new RuntimeException(new IllegalAccessException(
 					"Not EL trusted class"));
 		}
-		System.err.println(crashCoursePrintStr + msg);
+		System.err.println(elPrintStr + " " + msg);
 	}
 }
