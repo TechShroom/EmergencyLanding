@@ -17,7 +17,7 @@ public abstract class KMain {
 
 	public static void setInst(KMain inst) {
 		try {
-			LUtils.checkAccessor("crashcourse.k.library.*",
+			LUtils.checkAccessor("emergencylanding.k.library.*",
 					StackTraceInfo.getInvokingClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -32,7 +32,7 @@ public abstract class KMain {
 
 	public static void setDisplayThread(Thread t) {
 		try {
-			LUtils.checkAccessor("crashcourse.k.library.*",
+			LUtils.checkAccessor("emergencylanding.k.library.*",
 					StackTraceInfo.getInvokingClassName());
 		} catch (Exception e) {
 			e.printStackTrace();
