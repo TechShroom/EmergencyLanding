@@ -9,6 +9,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
+import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.Texture;
@@ -97,7 +98,7 @@ public class MouseHelp {
 			Mouse.setNativeCursor(c);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			System.err.println("Mouse cursor couldn't be created/implemented!");
+			DisplayLayer.print("Mouse cursor couldn't be created/implemented!");
 		}
 	}
 

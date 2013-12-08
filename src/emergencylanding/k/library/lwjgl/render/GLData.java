@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
@@ -16,6 +15,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
 
+import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.util.LUtils;
 import emergencylanding.k.library.util.StackTraceInfo;
 
@@ -142,7 +142,7 @@ public class GLData {
 			}
 			reader.close();
 		} catch (IOException e) {
-			System.err.println("Could not read file.");
+			DisplayLayer.print("Could not read file.");
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -194,7 +194,7 @@ public class GLData {
 	public static void notifyOnGLError(String location) {
 		int err = GL11.glGetError();
 		if (err != GL11.GL_NO_ERROR) {
-			System.err.println("[GLErrorReporter] GLError in " + location
+			DisplayLayer.print("[GLErrorReporter] GLError in " + location
 					+ ": " + GLU.gluErrorString(err) + " (id: " + err + ")");
 			System.exit(-10);
 		}

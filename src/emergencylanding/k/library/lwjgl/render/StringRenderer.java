@@ -20,6 +20,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.Texture;
 
@@ -227,7 +228,7 @@ public class StringRenderer {
 			// .getTexture(font.toString(), imgTemp);
 
 		} catch (Exception e) {
-			System.err.println("Failed to create font.");
+			DisplayLayer.print("Failed to create font.");
 			e.printStackTrace();
 		}
 	}

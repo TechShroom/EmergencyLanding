@@ -22,6 +22,7 @@ import org.lwjgl.util.glu.MipMap;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
+import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.main.KMain;
 
 public abstract class Texture {
@@ -81,7 +82,7 @@ public abstract class Texture {
 		} catch (Exception e) {
 			Texture.mipmapsEnabled = false;
 		}
-		System.err.println("3.0 mipmaps? " + Texture.mipmapsEnabled);
+		DisplayLayer.print("3.0 mipmaps? " + Texture.mipmapsEnabled);
 	}
 
 	// Define static Textures AFTER this comment
@@ -113,7 +114,7 @@ public abstract class Texture {
 					Texture lookAlike;
 					if ((lookAlike = Texture.similar(texObj)) != null) {
 						id = lookAlike.id;
-						System.out.println("Overrode id: " + id);
+						DisplayLayer.print("Overrode id: " + id);
 						Texture.texlist.put(lookAlike.id, texObj);
 					} else {
 						boolean override = false;
@@ -124,7 +125,7 @@ public abstract class Texture {
 							Texture.removedIDs.remove(0);
 						}
 						if (Texture.useID > -1) {
-							System.out.println("Force-overrode id: " + id);
+							DisplayLayer.print("Force-overrode id: " + id);
 							override = true;
 							id = Texture.useID;
 							Texture.currentSpace -= Texture.texlist.get(id).buf
@@ -134,8 +135,8 @@ public abstract class Texture {
 								&& id == -1 && Texture.useID == -1) {
 							id = GL11.glGenTextures();
 						} else {
-							System.out
-									.println("WARNING! Texture limit reached, "
+							DisplayLayer
+									.print("WARNING! Texture limit reached, "
 											+ "not adding new textures!");
 							return;
 						}
@@ -182,8 +183,8 @@ public abstract class Texture {
 									dim.height, GL11.GL_RGBA,
 									GL11.GL_UNSIGNED_BYTE, buf);
 							if (err != 0) {
-								System.err
-										.println("error while running build2dMipMaps: "
+								DisplayLayer
+										.print("error while running build2dMipMaps: "
 												+ err);
 							}
 						}
@@ -281,7 +282,7 @@ public abstract class Texture {
 		int height = dim.height;
 		int[] packedPixels = new int[width * height * 4];
 		buf.rewind();
-		// System.out.println("id " + id + " buf capacity " + buf.capacity());
+		// DisplayLayer.print("id " + id + " buf capacity " + buf.capacity());
 		int bufferInd = 0;
 		for (int row = height - 1; row >= 0; row--) {
 			for (int col = 0; col < width; col++) {
@@ -291,7 +292,7 @@ public abstract class Texture {
 				B = buf.get(bufferInd++);
 				A = buf.get(bufferInd++) & 0xff;
 				int index = row * width + col;
-				// System.out.println("recv " + R + "-" + G + "-" + B + "-" +
+				// DisplayLayer.print("recv " + R + "-" + G + "-" + B + "-" +
 				// A);
 				packedPixels[index] = B + (G << 8) + (R << 16) + (A << 24);
 			}

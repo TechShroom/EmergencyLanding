@@ -112,6 +112,8 @@ public class VertexData {
 	public VertexData(int order, float... floats) {
 		float x = 0, y = 0, z = 0, w = 1, r = 1, g = 1, b = 1, a = 1, u = 0, v = 0;
 		switch (floats.length) {
+			case 0 :
+				break;
 			case 3 :
 				x = floats[0];
 				y = floats[1];

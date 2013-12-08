@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.newdawn.slick.opengl.PNGDecoder;
 import org.newdawn.slick.opengl.PNGDecoder.Format;
 
+import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.util.LUtils;
 
 public class InputStreamTexture extends Texture {
@@ -21,7 +22,7 @@ public class InputStreamTexture extends Texture {
 			parentDir = System.getProperty("user.home", "/");
 		}
 		if (name == null) {
-			System.err.println("Creating a null src!");
+			DisplayLayer.print("Creating a null src!");
 			return;
 		}
 		try {

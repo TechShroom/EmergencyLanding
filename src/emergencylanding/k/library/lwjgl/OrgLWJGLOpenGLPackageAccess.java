@@ -19,7 +19,7 @@ public class OrgLWJGLOpenGLPackageAccess {
 				impl = getI.invoke(null);
 				updateImpl = impl.getClass().getDeclaredMethod("update");
 				updateImpl.setAccessible(true);
-				System.err.println("LWJGL's implementation is secured.");
+				DisplayLayer.print("LWJGL's implementation is secured.");
 			} catch (Exception e) {
 				throw new IllegalStateException(
 						"Implementation not accessable", e);

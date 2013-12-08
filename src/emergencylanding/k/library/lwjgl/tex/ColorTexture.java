@@ -41,10 +41,6 @@ public class ColorTexture extends Texture {
 
 	@Override
 	public void setup() {
-		System.err.println("The RGBA values from c are these "
-				+ String.format("%s %s %s %s", c.getRedByte() & 0xFF,
-						c.getGreenByte() & 0xFF, c.getBlueByte() & 0xFF,
-						c.getAlphaByte() & 0xFF));
 		buf = ByteBuffer.allocateDirect(4 * dim.width * dim.height);
 		for (int i = 0; i < buf.capacity(); i += 4) {
 			c.writeRGB(buf);
