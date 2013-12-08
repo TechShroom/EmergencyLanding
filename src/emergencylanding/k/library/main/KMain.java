@@ -3,7 +3,6 @@ package emergencylanding.k.library.main;
 import java.util.HashMap;
 
 import emergencylanding.k.library.internalstate.Entity;
-import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.util.LUtils;
 import emergencylanding.k.library.util.StackTraceInfo;
@@ -40,7 +39,7 @@ public abstract class KMain {
 			return;
 		}
 		KMain.displayThread = t;
-		DisplayLayer.print("Display thread set");
+		LUtils.print("Display thread set");
 	}
 
 	public static Thread getDisplayThread() {

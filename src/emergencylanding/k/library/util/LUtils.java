@@ -27,6 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 
+
 public class LUtils {
 	/**
 	 * The top level of the game/tool
@@ -39,7 +40,7 @@ public class LUtils {
 					.getParentFile().getParentFile().getParentFile()
 					.getParentFile().getParentFile().getAbsoluteFile();
 			LUtils.TOP_LEVEL.mkdirs();
-			DisplayLayer
+			LUtils
 					.print("Using TOP_LEVEL " + TOP_LEVEL.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,7 +164,7 @@ public class LUtils {
 		if (cver.indexOf(' ') > -1) {
 			cver = cver.substring(0, cver.indexOf(' '));
 		}
-		DisplayLayer.print("Comparing " + cver + " to " + vers);
+		LUtils.print("Comparing " + cver + " to " + vers);
 		String[] cver_sep = cver.split("\\.", 3);
 		String[] vers_sep = vers.split("\\.", 3);
 		int[] cver_sepi = new int[3];
@@ -175,7 +176,7 @@ public class LUtils {
 		}
 		boolean ret = cver_sepi[0] >= vers_sepi[0]
 				&& cver_sepi[1] >= vers_sepi[1] && cver_sepi[2] >= vers_sepi[2];
-		DisplayLayer.print("Returning " + ret);
+		LUtils.print("Returning " + ret);
 		return ret;
 	}
 
@@ -285,7 +286,7 @@ public class LUtils {
 							if (m.isFullscreenCapable()) {
 								return m;
 							} else {
-								DisplayLayer
+								LUtils
 										.print(String
 												.format("A non-aspect-compat mode"
 														+ " is being used:"
@@ -299,7 +300,7 @@ public class LUtils {
 					}
 				}
 				if (m.isFullscreenCapable()) {
-					DisplayLayer.print(String.format("A non-args-compat mode"
+					LUtils.print(String.format("A non-args-compat mode"
 							+ " is avaliable:" + " Width: %s Height: %s"
 							+ " Fullscreen: %s", m.getWidth(), m.getHeight(),
 							m.isFullscreenCapable()));
@@ -451,9 +452,9 @@ public class LUtils {
 	public static Dimension getDimensionFromUserAndArgs(Dimension[] dimensions,
 			String[] normalized) {
 		if (normalized.length >= 4) {
-			DisplayLayer.print("This is the args sector");
+			LUtils.print("This is the args sector");
 			List<String> strs = Arrays.asList(normalized);
-			DisplayLayer.print(strs.toString());
+			LUtils.print(strs.toString());
 			if (strs.indexOf("-width") == -1 || strs.indexOf("-height") == -1) {
 			} else {
 				String w = strs.get(strs.indexOf("-width") + 1);
@@ -466,7 +467,7 @@ public class LUtils {
 		}
 		Dimension get = LUtils.getDimensionFromUser(dimensions);
 		if (get == null) {
-			DisplayLayer.print("This is the args length " + normalized.length);
+			LUtils.print("This is the args length " + normalized.length);
 			get = new Dimension(600, 600);
 		}
 
@@ -530,7 +531,7 @@ public class LUtils {
 	 */
 	@SuppressWarnings("resource")
 	public static InputStream getInputStream(String path) throws IOException {
-		DisplayLayer.print("[Retriving InputStream for '" + path + "']");
+		LUtils.print("[Retriving InputStream for '" + path + "']");
 		// Normalize to UNIX style
 		path = path.replace(File.separatorChar, '/');
 
@@ -551,16 +552,16 @@ public class LUtils {
 		}
 
 		if (isType == 0) {
-			DisplayLayer.print("Using raw file input stream");
+			LUtils.print("Using raw file input stream");
 			result = new FileInputStream(path);
 		} else if (isType == 1 || isType == 2) {
-			DisplayLayer.print("Using recursive zip/jar searcher style "
+			LUtils.print("Using recursive zip/jar searcher style "
 					+ isType);
 			ArrayList<Integer> indexes = new ArrayList<Integer>();
 			for (int i = 0; i < pathparts.size(); i++) {
 				if (pathparts.get(i).endsWith(".zip")
 						|| pathparts.get(i).endsWith(".jar")) {
-					DisplayLayer.print("Adding zip/jar " + pathparts.get(i)
+					LUtils.print("Adding zip/jar " + pathparts.get(i)
 							+ " at " + i);
 					indexes.add(i);
 				}
@@ -569,14 +570,14 @@ public class LUtils {
 			String pathToCurrFile = "";
 			for (int i = 0; i <= indexes.get(0); i++) {
 				String temp_ = pathparts.get(i);
-				DisplayLayer.print(String.format("Appending '%s' to '%s'",
+				LUtils.print(String.format("Appending '%s' to '%s'",
 						temp_, pathToCurrFile));
 				pathToCurrFile += temp_ + "/";
 			}
 			String file = pathToCurrFile.substring(0,
 					pathToCurrFile.length() - 1);
 			String extra = path.replace(pathToCurrFile, "");
-			DisplayLayer.print("Attempting to load from " + file);
+			LUtils.print("Attempting to load from " + file);
 			ZipFile zf = new ZipFile(file);
 			if (isType == 1) {
 				ZipEntry ze = zf.getEntry(extra);
@@ -600,7 +601,21 @@ public class LUtils {
 			}
 		}
 
-		DisplayLayer.print("[Complete]");
+		LUtils.print("[Complete]");
 		return result;
 	}
+
+	public static void print(String msg) {
+		try {
+			checkAccessor("emergencylanding.k.*",
+					StackTraceInfo.getInvokingClassName());
+		} catch (Exception e) {
+			throw new RuntimeException(new IllegalAccessException(
+					"Not EL trusted class"));
+		}
+		System.err.println(DisplayLayer.elPrintStr + " " + msg);
+	}
+
+	public static String elPrintStr = String.format("[EmergencyLanding-%s]",
+	DisplayLayer.VERSION);
 }

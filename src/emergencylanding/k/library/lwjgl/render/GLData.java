@@ -15,7 +15,6 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
 
-import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.util.LUtils;
 import emergencylanding.k.library.util.StackTraceInfo;
 
@@ -142,7 +141,7 @@ public class GLData {
 			}
 			reader.close();
 		} catch (IOException e) {
-			DisplayLayer.print("Could not read file.");
+			LUtils.print("Could not read file.");
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -194,7 +193,7 @@ public class GLData {
 	public static void notifyOnGLError(String location) {
 		int err = GL11.glGetError();
 		if (err != GL11.GL_NO_ERROR) {
-			DisplayLayer.print("[GLErrorReporter] GLError in " + location
+			LUtils.print("[GLErrorReporter] GLError in " + location
 					+ ": " + GLU.gluErrorString(err) + " (id: " + err + ")");
 			System.exit(-10);
 		}

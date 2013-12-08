@@ -20,9 +20,9 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.Texture;
+import emergencylanding.k.library.util.LUtils;
 
 /**
  * A TrueType font implementation originally for Slick, edited for Bobjob's
@@ -228,7 +228,7 @@ public class StringRenderer {
 			// .getTexture(font.toString(), imgTemp);
 
 		} catch (Exception e) {
-			DisplayLayer.print("Failed to create font.");
+			LUtils.print("Failed to create font.");
 			e.printStackTrace();
 		}
 	}

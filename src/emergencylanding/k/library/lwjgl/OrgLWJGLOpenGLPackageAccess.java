@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 
 import org.lwjgl.opengl.Display;
 
+import emergencylanding.k.library.util.LUtils;
+
 public class OrgLWJGLOpenGLPackageAccess {
 	static Object impl = null; // ACTUALLY a DisplayImplementaion
 	static Method updateImpl = null, pollDevices = null;
@@ -19,7 +21,7 @@ public class OrgLWJGLOpenGLPackageAccess {
 				impl = getI.invoke(null);
 				updateImpl = impl.getClass().getDeclaredMethod("update");
 				updateImpl.setAccessible(true);
-				DisplayLayer.print("LWJGL's implementation is secured.");
+				LUtils.print("LWJGL's implementation is secured.");
 			} catch (Exception e) {
 				throw new IllegalStateException(
 						"Implementation not accessable", e);

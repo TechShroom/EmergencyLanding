@@ -22,8 +22,8 @@ import org.lwjgl.util.glu.MipMap;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
-import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.LUtils;
 
 public abstract class Texture {
 	public static class DestTexture extends Texture {
@@ -82,7 +82,7 @@ public abstract class Texture {
 		} catch (Exception e) {
 			Texture.mipmapsEnabled = false;
 		}
-		DisplayLayer.print("3.0 mipmaps? " + Texture.mipmapsEnabled);
+		LUtils.print("3.0 mipmaps? " + Texture.mipmapsEnabled);
 	}
 
 	// Define static Textures AFTER this comment
@@ -114,7 +114,7 @@ public abstract class Texture {
 					Texture lookAlike;
 					if ((lookAlike = Texture.similar(texObj)) != null) {
 						id = lookAlike.id;
-						DisplayLayer.print("Overrode id: " + id);
+						LUtils.print("Overrode id: " + id);
 						Texture.texlist.put(lookAlike.id, texObj);
 					} else {
 						boolean override = false;
@@ -125,7 +125,7 @@ public abstract class Texture {
 							Texture.removedIDs.remove(0);
 						}
 						if (Texture.useID > -1) {
-							DisplayLayer.print("Force-overrode id: " + id);
+							LUtils.print("Force-overrode id: " + id);
 							override = true;
 							id = Texture.useID;
 							Texture.currentSpace -= Texture.texlist.get(id).buf
@@ -135,7 +135,7 @@ public abstract class Texture {
 								&& id == -1 && Texture.useID == -1) {
 							id = GL11.glGenTextures();
 						} else {
-							DisplayLayer
+							LUtils
 									.print("WARNING! Texture limit reached, "
 											+ "not adding new textures!");
 							return;
@@ -183,7 +183,7 @@ public abstract class Texture {
 									dim.height, GL11.GL_RGBA,
 									GL11.GL_UNSIGNED_BYTE, buf);
 							if (err != 0) {
-								DisplayLayer
+								LUtils
 										.print("error while running build2dMipMaps: "
 												+ err);
 							}

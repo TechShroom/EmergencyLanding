@@ -29,9 +29,7 @@ public class DisplayLayer {
 	private static boolean wasResizable;
 	private static LWJGLRenderer renderer;
 	public static String VERSION = "1.0";
-	private static String elPrintStr = String.format("[EmergencyLanding-%s]",
-			VERSION);
-
+	
 	/**
 	 * Initializes the display and KMain instance. Parameter notes are found on
 	 * the longest argument version.
@@ -141,10 +139,10 @@ public class DisplayLayer {
 	public static void initDisplay(boolean fullscreen, int width, int height,
 			String title, boolean resizable, boolean vsync, String[] args,
 			KMain main) throws Exception {
-		print("Using LWJGL v" + Sys.getVersion());
+		LUtils.print("Using LWJGL v" + Sys.getVersion());
 		DisplayMode dm = LUtils.getDisplayMode(width, height, fullscreen);
 		if (!dm.isFullscreenCapable() && fullscreen) {
-			print("Warning! Fullscreen is not supported with width " + width
+			LUtils.print("Warning! Fullscreen is not supported with width " + width
 					+ " and height " + height);
 			fullscreen = false;
 		}
@@ -174,7 +172,7 @@ public class DisplayLayer {
 		GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
 		main.init(args);
 		GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
-		print("Using OpenGL v" + LUtils.getGLVer());
+		LUtils.print("Using OpenGL v" + LUtils.getGLVer());
 	}
 
 	public static void loop(int dfps) throws LWJGLException {
@@ -263,16 +261,5 @@ public class DisplayLayer {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public static void print(String msg) {
-		try {
-			LUtils.checkAccessor("emergencylanding.k.*",
-					StackTraceInfo.getInvokingClassName());
-		} catch (Exception e) {
-			throw new RuntimeException(new IllegalAccessException(
-					"Not EL trusted class"));
-		}
-		System.err.println(elPrintStr + " " + msg);
 	}
 }

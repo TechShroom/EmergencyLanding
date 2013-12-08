@@ -9,7 +9,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import emergencylanding.k.library.lwjgl.DisplayLayer;
+import emergencylanding.k.library.util.LUtils;
 
 /**
  * A class that uses the AWT event system for callbacks on {@link KeyEvent
@@ -69,7 +69,7 @@ public class Keys {
 	public static void registerListener(KeyListener k) {
 		synchronized (l_l) {
 			listeners.add(k);
-			DisplayLayer.print("Registered new KeyListener " + k);
+			LUtils.print("Registered new KeyListener " + k);
 		}
 	}
 
