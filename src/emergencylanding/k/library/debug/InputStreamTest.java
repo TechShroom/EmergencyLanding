@@ -10,7 +10,7 @@ public class InputStreamTest {
 
 	public static void main(String[] args) throws IOException {
 		String path = //
-		"C:/Users/Kenzie Togami/Dropbox/CrashCourse/test.zip/test/layer.zip/layer/zips.zip/zips/theresult.txt"
+		"C:/Users/Kenzie Togami/Dropbox/EmergencyLanding/test.zip/test/layer.zip/layer/zips.zip/zips/theresult.txt"
 				.replace('/', '\\');
 		InputStream is = LUtils.getInputStream(path);
 		System.err.println("Got " + is + " for " + path);

@@ -23,7 +23,7 @@ public class WorldAndEntityTest extends KMain {
 
 	public static void main(String[] args) {
 		try {
-			DisplayLayer.initDisplay(false, 800, 500, "Testing CrashCourse",
+			DisplayLayer.initDisplay(false, 800, 500, "Testing EmergencyLanding",
 					true, true, args);
 			FPS.enable(WorldAndEntityTest.DISPLAY_FPS_INDEX);
 			WorldAndEntityTest.startISThreads();

@@ -12,6 +12,8 @@ import emergencylanding.k.library.lwjgl.render.VBAO;
 import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.main.KMain;
 
+
+
 public class VBAOTest extends KMain {
 	VBAO quad = null;
 	RunningAvg davg = new RunningAvg(10);
@@ -21,7 +23,7 @@ public class VBAOTest extends KMain {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		DisplayLayer.initDisplay(false, 1000, 600, "VBAO NewCCTest", false,
+		DisplayLayer.initDisplay(false, 1000, 600, "VBAO NewElTest", false,
 				false, args);
 		FPS.enable(0);
 		while (!Display.isCloseRequested()) {

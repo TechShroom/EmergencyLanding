@@ -26,7 +26,7 @@ public class TestingGuis extends KMain {
 
 	public static void main(String[] args) {
 		try {
-			DisplayLayer.initDisplay(false, 800, 500, "Testing CrashCourse",
+			DisplayLayer.initDisplay(false, 800, 500, "Testing EmergencyLanding",
 					true, args);
 			FPS.enable(TestingGuis.DISPLAY_FPS_INDEX);
 			TestingGuis.startISThreads();
