@@ -34,26 +34,7 @@ public class VBAOTest extends KMain {
 
 	@Override
 	public void onDisplayUpdate(int delta) {
-		davg.add(delta * 100);
-		delta = (int) davg.avg();
-		delta /= 10;
-		System.err.println(delta);
-		float[] v1 = {0, 100, 0, 1, 1, 1};
-		float[] v2 = {0, 0, 0, 1, 1, 1};
-		float[] v3 = {100, 0, 0, 1, 1, 1};
-		float[] v4 = {100, 100, 0, 1, 1, 1};
-		int order = VertexData.COLOR_FIRST;
-		VertexData[] verts = {new VertexData(order, v1),
-				new VertexData(order, v2), new VertexData(order, v3),
-				new VertexData(order, v4)};
-		byte[] indexControl = {
-				// t1
-				0, 1, 2,
-				// t2
-				2, 3, 0};
-		quad = new VBAO(verts, indexControl);
 		quad.draw();
-		quad.destroy();
 	}
 
 	@Override
