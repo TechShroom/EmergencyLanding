@@ -37,6 +37,12 @@ public class VBAO {
 	 */
 	public static final int VBO_COUNT = 2;
 	/**
+	 * An empty VBAO for returning valid values for invalid input.
+	 */
+	public static final VBAO EMPTY = new VBAO(
+			new VertexData[]{new VertexData()}, new byte[]{0, 1, 2});
+
+	/**
 	 * The vertex data
 	 */
 	private FloatBuffer vertData = BufferUtils.createFloatBuffer(0);
