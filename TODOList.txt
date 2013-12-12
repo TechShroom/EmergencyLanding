@@ -7,3 +7,5 @@ Continuing check (Keep checking these during development):
 - Ensure thread safety: we will be using threads for ticking at some point
 
 Ideas? Put here:
+- File system handling 
+- Media API(Load, Play, Modify audio and video)
