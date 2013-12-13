@@ -28,6 +28,21 @@ import org.lwjgl.opengl.GL11;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 
 public class LUtils {
+
+	public static final String elPrintStr = String.format(
+			"[EmergencyLanding-%s]", DisplayLayer.VERSION);
+
+	public static void print(String msg) {
+		try {
+			checkAccessor("emergencylanding.k.*",
+					StackTraceInfo.getInvokingClassName());
+		} catch (Exception e) {
+			throw new RuntimeException(new IllegalAccessException(
+					"Not EL trusted class"));
+		}
+		System.err.println(elPrintStr + " " + msg);
+	}
+	
 	/**
 	 * The top level of the game/tool
 	 */
@@ -598,19 +613,5 @@ public class LUtils {
 
 		LUtils.print("[Complete]");
 		return result;
-	}
-
-	public static final String elPrintStr = String.format(
-			"[EmergencyLanding-%s]", DisplayLayer.VERSION);
-
-	public static void print(String msg) {
-		try {
-			checkAccessor("emergencylanding.k.*",
-					StackTraceInfo.getInvokingClassName());
-		} catch (Exception e) {
-			throw new RuntimeException(new IllegalAccessException(
-					"Not EL trusted class"));
-		}
-		System.err.println(elPrintStr + " " + msg);
 	}
 }
