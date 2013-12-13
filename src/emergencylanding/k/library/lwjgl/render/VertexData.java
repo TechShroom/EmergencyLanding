@@ -243,8 +243,8 @@ public class VertexData {
 	 * @param z
 	 *            - z
 	 */
-	public void setXYZ(float x, float y, float z) {
-		setXYZW(x, y, z, 1f);
+	public VertexData setXYZ(float x, float y, float z) {
+		return setXYZW(x, y, z, 1f);
 	}
 
 	/**
@@ -259,11 +259,12 @@ public class VertexData {
 	 * @param w
 	 *            - w
 	 */
-	public void setXYZW(float x, float y, float z, float w) {
+	public VertexData setXYZW(float x, float y, float z, float w) {
 		verts[0] = x;
 		verts[1] = y;
 		verts[2] = z;
 		verts[3] = w;
+		return this;
 	}
 
 	/**
@@ -276,8 +277,8 @@ public class VertexData {
 	 * @param b
 	 *            - blue
 	 */
-	public void setRGB(float r, float g, float b) {
-		setRGBA(r, g, b, 1f);
+	public VertexData setRGB(float r, float g, float b) {
+		return setRGBA(r, g, b, 1f);
 	}
 
 	/**
@@ -292,11 +293,12 @@ public class VertexData {
 	 * @param a
 	 *            - alpha
 	 */
-	public void setRGBA(float r, float g, float b, float a) {
+	public VertexData setRGBA(float r, float g, float b, float a) {
 		colors[0] = r;
 		colors[1] = g;
 		colors[2] = b;
 		colors[3] = a;
+		return this;
 	}
 
 	/**
@@ -307,9 +309,10 @@ public class VertexData {
 	 * @param v
 	 *            - texture coord v
 	 */
-	public void setUV(float u, float v) {
+	public VertexData setUV(float u, float v) {
 		texCoords[0] = u;
 		texCoords[1] = v;
+		return this;
 	}
 
 	/**
