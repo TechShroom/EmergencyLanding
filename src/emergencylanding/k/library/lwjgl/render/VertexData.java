@@ -19,19 +19,19 @@ public class VertexData {
 			TEX_FIRST = 2;
 
 	/**
-	 * Default vertex origin
+	 * Default vertex is origin
 	 */
-	private float[] verts = {0f, 0f, 0f, 1f};
+	public float[] verts = {0f, 0f, 0f, 1f};
 
 	/**
-	 * Default color white
+	 * Default color is white
 	 */
-	private float[] colors = {1f, 1f, 1f, 1f};
+	public float[] colors = {1f, 1f, 1f, 1f};
 
 	/**
 	 * Default texture coords 0, 0
 	 */
-	private float[] texCoords = {0f, 0f};
+	public float[] texCoords = {0f, 0f};
 
 	private int order = NO_DATA;
 
