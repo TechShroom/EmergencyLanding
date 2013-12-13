@@ -33,6 +33,8 @@ public class VertexData {
 	 */
 	private float[] texCoords = {0f, 0f};
 
+	private int order = NO_DATA;
+
 	public VertexData() {
 		this(NO_DATA, new float[0]);
 	}
@@ -228,12 +230,35 @@ public class VertexData {
 		setXYZW(x, y, z, w);
 		setRGBA(r, g, b, a);
 		setUV(u, v);
+		this.order = order;
 	}
 
+	/**
+	 * Sets the x, y, and z
+	 * 
+	 * @param x
+	 *            - x
+	 * @param y
+	 *            - y
+	 * @param z
+	 *            - z
+	 */
 	public void setXYZ(float x, float y, float z) {
 		setXYZW(x, y, z, 1f);
 	}
 
+	/**
+	 * Sets the x, y, z, and w
+	 * 
+	 * @param x
+	 *            - x
+	 * @param y
+	 *            - y
+	 * @param z
+	 *            - z
+	 * @param w
+	 *            - w
+	 */
 	public void setXYZW(float x, float y, float z, float w) {
 		verts[0] = x;
 		verts[1] = y;
@@ -241,10 +266,32 @@ public class VertexData {
 		verts[3] = w;
 	}
 
+	/**
+	 * Sets the r, g, and b
+	 * 
+	 * @param r
+	 *            - red
+	 * @param g
+	 *            - green
+	 * @param b
+	 *            - blue
+	 */
 	public void setRGB(float r, float g, float b) {
 		setRGBA(r, g, b, 1f);
 	}
 
+	/**
+	 * Sets the r, g, b, and a
+	 * 
+	 * @param r
+	 *            - red
+	 * @param g
+	 *            - green
+	 * @param b
+	 *            - blue
+	 * @param a
+	 *            - alpha
+	 */
 	public void setRGBA(float r, float g, float b, float a) {
 		colors[0] = r;
 		colors[1] = g;
@@ -252,11 +299,35 @@ public class VertexData {
 		colors[3] = a;
 	}
 
+	/**
+	 * Sets the u and v
+	 * 
+	 * @param u
+	 *            - texture coord u
+	 * @param v
+	 *            - texture coord v
+	 */
 	public void setUV(float u, float v) {
 		texCoords[0] = u;
 		texCoords[1] = v;
 	}
 
+	/**
+	 * Returns the order used to generate the vertex data
+	 * 
+	 * @return the order used to generate the vertex data
+	 */
+	public int getOrderUsed() {
+		return order;
+	}
+
+	/**
+	 * Converts the given data to a {@link FloatBuffer}
+	 * 
+	 * @param vds
+	 *            - the {@link VertexData} to use
+	 * @return a FloatBuffer with the data
+	 */
 	public static FloatBuffer toFB(VertexData[] vds) {
 		FloatBuffer ret = BufferUtils.createFloatBuffer(VERTEX_SIZE
 				* vds.length);
