@@ -27,7 +27,6 @@ import org.lwjgl.opengl.GL11;
 
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 
-
 public class LUtils {
 	/**
 	 * The top level of the game/tool
@@ -40,8 +39,7 @@ public class LUtils {
 					.getParentFile().getParentFile().getParentFile()
 					.getParentFile().getParentFile().getAbsoluteFile();
 			LUtils.TOP_LEVEL.mkdirs();
-			LUtils
-					.print("Using TOP_LEVEL " + TOP_LEVEL.getAbsolutePath());
+			LUtils.print("Using TOP_LEVEL " + TOP_LEVEL.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -286,15 +284,13 @@ public class LUtils {
 							if (m.isFullscreenCapable()) {
 								return m;
 							} else {
-								LUtils
-										.print(String
-												.format("A non-aspect-compat mode"
-														+ " is being used:"
-														+ " Width: %s Height: %s"
-														+ " Fullscreen: %s."
-														+ " Fullscreen may not work as expected!",
-														width, height,
-														fullscreen));
+								LUtils.print(String
+										.format("A non-aspect-compat mode"
+												+ " is being used:"
+												+ " Width: %s Height: %s"
+												+ " Fullscreen: %s."
+												+ " Fullscreen may not work as expected!",
+												width, height, fullscreen));
 							}
 						}
 					}
@@ -555,14 +551,13 @@ public class LUtils {
 			LUtils.print("Using raw file input stream");
 			result = new FileInputStream(path);
 		} else if (isType == 1 || isType == 2) {
-			LUtils.print("Using recursive zip/jar searcher style "
-					+ isType);
+			LUtils.print("Using recursive zip/jar searcher style " + isType);
 			ArrayList<Integer> indexes = new ArrayList<Integer>();
 			for (int i = 0; i < pathparts.size(); i++) {
 				if (pathparts.get(i).endsWith(".zip")
 						|| pathparts.get(i).endsWith(".jar")) {
-					LUtils.print("Adding zip/jar " + pathparts.get(i)
-							+ " at " + i);
+					LUtils.print("Adding zip/jar " + pathparts.get(i) + " at "
+							+ i);
 					indexes.add(i);
 				}
 			}
@@ -570,8 +565,8 @@ public class LUtils {
 			String pathToCurrFile = "";
 			for (int i = 0; i <= indexes.get(0); i++) {
 				String temp_ = pathparts.get(i);
-				LUtils.print(String.format("Appending '%s' to '%s'",
-						temp_, pathToCurrFile));
+				LUtils.print(String.format("Appending '%s' to '%s'", temp_,
+						pathToCurrFile));
 				pathToCurrFile += temp_ + "/";
 			}
 			String file = pathToCurrFile.substring(0,
@@ -605,6 +600,9 @@ public class LUtils {
 		return result;
 	}
 
+	public static final String elPrintStr = String.format(
+			"[EmergencyLanding-%s]", DisplayLayer.VERSION);
+
 	public static void print(String msg) {
 		try {
 			checkAccessor("emergencylanding.k.*",
@@ -615,7 +613,4 @@ public class LUtils {
 		}
 		System.err.println(elPrintStr + " " + msg);
 	}
-
-	public static String elPrintStr = String.format("[EmergencyLanding-%s]",
-	DisplayLayer.VERSION);
 }
