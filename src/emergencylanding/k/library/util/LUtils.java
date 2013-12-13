@@ -613,7 +613,7 @@ public class LUtils {
 			throw new RuntimeException(new IllegalAccessException(
 					"Not EL trusted class"));
 		}
-		System.err.println(DisplayLayer.elPrintStr + " " + msg);
+		System.err.println(elPrintStr + " " + msg);
 	}
 
 	public static String elPrintStr = String.format("[EmergencyLanding-%s]",
