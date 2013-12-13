@@ -22,6 +22,7 @@ import org.lwjgl.util.glu.MipMap;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
+import emergencylanding.k.library.lwjgl.render.GLData;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
@@ -242,6 +243,11 @@ public abstract class Texture {
 	public void bind() {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, getID());
+	}
+
+	public void unbind() {
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, GLData.NONE);
 	}
 
 	public void glTextureVertex(float s, float t) {
