@@ -244,14 +244,15 @@ public class StringRenderer {
 		float RenderWidth = (SrcWidth / textureWidth);
 		float RenderHeight = (SrcHeight / textureHeight);
 
-		GL11.glTexCoord2f(TextureSrcX, TextureSrcY);
-		GL11.glVertex2f(drawX, drawY);
-		GL11.glTexCoord2f(TextureSrcX, TextureSrcY + RenderHeight);
-		GL11.glVertex2f(drawX, drawY + DrawHeight);
-		GL11.glTexCoord2f(TextureSrcX + RenderWidth, TextureSrcY + RenderHeight);
-		GL11.glVertex2f(drawX + DrawWidth, drawY + DrawHeight);
-		GL11.glTexCoord2f(TextureSrcX + RenderWidth, TextureSrcY);
-		GL11.glVertex2f(drawX + DrawWidth, drawY);
+		// GL11.glTexCoord2f(TextureSrcX, TextureSrcY);
+		// GL11.glVertex2f(drawX, drawY);
+		// GL11.glTexCoord2f(TextureSrcX, TextureSrcY + RenderHeight);
+		// GL11.glVertex2f(drawX, drawY + DrawHeight);
+		// GL11.glTexCoord2f(TextureSrcX + RenderWidth, TextureSrcY +
+		// RenderHeight);
+		// GL11.glVertex2f(drawX + DrawWidth, drawY + DrawHeight);
+		// GL11.glTexCoord2f(TextureSrcX + RenderWidth, TextureSrcY);
+		// GL11.glVertex2f(drawX + DrawWidth, drawY);
 	}
 
 	public int getWidth(String whatchars) {
@@ -342,8 +343,8 @@ public class StringRenderer {
 
 		}
 
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fontTextureID);
-		GL11.glBegin(GL11.GL_QUADS);
+		// GL11.glBindTexture(GL11.GL_TEXTURE_2D, fontTextureID);
+		// GL11.glBegin(GL11.GL_QUADS);
 
 		while (i >= startIndex && i <= endIndex) {
 
@@ -391,7 +392,7 @@ public class StringRenderer {
 
 			}
 		}
-		GL11.glEnd();
+		// GL11.glEnd();
 	}
 
 	public static int loadImage(BufferedImage bi) {
