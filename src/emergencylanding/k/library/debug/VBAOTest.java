@@ -6,6 +6,7 @@ import org.lwjgl.opengl.Display;
 
 import emergencylanding.k.imported.Sync.RunningAvg;
 import emergencylanding.k.library.internalstate.Entity;
+import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.render.Render;
@@ -36,6 +37,7 @@ public class VBAOTest extends KMain {
 
 	@Override
 	public void onDisplayUpdate(int delta) {
+		quad.setXYZOff(new Victor(delta, delta, delta));
 		quad.draw();
 	}
 
@@ -50,7 +52,6 @@ public class VBAOTest extends KMain {
 				new VertexData(order, v2), new VertexData(order, v3),
 				new VertexData(order, v4)};
 		quad = Shapes.getQuad(verts);
-		quad.setTexture(ColorTexture.PURPLE);
 	}
 
 	@Override

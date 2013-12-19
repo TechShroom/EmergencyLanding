@@ -324,6 +324,12 @@ public class VertexData {
 		return order;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("VD: {%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", verts[0],
+				verts[1], verts[2], verts[3], colors[0], colors[1], colors[2],
+				colors[3], texCoords[0], texCoords[1]);
+	}
 	/**
 	 * Converts the given data to a {@link FloatBuffer}
 	 * 
