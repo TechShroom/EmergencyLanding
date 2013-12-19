@@ -532,6 +532,7 @@ public class LUtils {
 		return ret;
 	}
 
+	@Deprecated
 	public static InputStream getInputStreamSimple(String path)
 			throws IOException, ClassNotFoundException {
 		return Class.forName("Reference").getResourceAsStream(path);
@@ -565,6 +566,7 @@ public class LUtils {
 					break;
 				} else {
 					isType = 1;
+					break;
 				}
 			}
 		}
@@ -583,7 +585,6 @@ public class LUtils {
 					indexes.add(i);
 				}
 			}
-			int currentIndex = 1, filesProccessed = 1;
 			String pathToCurrFile = "";
 			for (int i = 0; i <= indexes.get(0); i++) {
 				String temp_ = pathparts.get(i);
@@ -596,39 +597,8 @@ public class LUtils {
 			String extra = path.replace(pathToCurrFile, "");
 			LUtils.print("Attempting to load from " + file);
 			ZipFile zf = new ZipFile(file);
-			if (isType == 1) {
-				System.out.println(extra);
-				ZipEntry ze = zf.getEntry(extra);
-				result = zf.getInputStream(ze);
-			} else {
-				System.out.println("hai0");
-				while (filesProccessed < indexes.size()) {
-					System.out.println(extra);
-					ZipEntry temp = zf.getEntry(extra);
-					@SuppressWarnings("unchecked")
-					Enumeration<ZipEntry> e = (Enumeration<ZipEntry>) zf
-							.entries();
-					while (e.hasMoreElements()) {
-						System.err.println(e.nextElement().toString());
-					}
-					InputStream zipIN = zf.getInputStream(temp);
-					System.out.println("hai2");
-					File tempFile = File.createTempFile("tempFile-ccscanner-"
-							+ filesProccessed, "zip");
-					OutputStream tempOut = new FileOutputStream(tempFile);
-					byte[] transfer = new byte[zipIN.available()];
-					zipIN.read(transfer);
-					tempOut.write(transfer);
-					System.out.println("hai3");
-					ZipFile innerZipFile = new ZipFile(tempFile);
-					zipIN.close();
-					tempFile.delete();
-					tempOut.close();
-					innerZipFile.close();
-					System.out.println("hai4");
-					filesProccessed++;
-				}
-			}
+			ZipEntry ze = zf.getEntry(extra);
+			result = zf.getInputStream(ze);
 		}
 
 		LUtils.print("[Complete]");
