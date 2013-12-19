@@ -7,8 +7,9 @@ public class GravEntity extends Entity {
 
 	private float grav;
 
-	public GravEntity(float posX, float posY, float posZ, Texture texture) {
-		super(posX, posY, posZ, texture);
+	public GravEntity(World w, float posX, float posY, float posZ,
+			Texture texture) {
+		super(w, posX, posY, posZ, texture);
 		grav = 9.8f;
 	}
 	/**
@@ -24,14 +25,15 @@ public class GravEntity extends Entity {
 	 * @param gravity
 	 *            -Acceleration due to gravity
 	 */
-	public GravEntity(float posX, float posY, float posZ, Texture texture,
-			float gravity) {
-		super(posX, posY, posZ, texture);
+	public GravEntity(World w, float posX, float posY, float posZ,
+			Texture texture, float gravity) {
+		super(w, posX, posY, posZ, texture);
 		grav = gravity;
 	}
 
-	public void updateOnTick(float delta, World w) {
-		super.updateOnTick(delta, w);
+	@Override
+	public void updateOnTick(float delta) {
+		super.updateOnTick(delta);
 		setRelativeXYZVel(0, -grav, 0);
 	}
 }

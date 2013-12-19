@@ -7,6 +7,14 @@ public class Victor {
 	public float x, y, z;
 	public float lastX, lastY, lastZ;
 
+	public Victor() {
+		this(0, 0, 0);
+	}
+
+	public Victor(float x, float y, float z) {
+		init(x, y, z);
+	}
+
 	public Victor interpolate(float del) {
 		Victor inter = new Victor();
 		if (del > 1) {

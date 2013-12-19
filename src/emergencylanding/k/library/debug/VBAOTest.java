@@ -7,16 +7,18 @@ import org.lwjgl.opengl.Display;
 import emergencylanding.k.imported.Sync.RunningAvg;
 import emergencylanding.k.library.internalstate.Entity;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
+import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.lwjgl.render.VBAO;
 import emergencylanding.k.library.lwjgl.render.VertexData;
+import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.main.KMain;
-
-
 
 public class VBAOTest extends KMain {
 	VBAO quad = null;
 	RunningAvg davg = new RunningAvg(10);
+
+	int t = 0;
 
 	/**
 	 * @param args
@@ -39,20 +41,16 @@ public class VBAOTest extends KMain {
 
 	@Override
 	public void init(String[] args) {
-		float[] v1 = {50, 200, 0, 1f, 0, 0};
-		float[] v2 = {50, 50, 0, 0, 1f, 0f};
-		float[] v3 = {200, 50, 0, 0, 0f, 1f};
+		float[] v1 = {50, 200, 0, 1f, 1f, 1f};
+		float[] v2 = {50, 50, 0, 1f, 1f, 1f};
+		float[] v3 = {200, 50, 0, 1f, 1f, 1f};
 		float[] v4 = {200, 200, 0, 1f, 1f, 1f};
 		int order = VertexData.COLOR_FIRST;
 		VertexData[] verts = {new VertexData(order, v1),
 				new VertexData(order, v2), new VertexData(order, v3),
 				new VertexData(order, v4)};
-		byte[] indexControl = {
-				// t1
-				0, 1, 2,
-				// t2
-				2, 3, 0};
-		quad = new VBAO(verts, indexControl);
+		quad = Shapes.getQuad(verts);
+		quad.setTexture(ColorTexture.PURPLE);
 	}
 
 	@Override

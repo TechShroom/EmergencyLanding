@@ -13,37 +13,43 @@ public abstract class Entity {
 	protected float elapsed;
 	protected Texture tex;
 	private boolean isDead;
+	public World w = null;
 
-	public Entity() {
-		pos.update(0, 0, 0);
+	public Entity(World w) {
+		setXYZ(0, 0, 0);
 		tex = ColorTexture.RED;
+		this.w = w;
 	}
-	public Entity(Texture texture) {
-		pos.update(0, 0, 0);
+	public Entity(World w, Texture texture) {
+		setXYZ(0, 0, 0);
 		tex = texture;
+		this.w = w;
 	}
 
-	public Entity(float posX, float posY, float posZ, Texture texture) {
-		pos.update(posX, posY, posZ);
+	public Entity(World w, float posX, float posY, float posZ, Texture texture) {
+		setXYZ(posX, posY, posZ);
 		tex = texture;
+		this.w = w;
 	}
 
-	public Entity(float posX, float posY, float posZ, float xVel, float yVel,
-			float zVel, Texture texture) {
-		pos.update(posX, posY, posZ);
-		vel.update(xVel, yVel, zVel);
+	public Entity(World w, float posX, float posY, float posZ, float xVel,
+			float yVel, float zVel, Texture texture) {
+		setXYZ(posX, posY, posZ);
+		setXYZVel(xVel, yVel, zVel);
 		tex = texture;
+		this.w = w;
 	}
 
-	public Entity(float posX, float posY, float posZ, float xVel, float yVel,
-			float zVel, float pitchRot, float yawRot, float rollRot,
-			Texture texture) {
-		pos.update(posX, posY, posZ);
-		vel.update(xVel, yVel, zVel);
+	public Entity(World w, float posX, float posY, float posZ, float xVel,
+			float yVel, float zVel, float pitchRot, float yawRot,
+			float rollRot, Texture texture) {
+		setXYZ(posX, posY, posZ);
+		setXYZVel(xVel, yVel, zVel);
 		pitch = pitchRot;
 		yaw = yawRot;
 		roll = rollRot;
 		tex = texture;
+		this.w = w;
 	}
 
 	/**
@@ -53,10 +59,10 @@ public abstract class Entity {
 	 * @param delta
 	 *            - the float value of the time elapsed to update.
 	 */
-	public void updateOnTick(float delta, World w) {
+	public void updateOnTick(float delta) {
 		elapsed = 0;
 
-		pos.update(pos.x + vel.x * delta, pos.y + vel.y * delta, pos.z + vel.z
+		setXYZ(pos.x + vel.x * delta, pos.y + vel.y * delta, pos.z + vel.z
 				* delta);
 
 		deltaT = delta;
@@ -87,7 +93,7 @@ public abstract class Entity {
 	 *            - relative change in posZ.
 	 */
 	public void setRelativeXYZ(float relX, float relY, float relZ) {
-		pos.update(pos.x + relX, pos.y + relY, pos.z + relZ);
+		setXYZ(pos.x + relX, pos.y + relY, pos.z + relZ);
 	}
 
 	/**
@@ -115,7 +121,7 @@ public abstract class Entity {
 	 *            - Relative velZ
 	 */
 	public void setRelativeXYZVel(float relXVel, float relYVel, float relZVel) {
-		vel.update(vel.x + relXVel, vel.y + relYVel, vel.z + relZVel);
+		setXYZVel(vel.x + relXVel, vel.y + relYVel, vel.z + relZVel);
 	}
 
 	/**
@@ -209,7 +215,7 @@ public abstract class Entity {
 	 *            the new value for velX
 	 */
 	public void setXVel(float newXVel) {
-		vel.update(newXVel, vel.y, vel.z);
+		setXYZVel(newXVel, vel.y, vel.z);
 	}
 
 	/**
@@ -219,7 +225,7 @@ public abstract class Entity {
 	 *            the new value for velY
 	 */
 	public void setYVel(float newYVel) {
-		vel.update(vel.x, newYVel, vel.z);
+		setXYZVel(vel.x, newYVel, vel.z);
 	}
 
 	/**
@@ -229,7 +235,7 @@ public abstract class Entity {
 	 *            the new value for velZ
 	 */
 	public void setZVel(float newZVel) {
-		vel.update(vel.x, newZVel, vel.z);
+		setXYZVel(vel.x, newZVel, vel.z);
 	}
 
 	public void setDead() {
@@ -240,21 +246,13 @@ public abstract class Entity {
 		return isDead;
 	}
 	public void interpolate(float elap) {
-		elapsed += elap;
-		float del = elapsed / deltaT;
-		if (Float.isInfinite(del)) {
-			del = 0;
-		}
-		if (del > 1) {
-			del = 1;
-		}
 		synchronized (posInter) {
 			synchronized (pos) {
-				posInter = pos.interpolate(del);
+				posInter = pos;
 			}
 		}
 		synchronized (velInter) {
-			velInter = vel.interpolate(del);
+			velInter = vel;
 		}
 	}
 	public Victor getInterpolated() {

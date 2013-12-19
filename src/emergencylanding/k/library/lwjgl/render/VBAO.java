@@ -9,6 +9,8 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
+import emergencylanding.k.library.internalstate.Victor;
+import emergencylanding.k.library.lwjgl.tex.Texture;
 import emergencylanding.k.library.util.StackTraceInfo;
 
 /**
@@ -66,15 +68,78 @@ public class VBAO {
 	 * The VBO id that holds the IC data.
 	 */
 	private int vbo_i = GLData.NONE;
+	/**
+	 * The texture used by this VBAO, if any.
+	 */
+	public Texture tex = null;
+	/**
+	 * The original data.
+	 */
+	public VertexData[] data = {};
+	/**
+	 * The original data.
+	 */
+	public byte[] icdata = {};
+	/**
+	 * The offset for drawing (like doing glTanslate)
+	 */
+	public Victor xyzoffset = new Victor();
 
 	public VBAO(VertexData[] verts, byte[] indexControl) {
+		this(verts, indexControl, null);
+	}
+
+	public VBAO(VertexData[] verts, byte[] indexControl, Texture t) {
+		data = verts;
+		icdata = indexControl;
 		vertData = VertexData.toFB(verts);
 		indexData = BufferUtils.createByteBuffer(indexControl.length);
 		indexData.put(indexControl);
 		indexData.flip();
 		verticesCount = indexControl.length;
+		tex = t;
 		init();
 		GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+	}
+
+	public void setTexture(Texture t) {
+		tex = t;
+	}
+
+	public void setXYZOff(Victor pos) {
+		xyzoffset = pos;
+		VertexData[] newDataTemp = new VertexData[data.length];
+		for (int i = 0; i < newDataTemp.length; i++) {
+			VertexData old = data[i];
+			VertexData v = new VertexData()
+					.setXYZW(old.verts[0] + pos.x, old.verts[1] + pos.y,
+							old.verts[2] + pos.z, old.verts[3])
+					.setRGBA(old.colors[0], old.colors[1], old.colors[2],
+							old.colors[3])
+					.setUV(old.texCoords[0], old.texCoords[1]);
+			newDataTemp[i] = v;
+		}
+		updateData(newDataTemp, icdata);
+	}
+	public void updateData(VertexData[] verts, byte[] indexControl) {
+		vertData = VertexData.toFB(verts);
+		indexData = BufferUtils.createByteBuffer(indexControl.length);
+		indexData.put(indexControl);
+		indexData.flip();
+		verticesCount = indexControl.length;
+		// Overwrite data
+		GL30.glBindVertexArray(vaoId);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertData, GL15.GL_STATIC_DRAW);
+		GLData.notifyOnGLError("updateData -> overwrite vertData");
+		GL30.glBindVertexArray(GLData.NONE);
+		// IC
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vbo_i);
+		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indexData,
+				GL15.GL_STATIC_DRAW);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
+		GLData.notifyOnGLError("updateData -> overwrite IC");
+		//
 	}
 
 	private void init() {
@@ -128,11 +193,17 @@ public class VBAO {
 	}
 
 	public void draw() {
+
+		if (tex != null) {
+			tex.bind();
+		}
+
 		// Bind to the VAO that has all the information about the quad vertices
 		GL30.glBindVertexArray(vaoId);
 		GL20.glEnableVertexAttribArray(POS_VBO_INDEX);
-		GL20.glEnableVertexAttribArray(COLOR_VBO_INDEX);
-		GL20.glEnableVertexAttribArray(TEX_VBO_INDEX);
+		GL20.glEnableVertexAttribArray((tex == null)
+				? COLOR_VBO_INDEX
+				: TEX_VBO_INDEX);
 
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vbo_i);
 
@@ -142,9 +213,14 @@ public class VBAO {
 
 		// Put everything back to default (deselect)
 		GL20.glDisableVertexAttribArray(POS_VBO_INDEX);
-		GL20.glDisableVertexAttribArray(COLOR_VBO_INDEX);
-		GL20.glDisableVertexAttribArray(TEX_VBO_INDEX);
+		GL20.glDisableVertexAttribArray((tex == null)
+				? COLOR_VBO_INDEX
+				: TEX_VBO_INDEX);
 		GL30.glBindVertexArray(GLData.NONE);
+
+		if (tex != null) {
+			tex.unbind();
+		}
 		GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
 	}
 

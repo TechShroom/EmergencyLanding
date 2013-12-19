@@ -23,8 +23,8 @@ public class WorldAndEntityTest extends KMain {
 
 	public static void main(String[] args) {
 		try {
-			DisplayLayer.initDisplay(false, 800, 500, "Testing EmergencyLanding",
-					true, true, args);
+			DisplayLayer.initDisplay(false, 800, 500,
+					"Testing EmergencyLanding", true, true, args);
 			FPS.enable(WorldAndEntityTest.DISPLAY_FPS_INDEX);
 			WorldAndEntityTest.startISThreads();
 			while (WorldAndEntityTest.run) {
@@ -90,7 +90,7 @@ public class WorldAndEntityTest extends KMain {
 		World w = new World();
 		WorldManager.addWorldToSystem(w);
 		for (int i = 0; i < 500; i++) {
-			Entity e = new TestEntity();
+			Entity e = new TestEntity(w);
 			w.addEntity(e);
 			e.setXYZ(0, 0, 0);
 			e.setXYZVel(1, 1, 0);

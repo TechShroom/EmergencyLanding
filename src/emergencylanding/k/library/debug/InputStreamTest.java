@@ -8,11 +8,13 @@ import emergencylanding.k.library.util.LUtils;
 
 public class InputStreamTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException,
+			ClassNotFoundException {
 		String path = //
-		"C:/Users/Kenzie Togami/Dropbox/EmergencyLanding/test.zip/test/layer.zip/layer/zips.zip/zips/theresult.txt"
-				.replace('/', '\\');
-		InputStream is = LUtils.getInputStream(path);
+		LUtils.TOP_LEVEL
+				+ "/test2.zip/layers.zip" //txt.txt
+						.replace('/', '\\');
+		InputStream is = LUtils.getInputStreamSimple("res/txt.txt");
 		System.err.println("Got " + is + " for " + path);
 		if (is == null) {
 			System.err.println("No InputStream, no data?");

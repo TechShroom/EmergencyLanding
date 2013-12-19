@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -42,7 +43,7 @@ public class LUtils {
 		}
 		System.err.println(elPrintStr + " " + msg);
 	}
-	
+
 	/**
 	 * The top level of the game/tool
 	 */
@@ -531,6 +532,12 @@ public class LUtils {
 		return ret;
 	}
 
+	public static InputStream getInputStreamSimple(String path)
+			throws IOException, ClassNotFoundException {
+		return Class.forName("Reference").getResourceAsStream(path);
+
+	}
+
 	/**
 	 * Gets an input stream from a path
 	 * 
@@ -590,22 +597,35 @@ public class LUtils {
 			LUtils.print("Attempting to load from " + file);
 			ZipFile zf = new ZipFile(file);
 			if (isType == 1) {
+				System.out.println(extra);
 				ZipEntry ze = zf.getEntry(extra);
 				result = zf.getInputStream(ze);
 			} else {
+				System.out.println("hai0");
 				while (filesProccessed < indexes.size()) {
-					InputStream zipIN = zf.getInputStream(zf.getEntry(extra));
+					System.out.println(extra);
+					ZipEntry temp = zf.getEntry(extra);
+					@SuppressWarnings("unchecked")
+					Enumeration<ZipEntry> e = (Enumeration<ZipEntry>) zf
+							.entries();
+					while (e.hasMoreElements()) {
+						System.err.println(e.nextElement().toString());
+					}
+					InputStream zipIN = zf.getInputStream(temp);
+					System.out.println("hai2");
 					File tempFile = File.createTempFile("tempFile-ccscanner-"
 							+ filesProccessed, "zip");
 					OutputStream tempOut = new FileOutputStream(tempFile);
 					byte[] transfer = new byte[zipIN.available()];
 					zipIN.read(transfer);
 					tempOut.write(transfer);
+					System.out.println("hai3");
 					ZipFile innerZipFile = new ZipFile(tempFile);
 					zipIN.close();
 					tempFile.delete();
 					tempOut.close();
 					innerZipFile.close();
+					System.out.println("hai4");
 					filesProccessed++;
 				}
 			}

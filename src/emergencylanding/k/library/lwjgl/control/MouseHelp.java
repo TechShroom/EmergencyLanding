@@ -9,11 +9,11 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
-import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.Texture;
 import emergencylanding.k.library.util.DrawableUtils;
+import emergencylanding.k.library.util.LUtils;
 
 public class MouseHelp {
 	private static class FakeCursor {
@@ -27,8 +27,6 @@ public class MouseHelp {
 		}
 
 		public void drawAt(int x, int y) {
-			Shapes.glQuad(x - hx, y - hy, 0, display.dim.width,
-					display.dim.height, 0, Shapes.XYF, display);
 		}
 
 	}
@@ -98,7 +96,7 @@ public class MouseHelp {
 			Mouse.setNativeCursor(c);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
-			DisplayLayer.print("Mouse cursor couldn't be created/implemented!");
+			LUtils.print("Mouse cursor couldn't be created/implemented!");
 		}
 	}
 

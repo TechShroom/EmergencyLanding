@@ -75,7 +75,7 @@ public class World {
 				removeList.add(e);
 				continue;
 			}
-			e.updateOnTick(delta, this);
+			e.updateOnTick(delta);
 		}
 		read.unlock();
 		write.lock();
@@ -97,6 +97,7 @@ public class World {
 		read.unlock();
 	}
 
+	@Override
 	public String toString() {
 		return String.format(
 				"{World:{Entities:%s,width:%s,height:%s,length:%s}}",

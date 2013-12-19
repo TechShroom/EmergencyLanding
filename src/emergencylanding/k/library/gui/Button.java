@@ -5,13 +5,16 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
+import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
+import emergencylanding.k.library.lwjgl.render.VBAO;
+import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.lwjgl.tex.Texture;
 
 public class Button extends GuiElement {
 
-	private Texture unpressedTexture, pressedTexture;
+	private VBAO unpressed, pressedv;
 	private float xLen, yLen;
 	private volatile boolean pressed;
 	private Action onC = null;
@@ -21,18 +24,25 @@ public class Button extends GuiElement {
 		super(x, y);
 		xLen = xLength;
 		yLen = yLength;
-		unpressedTexture = unpressedT;
-		pressedTexture = pressedT;
 		onC = onClick;
+		unpressed = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
+				new VertexData().setXYZ(xLen, yLen, 0), Shapes.XY);
+		unpressed.setTexture(unpressedT);
+		pressedv = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
+				new VertexData().setXYZ(xLen, yLen, 0), Shapes.XY);
+		pressedv.setTexture(pressedT);
 	}
 
 	@Override
 	public void drawAt(float x, float y) {
+		VBAO drawing = null;
 		if (pressed) {
-			Shapes.glQuad(x, y, 0, xLen, yLen, 0, Shapes.XYF, pressedTexture);
+			drawing = pressedv;
 		} else {
-			Shapes.glQuad(x, y, 0, xLen, yLen, 0, Shapes.XYF, unpressedTexture);
+			drawing = unpressed;
 		}
+		drawing.setXYZOff(new Victor(x, y, 0));
+		drawing.draw();
 	}
 
 	@Override

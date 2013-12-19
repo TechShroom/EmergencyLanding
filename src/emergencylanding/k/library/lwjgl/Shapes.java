@@ -3,25 +3,36 @@ package emergencylanding.k.library.lwjgl;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import k.core.util.Helper;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.glu.Sphere;
-
-import emergencylanding.k.library.lwjgl.tex.ColorTexture;
-import emergencylanding.k.library.lwjgl.tex.Texture;
+import emergencylanding.k.library.lwjgl.render.VBAO;
+import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.util.LUtils;
 
 public class Shapes {
+	/**
+	 * Tells {@link Shapes#getQuad(VertexData)} how to use the two data points
+	 */
+	public static final int XY = 0x01, XZ = 0x02, YZ = 0x03;
 
-	public static final int XYF = 0x01;
-	public static final int XZT = 0x02;
-	public static final int YZL = 0x03;
-	public static final int XYB = -0x01;
-	public static final int XZB = -0x02;
-	public static final int YZR = -0x03;
+	private static final byte[] TRI_IC = {0, 1, 2};
+	private static final byte[] QUAD_IC = {0, 1, 2, 2, 3, 0};
+	/*
+	 * ..0..-1.0f,-1.0f,-1.0f,..1..-1.0f,-1.0f, 1.0f,..2..-1.0f, 1.0f, 1.0f,
+	 * ..3.. 1.0f, 1.0f,-1.0f,..0..-1.0f,-1.0f,-1.0f,..4..-1.0f, 1.0f,-1.0f,
+	 * ..5.. 1.0f,-1.0f, 1.0f,..0..-1.0f,-1.0f,-1.0f,..6.. 1.0f,-1.0f,-1.0f,
+	 * ..3.. 1.0f, 1.0f,-1.0f,..6.. 1.0f,-1.0f,-1.0f,..0..-1.0f,-1.0f,-1.0f,
+	 * ..0..-1.0f,-1.0f,-1.0f,..2..-1.0f, 1.0f, 1.0f,..4..-1.0f, 1.0f,-1.0f,
+	 * ..5.. 1.0f,-1.0f, 1.0f,..1..-1.0f,-1.0f, 1.0f,..0..-1.0f,-1.0f,-1.0f,
+	 * ..2..-1.0f, 1.0f, 1.0f,..1..-1.0f,-1.0f, 1.0f,..5.. 1.0f,-1.0f, 1.0f,
+	 * ..7.. 1.0f, 1.0f, 1.0f,..6.. 1.0f,-1.0f,-1.0f,..3.. 1.0f, 1.0f,-1.0f,
+	 * ..6.. 1.0f,-1.0f,-1.0f,..7.. 1.0f, 1.0f, 1.0f,..5.. 1.0f,-1.0f, 1.0f,
+	 * ..7.. 1.0f, 1.0f, 1.0f,..3.. 1.0f, 1.0f,-1.0f,..4..-1.0f, 1.0f,-1.0f,
+	 * ..7.. 1.0f, 1.0f, 1.0f,..4..-1.0f, 1.0f,-1.0f,..2..-1.0f, 1.0f, 1.0f,
+	 * ..7.. 1.0f, 1.0f, 1.0f,..2..-1.0f, 1.0f, 1.0f,..5.. 1.0f,-1.0f, 1.0f
+	 */
+	private static final byte[] CUBE_IC = {0, 1, 2, 3, 0, 4, 5, 0, 6, 3, 6, 0,
+			0, 2, 4, 5, 1, 0, 2, 1, 5, 7, 6, 3, 6, 7, 5, 7, 3, 4, 7, 4, 2, 7,
+			2, 5};
+	private static final byte[] SPHERE_IC = {0, 1, 2, 2, 3, 0};
 
 	private static HashMap<String, Integer> shapes = new HashMap<String, Integer>();
 	{
@@ -34,141 +45,169 @@ public class Shapes {
 		return new ArrayList<String>(Shapes.shapes.keySet());
 	}
 
-	public static void glShapeByName(float x, float y, float z,
-			float[] verticies, Object[] extra, String name) {
-		int shape = Shapes.shapes.get(name) == null ? 0 : Shapes.shapes
-				.get(name);
-		switch (shape) {
-			case 0 :
-				Shapes.glCube(x, y, z, verticies[0], verticies[1],
-						verticies[2],
-						Helper.Arrays.arrayTranslate(Texture.class, extra));
-				break;
-			case 1 :
-				Shapes.glQuad(x, y, z, verticies[0], verticies[1],
-						verticies[2], (Integer) extra[0], (Texture) extra[1]);
-				break;
-			case 2 :
-				Shapes.glSphere(x, y, z, (Float) extra[0], (Integer) extra[1],
-						(Texture) extra[2]);
-				break;
+	/**
+	 * Triangles do not care about vertex order.
+	 * 
+	 * @param verticies
+	 *            - the vertices to use
+	 * @return a {@link VBAO} for use in drawing.
+	 */
+	public static VBAO getTriangle(VertexData[] vertices) {
+		if (vertices == null) {
+			throw new IllegalArgumentException("vertices cannot be null");
 		}
+		if (vertices.length != 3) {
+			LUtils.print("Triangle requires ONLY 3 vertices");
+			return VBAO.EMPTY;
+		}
+		return new VBAO(vertices, TRI_IC);
 	}
 
-	public static void glCube(float x, float y, float z, float w, float h,
-			float l, Texture[] tex) {
-		Shapes.glQuad(x, y, z, w, h, l, Shapes.XZT,
-				LUtils.getArg(tex, 2, ColorTexture.GREEN));
-		Shapes.glQuad(x, y, z, w, h, l, Shapes.XZB,
-				LUtils.getArg(tex, 3, ColorTexture.YELLOW));
-		Shapes.glQuad(x, y, z, w, h, l, Shapes.XYF,
-				LUtils.getArg(tex, 0, ColorTexture.RED));
-		Shapes.glQuad(x, y, z, w, h, l, Shapes.XYB,
-				LUtils.getArg(tex, 1, ColorTexture.BLUE));
-		Shapes.glQuad(x, y, z, w, h, l, Shapes.YZL,
-				LUtils.getArg(tex, 4, ColorTexture.WHITE));
-		Shapes.glQuad(x, y, z, w, h, l, Shapes.YZR,
-				LUtils.getArg(tex, 5, ColorTexture.PURPLE));
+	/**
+	 * Uses two sets of data to make the vertices for
+	 * {@link Shapes#getQuad(VertexData[])}
+	 * 
+	 * @param data
+	 *            - the first vertex. Uses the color from this one, and treats
+	 *            its xyz as the xyz coords
+	 * @param data2
+	 *            - the second vertex. Uses its xyz as the width, length, and
+	 *            height
+	 * @param dir
+	 *            - one of {@link Shapes#XY}, {@link Shapes#XZ}, or
+	 *            {@link Shapes#YZ}
+	 * @return - a {@link VBAO} for drawing
+	 */
+	public static VBAO getQuad(VertexData data, VertexData data2, int dir) {
+		VertexData[] data_array = new VertexData[4];
+		float[] color = data.colors;
+		for (int i = 0; i < data_array.length; i++) {
+			data_array[i] = new VertexData();
+			data_array[i].setRGBA(color[0], color[1], color[2], color[3]);
+		}
+		float[] vert = data.verts;
+		float x = vert[0];
+		float y = vert[1];
+		float z = vert[2];
+		float[] vert2 = data2.verts;
+		float w = vert2[0] + x;
+		float h = vert2[1] + y;
+		float l = vert2[2] + z;
+		if (dir == Shapes.XZ) {
+			data_array[0].setXYZ(w, y, z);// Top (x:0,y=y,z:0)
+			data_array[0].setUV(0, 0);
+			data_array[1].setXYZ(x, y, l);
+			data_array[1].setUV(0, 1);
+			data_array[2].setXYZ(w, y, l);
+			data_array[2].setUV(1, 1);
+			data_array[3].setXYZ(x, y, z);
+			data_array[3].setUV(1, 0);
+		}
+		if (dir == Shapes.XY) {
+			data_array[0].setXYZ(w, y, z);// Front (x:0,y:0,z=z)
+			data_array[0].setUV(0, 0);
+			data_array[1].setXYZ(x, h, z);
+			data_array[1].setUV(0, 1);
+			data_array[2].setXYZ(w, h, z);
+			data_array[2].setUV(1, 1);
+			data_array[3].setXYZ(x, y, z);
+			data_array[3].setUV(1, 0);
+		}
+		if (dir == Shapes.YZ) {
+			data_array[0].setXYZ(x, h, z);// Left (x=x,y:0,z:0)
+			data_array[0].setUV(0, 0);
+			data_array[1].setXYZ(x, y, l);
+			data_array[1].setUV(0, 1);
+			data_array[2].setXYZ(x, y, z);
+			data_array[2].setUV(1, 1);
+			data_array[3].setXYZ(x, h, l);
+			data_array[3].setUV(1, 0);
+		}
+		return getQuad(data_array);
 	}
 
-	public static void glQuad(float x, float y, float z, float w, float h,
-			float l, int dir, Texture t) {
-		if (t == null) {
-			t = ColorTexture.WHITE;
+	/**
+	 * Quads must have vertex data like this: <br>
+	 * 1------4<br>
+	 * |......|<br>
+	 * |......|<br>
+	 * |......|<br>
+	 * 2------3<br>
+	 * 
+	 * @param vertices
+	 *            - the vertices to use
+	 * @return a {@link VBAO} for use in drawing.
+	 */
+	public static VBAO getQuad(VertexData[] vertices) {
+		if (vertices == null) {
+			throw new IllegalArgumentException("vertices cannot be null");
 		}
-		t.bind();
-		GL11.glPushMatrix();
-		GL11.glTranslatef(x, y, z);
-		GL11.glBegin(GL11.GL_QUADS);
-		if (dir == Shapes.XZT) {
-			GL11.glVertex3f(w, h, 0);// Top (x:0,y=h,z:0)
-			t.glTextureVertex(0, 0);
-			GL11.glVertex3f(0, h, 0);
-			t.glTextureVertex(0, 1);
-			GL11.glVertex3f(0, h, l);
-			t.glTextureVertex(1, 1);
-			GL11.glVertex3f(w, h, l);
-			t.glTextureVertex(1, 0);
+		if (vertices.length != 4) {
+			LUtils.print("Quad requires ONLY 4 vertices");
+			return VBAO.EMPTY;
 		}
-		if (dir == Shapes.XZB) {
-			GL11.glVertex3f(w, 0, l);// Bottom (x:0,y=0,z:0)
-			t.glTextureVertex(0, 0);
-			GL11.glVertex3f(0, 0, l);
-			t.glTextureVertex(0, 1);
-			GL11.glVertex3f(0, 0, 0);
-			t.glTextureVertex(1, 1);
-			GL11.glVertex3f(w, 0, 0);
-			t.glTextureVertex(1, 0);
-		}
-		if (dir == Shapes.XYF) {
-			GL11.glVertex3f(w, h, l);// Front (x:0,y:0,z=l)
-			t.glTextureVertex(0, 0);
-			GL11.glVertex3f(0, h, l);
-			t.glTextureVertex(0, 1);
-			GL11.glVertex3f(0, 0, l);
-			t.glTextureVertex(1, 1);
-			GL11.glVertex3f(w, 0, l);
-			t.glTextureVertex(1, 0);
-		}
-		if (dir == Shapes.XYB) {
-			GL11.glVertex3f(w, 0, 0);// Back (x:0,y:0,z=0)
-			t.glTextureVertex(0, 0);
-			GL11.glVertex3f(0, 0, 0);
-			t.glTextureVertex(0, 1);
-			GL11.glVertex3f(0, h, 0);
-			t.glTextureVertex(1, 1);
-			GL11.glVertex3f(w, h, 0);
-			t.glTextureVertex(1, 0);
-		}
-		if (dir == Shapes.YZL) {
-			GL11.glVertex3f(0, h, l);// Left (x=0,y:0,z:0)
-			t.glTextureVertex(0, 0);
-			GL11.glVertex3f(0, h, 0);
-			t.glTextureVertex(0, 1);
-			GL11.glVertex3f(0, 0, 0);
-			t.glTextureVertex(1, 1);
-			GL11.glVertex3f(0, 0, l);
-			t.glTextureVertex(1, 0);
-		}
-		if (dir == Shapes.YZR) {
-			GL11.glVertex3f(w, h, 0);// Right (x=w,y:0,z:0)
-			t.glTextureVertex(0, 0);
-			GL11.glVertex3f(w, h, l);
-			t.glTextureVertex(0, 1);
-			GL11.glVertex3f(w, 0, l);
-			t.glTextureVertex(1, 1);
-			GL11.glVertex3f(w, 0, 0);
-			t.glTextureVertex(1, 0);
-		}
-		GL11.glEnd();
-
-		GL11.glPopMatrix();
+		return new VBAO(vertices, QUAD_IC);
 	}
 
-	public static void glSphere(float x, float y, float z, float r,
-			int quality, Texture t) {
-		GL11.glPushMatrix();
-		GL11.glTranslatef(x, y, z);
-		Sphere s = new Sphere();
-		s.setTextureFlag(true);
-		t.bind();
-		s.draw(r, quality, quality);
-		GL11.glPopMatrix();
+	/**
+	 * Cubes must have vertex data like this: <br>
+	 * Front:<br>
+	 * 1------4<br>
+	 * |......|<br>
+	 * |......|<br>
+	 * |......|<br>
+	 * 2------3<br>
+	 * <br>
+	 * Back:<br>
+	 * 5------8<br>
+	 * |......|<br>
+	 * |......|<br>
+	 * |......|<br>
+	 * 6------7<br>
+	 * 
+	 * @param vertices
+	 *            - the vertices to use
+	 * @return a {@link VBAO} for use in drawing.
+	 */
+	public static VBAO getCube(VertexData[] vertices) {
+		if (vertices == null) {
+			throw new IllegalArgumentException("vertices cannot be null");
+		}
+		if (vertices.length != 8) {
+			LUtils.print("Cube requires ONLY 8 vertices");
+			return VBAO.EMPTY;
+		}
+		return new VBAO(vertices, CUBE_IC);
 	}
 
-	public static void renderVBO(int vao, int vCount) {
+	/**
+	 * Deprecated due to non-working state
+	 * 
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
+	@Deprecated
+	public static VBAO getSphere(VertexData center, float radius) {
+		if (center == null) {
+			throw new IllegalArgumentException("center cannot be null");
+		}
+		VertexData[] vertices = null;
+		return getSphere(vertices);
+	}
 
-		// Draw
-
-		// Bind to the VAO that has all the information about the quad vertices
-		GL30.glBindVertexArray(vao);
-		GL20.glEnableVertexAttribArray(0);
-
-		// Draw the vertices
-		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vCount);
-
-		// Put everything back to default (deselect)
-		GL20.glDisableVertexAttribArray(0);
-		GL30.glBindVertexArray(0);
+	/**
+	 * Deprecated due to non-working state
+	 * 
+	 * @param center
+	 * @param radius
+	 * @return
+	 */
+	@Deprecated
+	public static VBAO getSphere(VertexData[] vertices) {
+		if (vertices == null) {
+			throw new IllegalArgumentException("vertices cannot be null");
+		}
+		return new VBAO(vertices, SPHERE_IC);
 	}
 }
