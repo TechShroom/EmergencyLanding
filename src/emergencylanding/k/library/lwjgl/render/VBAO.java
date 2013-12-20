@@ -24,15 +24,15 @@ public class VBAO {
 	/**
 	 * Index of the position attribute in the {@link VBAO#vbo vbo}
 	 */
-	public static final int POS_VBO_INDEX = 0;
+	public static final int POS_VBO_INDEX = GLData.POSITION_INDEX;
 	/**
 	 * Index of the color attribute in the {@link VBAO#vbo vbo}
 	 */
-	public static final int COLOR_VBO_INDEX = 1;
+	public static final int COLOR_VBO_INDEX = GLData.COLOR_INDEX;
 	/**
 	 * Index of the texCoord attribute in the {@link VBAO#vbo vbo}
 	 */
-	public static final int TEX_VBO_INDEX = 2;
+	public static final int TEX_VBO_INDEX = GLData.TEX_INDEX;
 
 	/**
 	 * The amount of VBOs used
