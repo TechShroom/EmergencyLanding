@@ -13,8 +13,7 @@
 *.pydevproject
 .project
 .metadata
-bin/
-bin-kenzie
+*bin*/
 tmp/
 *.tmp
 *.bak
