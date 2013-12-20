@@ -9,7 +9,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
-import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.Texture;
 import emergencylanding.k.library.util.DrawableUtils;
@@ -129,8 +128,8 @@ public class MouseHelp {
 	 * active.
 	 * 
 	 * @param texture
-	 *            - a {@link emergencylanding.k.library.lwjgl.tex.Texture Texture}
-	 *            for the mouse
+	 *            - a {@link emergencylanding.k.library.lwjgl.tex.Texture
+	 *            Texture} for the mouse
 	 * @param hotx
 	 *            - the hotspotX of the mouse (where the user will click
 	 *            relative to the top left corner)
@@ -155,8 +154,8 @@ public class MouseHelp {
 	 * active.
 	 * 
 	 * @param texture
-	 *            - a {@link emergencylanding.k.library.lwjgl.tex.Texture Texture}
-	 *            for the mouse
+	 *            - a {@link emergencylanding.k.library.lwjgl.tex.Texture
+	 *            Texture} for the mouse
 	 * @param width
 	 *            - the wanted width of the cursor
 	 * 

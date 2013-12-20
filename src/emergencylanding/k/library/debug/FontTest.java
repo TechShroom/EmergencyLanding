@@ -31,14 +31,14 @@ public class FontTest extends KMain {
 
 	@Override
 	public void init(String[] args) {
-		strrend = new StringRenderer(new Font("times new roman", Font.BOLD, 16),
-				false);
+		strrend = new StringRenderer(
+				new Font("times new roman", Font.BOLD, 16), false);
 	}
 
 	@Override
 	public void registerRenders(
 			HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

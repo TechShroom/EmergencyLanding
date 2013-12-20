@@ -56,16 +56,14 @@ public abstract class GuiElement {
 		return yPos;
 	}
 
-	public void draw()
-	{
+	public void draw() {
 		drawAt(this.xPos, this.yPos);
 	}
 
-	public void update()
-	{
+	public void update() {
 		updateAt(this.xPos, this.yPos);
 	}
-	
+
 	public abstract void drawAt(float x, float y);
 
 	public abstract void updateAt(float x, float y);

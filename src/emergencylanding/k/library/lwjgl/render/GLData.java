@@ -128,7 +128,8 @@ public class GLData {
 	public static void getLocations() {
 		orthoMatrixLocation = GL20.glGetUniformLocation(comboShaderProgram,
 				"orthoMatrix");
-		uniformTexEnabler = GL20.glGetUniformLocation(comboShaderProgram, "utexenabled");
+		uniformTexEnabler = GL20.glGetUniformLocation(comboShaderProgram,
+				"utexenabled");
 		notifyOnGLError(StackTraceInfo.getCurrentMethodName());
 	}
 

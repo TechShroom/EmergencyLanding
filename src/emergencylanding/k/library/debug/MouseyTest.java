@@ -24,8 +24,8 @@ public class MouseyTest extends KMain implements KeyListener {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		DisplayLayer.initDisplay(false, 800, 600, "Testing EmergencyLanding", true,
-				args);
+		DisplayLayer.initDisplay(false, 800, 600, "Testing EmergencyLanding",
+				true, args);
 		Keys.registerListener(new MouseyTest());
 		while (!Display.isCloseRequested()) {
 			DisplayLayer.loop(120);
@@ -39,7 +39,7 @@ public class MouseyTest extends KMain implements KeyListener {
 	@Override
 	public void onDisplayUpdate(int delta) {
 		DisplayLayer.readDevices();
-		if(toggleNextChance) {
+		if (toggleNextChance) {
 			toggleNextChance = false;
 			DisplayLayer.toggleFull();
 		}
@@ -74,6 +74,6 @@ public class MouseyTest extends KMain implements KeyListener {
 	public void registerRenders(
 			HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
