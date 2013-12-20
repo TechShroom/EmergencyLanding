@@ -198,6 +198,8 @@ public class VBAO {
 			tex.bind();
 		}
 
+		GL20.glUniform1f(GLData.uniformTexEnabler, (tex == null ? 0 : 1));
+
 		// Bind to the VAO that has all the information about the vertices
 		GL30.glBindVertexArray(vaoId);
 		GL20.glEnableVertexAttribArray(POS_VBO_INDEX);

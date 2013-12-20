@@ -31,6 +31,7 @@ public class GLData {
 	private static int comboShaderProgram = 0;
 	private static ArrayList<Integer> shaders = new ArrayList<Integer>();
 	private static int orthoMatrixLocation = 0;
+	public static int uniformTexEnabler = 0;
 
 	public static void clearAndLoad() {
 
@@ -127,6 +128,7 @@ public class GLData {
 	public static void getLocations() {
 		orthoMatrixLocation = GL20.glGetUniformLocation(comboShaderProgram,
 				"orthoMatrix");
+		uniformTexEnabler = GL20.glGetUniformLocation(comboShaderProgram, "utexenabled");
 		notifyOnGLError(StackTraceInfo.getCurrentMethodName());
 	}
 
@@ -194,8 +196,8 @@ public class GLData {
 	public static void notifyOnGLError(String location) {
 		int err = GL11.glGetError();
 		if (err != GL11.GL_NO_ERROR) {
-			LUtils.print("[GLErrorReporter] GLError in " + location
-					+ ": " + GLU.gluErrorString(err) + " (id: " + err + ")");
+			LUtils.print("[GLErrorReporter] GLError in " + location + ": "
+					+ GLU.gluErrorString(err) + " (id: " + err + ")");
 			System.exit(-10);
 		}
 	}

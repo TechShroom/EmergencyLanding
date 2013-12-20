@@ -330,6 +330,7 @@ public class VertexData {
 				verts[1], verts[2], verts[3], colors[0], colors[1], colors[2],
 				colors[3], texCoords[0], texCoords[1]);
 	}
+
 	/**
 	 * Converts the given data to a {@link FloatBuffer}
 	 * 
@@ -338,6 +339,19 @@ public class VertexData {
 	 * @return a FloatBuffer with the data
 	 */
 	public static FloatBuffer toFB(VertexData[] vds) {
+		return toFB(vds, false);
+	}
+
+	/**
+	 * Converts the given data to a {@link FloatBuffer}
+	 * 
+	 * @param vds
+	 *            - the {@link VertexData} to use
+	 * @param tex
+	 *            - does this FB need the textures enabled?
+	 * @return a FloatBuffer with the data
+	 */
+	public static FloatBuffer toFB(VertexData[] vds, boolean tex) {
 		FloatBuffer ret = BufferUtils.createFloatBuffer(VERTEX_SIZE
 				* vds.length);
 		for (VertexData vd : vds) {
