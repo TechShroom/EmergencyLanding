@@ -85,6 +85,7 @@ public class GLData {
 		GL20.glBindAttribLocation(comboShaderProgram, POSITION_INDEX,
 				"in_Position");
 		GL20.glBindAttribLocation(comboShaderProgram, COLOR_INDEX, "in_Color");
+		GL20.glBindAttribLocation(comboShaderProgram, TEX_INDEX, "in_texCoord");
 		GL20.glLinkProgram(comboShaderProgram);
 		GL20.glValidateProgram(comboShaderProgram);
 		notifyOnGLError(StackTraceInfo.getCurrentMethodName());

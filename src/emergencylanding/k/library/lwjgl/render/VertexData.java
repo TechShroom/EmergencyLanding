@@ -29,9 +29,9 @@ public class VertexData {
 	public float[] colors = {1f, 1f, 1f, 1f};
 
 	/**
-	 * Default texture coords 0, 0
+	 * Default texture coords -1,0 (disabled)
 	 */
-	public float[] texCoords = {0f, 0f};
+	public float[] texCoords = {-1f, -1f};
 
 	private int order = NO_DATA;
 
@@ -112,7 +112,7 @@ public class VertexData {
 	 *            - the floats to use
 	 */
 	public VertexData(int order, float... floats) {
-		float x = 0, y = 0, z = 0, w = 1, r = 1, g = 1, b = 1, a = 1, u = 0, v = 0;
+		float x = 0f, y = 0f, z = 0f, w = 1f, r = 1f, g = 1f, b = 1f, a = 1f, u = -1f, v = 0f;
 		switch (floats.length) {
 			case 0 :
 				break;

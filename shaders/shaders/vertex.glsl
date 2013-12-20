@@ -4,8 +4,10 @@ uniform mat4 orthoMatrix;
 
 in vec4 in_Position;
 in vec4 in_Color;
+in vec2 in_texCoord;
 
 out vec4 pass_Color;
+out vec2 pass_texCoord;
 
 void main(void) {
 	gl_Position = in_Position;
@@ -13,4 +15,5 @@ void main(void) {
 	gl_Position = orthoMatrix * in_Position;
 	
 	pass_Color = in_Color;
+	pass_texCoord = in_texCoord;
 }
