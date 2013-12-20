@@ -12,6 +12,7 @@ import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.lwjgl.render.VBAO;
 import emergencylanding.k.library.lwjgl.render.VertexData;
+import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.main.KMain;
 
 public class VBAOTest extends KMain {
@@ -51,6 +52,7 @@ public class VBAOTest extends KMain {
 				new VertexData(order, v2), new VertexData(order, v3),
 				new VertexData(order, v4)};
 		quad = Shapes.getQuad(verts);
+		quad.setTexture(ColorTexture.BLUE);
 	}
 
 	@Override
