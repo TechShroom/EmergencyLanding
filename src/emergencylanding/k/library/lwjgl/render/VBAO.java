@@ -198,7 +198,7 @@ public class VBAO {
 			tex.bind();
 		}
 
-		// Bind to the VAO that has all the information about the quad vertices
+		// Bind to the VAO that has all the information about the vertices
 		GL30.glBindVertexArray(vaoId);
 		GL20.glEnableVertexAttribArray(POS_VBO_INDEX);
 		GL20.glEnableVertexAttribArray((tex == null)
