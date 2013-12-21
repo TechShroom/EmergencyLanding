@@ -7,7 +7,6 @@ import javax.xml.bind.DatatypeConverter;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
-
 public class DataStruct {
     public static final String SPLIT_PAIRS = ";", SPLIT_KEYVALUE = "|",
 	    SPLIT_CLASS = "`";
@@ -31,10 +30,12 @@ public class DataStruct {
     }
 
     private Object[] decodeData(String s) {
-	Object[] out = s.split(SPLIT_PAIRS);
+	String[] splitToCopy = s.split(SPLIT_PAIRS);
+	Object[] out = new Object[splitToCopy.length];
+	System.arraycopy(splitToCopy, 0, out, 0, splitToCopy.length);
 	for (int i = 0; i < out.length; i++) {
 	    String pair = (String) out[i];
-	    String[] key_val = pair.split(SPLIT_KEYVALUE);
+	    String[] key_val = pair.split("\\Q" + SPLIT_KEYVALUE + "\\E");
 	    out[i] = decode(key_val[0].toCharArray()[0], key_val[1]);
 	}
 	return out;
@@ -43,17 +44,17 @@ public class DataStruct {
     private Object decode(char key, String val) {
 	switch (key) {
 	case KEY_BOOL:
-	    return Boolean.parseBoolean(val);
+	    return Boolean.valueOf(val);
 	case KEY_BYTE:
-	    return Byte.parseByte(val);
+	    return Byte.valueOf(val);
 	case KEY_CHAR:
 	    return val.charAt(0);
 	case KEY_DOUBLE:
-	    return Double.parseDouble(val);
+	    return Double.valueOf(val);
 	case KEY_FLOAT:
-	    return Float.parseFloat(val);
+	    return Float.valueOf(val);
 	case KEY_INT:
-	    return Integer.parseInt(val);
+	    return Integer.valueOf(val);
 	case KEY_LONG:
 	    return Long.parseLong(val);
 	case KEY_OTHER:
@@ -71,7 +72,7 @@ public class DataStruct {
 	String[] classAndJson = val.split(SPLIT_CLASS);
 	try {
 	    Object o = new Gson().fromJson(classAndJson[1],
-		    Class.forName(classAndJson[2]));
+		    Class.forName(classAndJson[0]));
 	    return o;
 	} catch (JsonSyntaxException e) {
 	    e.printStackTrace();
@@ -82,7 +83,7 @@ public class DataStruct {
     }
 
     /**
-     * The 'enocde' constructor. Used for encoding the values to a data String.
+     * The 'encode' constructor. Used for encoding the values to a data String.
      * 
      * @param values
      *            - the data values
@@ -127,8 +128,8 @@ public class DataStruct {
 	    val = DatatypeConverter.printBase64Binary(o.toString().getBytes());
 	} else {
 	    key = KEY_OTHER;
-	    val = DatatypeConverter.printBase64Binary(new Gson().toJson(o)
-		    .getBytes());
+	    val = DatatypeConverter.printBase64Binary((o.getClass().getName()
+		    + SPLIT_CLASS + new Gson().toJson(o)).getBytes());
 	}
 	return key + SPLIT_KEYVALUE + val;
     }
@@ -156,6 +157,15 @@ public class DataStruct {
      */
     public Object get(int index, Object def) {
 	return LUtils.getArg(dataValues, index, def);
+    }
+
+    /**
+     * Gets the entire object array.
+     * 
+     * @return the object values
+     */
+    public Object[] getAll() {
+	return Arrays.asList(dataValues).toArray(new Object[0]);
     }
 
     @Override
