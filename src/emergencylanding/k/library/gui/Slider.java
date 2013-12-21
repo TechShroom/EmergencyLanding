@@ -2,13 +2,16 @@ package emergencylanding.k.library.gui;
 
 import java.awt.Rectangle;
 
+import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.render.StringRenderer;
+import emergencylanding.k.library.lwjgl.render.VBAO;
+import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.lwjgl.tex.Texture;
 
 public class Slider extends GuiElement {
-	private Texture slideTex, baseTex;
+	private VBAO slide, base;
 	private float minimum, maximum, minXAdd, maxXAdd, percentage, middleXAdd,
 			middleYAdd;
 	private boolean tracking;
@@ -21,8 +24,8 @@ public class Slider extends GuiElement {
 			Texture baseImgTex, String textForDisplay,
 			String[] stringsToAppend, StringRenderer renderer) {
 		super(x, y);
-		slideTex = slideImgTex;
-		baseTex = baseImgTex;
+		Texture slideTex = slideImgTex;
+		Texture baseTex = baseImgTex;
 		minimum = min;
 		maximum = max;
 		minXAdd = (slideTex.getWidth() / 2);
@@ -36,8 +39,16 @@ public class Slider extends GuiElement {
 		} else {
 			fillDefaults(stringsToAppend);
 		}
+		slide = Shapes.getQuad(
+				new VertexData().setXYZ(0, 0, 0),
+				new VertexData().setXYZ(slideTex.getWidth(),
+						slideTex.getHeight(), 0), Shapes.XY);
+		slide.setTexture(slideTex);
+		base = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
+				new VertexData().setXYZ(baseTex.getWidth(),
+						baseTex.getHeight(), 0), Shapes.XY);
+		base.setTexture(baseTex);
 	}
-
 	private void fillDefaults(String[] stringsToAppend) {
 		int cap = Math.min(101, stringsToAppend.length);
 		appendables = new String[101];
@@ -59,8 +70,8 @@ public class Slider extends GuiElement {
 	@Override
 	public void updateAt(float x, float y) {
 		Rectangle recalcBB = new Rectangle((int) Math.floor(xPos),
-				(int) Math.floor(this.yPos), baseTex.getWidth(),
-				baseTex.getHeight());
+				(int) Math.floor(this.yPos), base.tex.getWidth(),
+				base.tex.getHeight());
 		if (MouseHelp.clickingInRect(recalcBB, MouseHelp.LMB) && !tracking
 				&& !anytracking) {
 			tracking = true;
@@ -87,10 +98,10 @@ public class Slider extends GuiElement {
 	@Override
 	public void drawAt(float x, float y) {
 		float slideX = calcSlideX(xPos);
-		Shapes.glQuad(xPos, yPos, 0, baseTex.getWidth(), baseTex.getHeight(),
-				0, Shapes.XYF, baseTex);
-		Shapes.glQuad(slideX, yPos, 2, slideTex.getWidth(),
-				slideTex.getHeight(), 2, Shapes.XYF, slideTex);
+		base.setXYZOff(new Victor(xPos, yPos, 0));
+		base.draw();
+		slide.setXYZOff(new Victor(slideX, yPos, 0));
+		slide.draw();
 		float percentInt = Math.round(percentage * 100);
 		String append = "";
 		append = appendables[(int) percentInt];
@@ -100,7 +111,7 @@ public class Slider extends GuiElement {
 	}
 
 	private float calcSlideX(float x) {
-		float xres = x + percentage * baseTex.getWidth() - minXAdd * 2;
+		float xres = x + percentage * base.tex.getWidth() - minXAdd * 2;
 		if (percentage == 0) {
 			xres = x;
 		}

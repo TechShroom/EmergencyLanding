@@ -28,8 +28,8 @@ public class DisplayLayer {
 	private static String reqTitle = "";
 	private static boolean wasResizable;
 	private static LWJGLRenderer renderer;
-	public static String VERSION = "1.0";
-	
+	public static String VERSION = "1.1";
+
 	/**
 	 * Initializes the display and KMain instance. Parameter notes are found on
 	 * the longest argument version.
@@ -142,8 +142,8 @@ public class DisplayLayer {
 		LUtils.print("Using LWJGL v" + Sys.getVersion());
 		DisplayMode dm = LUtils.getDisplayMode(width, height, fullscreen);
 		if (!dm.isFullscreenCapable() && fullscreen) {
-			LUtils.print("Warning! Fullscreen is not supported with width " + width
-					+ " and height " + height);
+			LUtils.print("Warning! Fullscreen is not supported with width "
+					+ width + " and height " + height);
 			fullscreen = false;
 		}
 		DisplayLayer.reqTitle = title.toString();

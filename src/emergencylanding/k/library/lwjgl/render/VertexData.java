@@ -19,19 +19,21 @@ public class VertexData {
 			TEX_FIRST = 2;
 
 	/**
-	 * Default vertex origin
+	 * Default vertex is origin
 	 */
-	private float[] verts = {0f, 0f, 0f, 1f};
+	public float[] verts = {0f, 0f, 0f, 1f};
 
 	/**
-	 * Default color white
+	 * Default color is white
 	 */
-	private float[] colors = {1f, 1f, 1f, 1f};
+	public float[] colors = {1f, 1f, 1f, 1f};
 
 	/**
-	 * Default texture coords 0, 0
+	 * Default texture coords -1,0 (disabled)
 	 */
-	private float[] texCoords = {0f, 0f};
+	public float[] texCoords = {-1f, -1f};
+
+	private int order = NO_DATA;
 
 	public VertexData() {
 		this(NO_DATA, new float[0]);
@@ -110,7 +112,7 @@ public class VertexData {
 	 *            - the floats to use
 	 */
 	public VertexData(int order, float... floats) {
-		float x = 0, y = 0, z = 0, w = 1, r = 1, g = 1, b = 1, a = 1, u = 0, v = 0;
+		float x = 0f, y = 0f, z = 0f, w = 1f, r = 1f, g = 1f, b = 1f, a = 1f, u = -1f, v = 0f;
 		switch (floats.length) {
 			case 0 :
 				break;
@@ -228,36 +230,128 @@ public class VertexData {
 		setXYZW(x, y, z, w);
 		setRGBA(r, g, b, a);
 		setUV(u, v);
+		this.order = order;
 	}
 
-	public void setXYZ(float x, float y, float z) {
-		setXYZW(x, y, z, 1f);
+	/**
+	 * Sets the x, y, and z
+	 * 
+	 * @param x
+	 *            - x
+	 * @param y
+	 *            - y
+	 * @param z
+	 *            - z
+	 */
+	public VertexData setXYZ(float x, float y, float z) {
+		return setXYZW(x, y, z, 1f);
 	}
 
-	public void setXYZW(float x, float y, float z, float w) {
+	/**
+	 * Sets the x, y, z, and w
+	 * 
+	 * @param x
+	 *            - x
+	 * @param y
+	 *            - y
+	 * @param z
+	 *            - z
+	 * @param w
+	 *            - w
+	 */
+	public VertexData setXYZW(float x, float y, float z, float w) {
 		verts[0] = x;
 		verts[1] = y;
 		verts[2] = z;
 		verts[3] = w;
+		return this;
 	}
 
-	public void setRGB(float r, float g, float b) {
-		setRGBA(r, g, b, 1f);
+	/**
+	 * Sets the r, g, and b
+	 * 
+	 * @param r
+	 *            - red
+	 * @param g
+	 *            - green
+	 * @param b
+	 *            - blue
+	 */
+	public VertexData setRGB(float r, float g, float b) {
+		return setRGBA(r, g, b, 1f);
 	}
 
-	public void setRGBA(float r, float g, float b, float a) {
+	/**
+	 * Sets the r, g, b, and a
+	 * 
+	 * @param r
+	 *            - red
+	 * @param g
+	 *            - green
+	 * @param b
+	 *            - blue
+	 * @param a
+	 *            - alpha
+	 */
+	public VertexData setRGBA(float r, float g, float b, float a) {
 		colors[0] = r;
 		colors[1] = g;
 		colors[2] = b;
 		colors[3] = a;
+		return this;
 	}
 
-	public void setUV(float u, float v) {
+	/**
+	 * Sets the u and v
+	 * 
+	 * @param u
+	 *            - texture coord u
+	 * @param v
+	 *            - texture coord v
+	 */
+	public VertexData setUV(float u, float v) {
 		texCoords[0] = u;
 		texCoords[1] = v;
+		return this;
 	}
 
+	/**
+	 * Returns the order used to generate the vertex data
+	 * 
+	 * @return the order used to generate the vertex data
+	 */
+	public int getOrderUsed() {
+		return order;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("VD: {%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", verts[0],
+				verts[1], verts[2], verts[3], colors[0], colors[1], colors[2],
+				colors[3], texCoords[0], texCoords[1]);
+	}
+
+	/**
+	 * Converts the given data to a {@link FloatBuffer}
+	 * 
+	 * @param vds
+	 *            - the {@link VertexData} to use
+	 * @return a FloatBuffer with the data
+	 */
 	public static FloatBuffer toFB(VertexData[] vds) {
+		return toFB(vds, false);
+	}
+
+	/**
+	 * Converts the given data to a {@link FloatBuffer}
+	 * 
+	 * @param vds
+	 *            - the {@link VertexData} to use
+	 * @param tex
+	 *            - does this FB need the textures enabled?
+	 * @return a FloatBuffer with the data
+	 */
+	public static FloatBuffer toFB(VertexData[] vds, boolean tex) {
 		FloatBuffer ret = BufferUtils.createFloatBuffer(VERTEX_SIZE
 				* vds.length);
 		for (VertexData vd : vds) {

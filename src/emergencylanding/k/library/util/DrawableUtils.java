@@ -43,8 +43,8 @@ public class DrawableUtils {
 					"Scaling not complete, and callback not implemented");
 		}
 		g.dispose();
-		LUtils.print("Resultant x and y of image is "
-				+ resizedImage.getWidth() + " " + resizedImage.getHeight());
+		LUtils.print("Resultant x and y of image is " + resizedImage.getWidth()
+				+ " " + resizedImage.getHeight());
 		return resizedImage;
 	}
 

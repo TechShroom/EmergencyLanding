@@ -3,10 +3,8 @@ package emergencylanding.k.library.util;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,8 +25,22 @@ import org.lwjgl.opengl.GL11;
 
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 
-
 public class LUtils {
+
+	public static final String elPrintStr = String.format(
+			"[EmergencyLanding-%s]", DisplayLayer.VERSION);
+
+	public static void print(String msg) {
+		try {
+			checkAccessor("emergencylanding.k.*",
+					StackTraceInfo.getInvokingClassName());
+		} catch (Exception e) {
+			throw new RuntimeException(new IllegalAccessException(
+					"Not EL trusted class"));
+		}
+		System.err.println(elPrintStr + " " + msg);
+	}
+
 	/**
 	 * The top level of the game/tool
 	 */
@@ -40,8 +52,7 @@ public class LUtils {
 					.getParentFile().getParentFile().getParentFile()
 					.getParentFile().getParentFile().getAbsoluteFile();
 			LUtils.TOP_LEVEL.mkdirs();
-			LUtils
-					.print("Using TOP_LEVEL " + TOP_LEVEL.getAbsolutePath());
+			LUtils.print("Using TOP_LEVEL " + TOP_LEVEL.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -286,15 +297,13 @@ public class LUtils {
 							if (m.isFullscreenCapable()) {
 								return m;
 							} else {
-								LUtils
-										.print(String
-												.format("A non-aspect-compat mode"
-														+ " is being used:"
-														+ " Width: %s Height: %s"
-														+ " Fullscreen: %s."
-														+ " Fullscreen may not work as expected!",
-														width, height,
-														fullscreen));
+								LUtils.print(String
+										.format("A non-aspect-compat mode"
+												+ " is being used:"
+												+ " Width: %s Height: %s"
+												+ " Fullscreen: %s."
+												+ " Fullscreen may not work as expected!",
+												width, height, fullscreen));
 							}
 						}
 					}
@@ -520,6 +529,13 @@ public class LUtils {
 		return ret;
 	}
 
+	@Deprecated
+	public static InputStream getInputStreamSimple(String path)
+			throws IOException, ClassNotFoundException {
+		return Class.forName("Reference").getResourceAsStream(path);
+
+	}
+
 	/**
 	 * Gets an input stream from a path
 	 * 
@@ -547,6 +563,7 @@ public class LUtils {
 					break;
 				} else {
 					isType = 1;
+					break;
 				}
 			}
 		}
@@ -555,23 +572,21 @@ public class LUtils {
 			LUtils.print("Using raw file input stream");
 			result = new FileInputStream(path);
 		} else if (isType == 1 || isType == 2) {
-			LUtils.print("Using recursive zip/jar searcher style "
-					+ isType);
+			LUtils.print("Using recursive zip/jar searcher style " + isType);
 			ArrayList<Integer> indexes = new ArrayList<Integer>();
 			for (int i = 0; i < pathparts.size(); i++) {
 				if (pathparts.get(i).endsWith(".zip")
 						|| pathparts.get(i).endsWith(".jar")) {
-					LUtils.print("Adding zip/jar " + pathparts.get(i)
-							+ " at " + i);
+					LUtils.print("Adding zip/jar " + pathparts.get(i) + " at "
+							+ i);
 					indexes.add(i);
 				}
 			}
-			int currentIndex = 1, filesProccessed = 1;
 			String pathToCurrFile = "";
 			for (int i = 0; i <= indexes.get(0); i++) {
 				String temp_ = pathparts.get(i);
-				LUtils.print(String.format("Appending '%s' to '%s'",
-						temp_, pathToCurrFile));
+				LUtils.print(String.format("Appending '%s' to '%s'", temp_,
+						pathToCurrFile));
 				pathToCurrFile += temp_ + "/";
 			}
 			String file = pathToCurrFile.substring(0,
@@ -579,43 +594,11 @@ public class LUtils {
 			String extra = path.replace(pathToCurrFile, "");
 			LUtils.print("Attempting to load from " + file);
 			ZipFile zf = new ZipFile(file);
-			if (isType == 1) {
-				ZipEntry ze = zf.getEntry(extra);
-				result = zf.getInputStream(ze);
-			} else {
-				while (filesProccessed < indexes.size()) {
-					InputStream zipIN = zf.getInputStream(zf.getEntry(extra));
-					File tempFile = File.createTempFile("tempFile-ccscanner-"
-							+ filesProccessed, "zip");
-					OutputStream tempOut = new FileOutputStream(tempFile);
-					byte[] transfer = new byte[zipIN.available()];
-					zipIN.read(transfer);
-					tempOut.write(transfer);
-					ZipFile innerZipFile = new ZipFile(tempFile);
-					zipIN.close();
-					tempFile.delete();
-					tempOut.close();
-					innerZipFile.close();
-					filesProccessed++;
-				}
-			}
+			ZipEntry ze = zf.getEntry(extra);
+			result = zf.getInputStream(ze);
 		}
 
 		LUtils.print("[Complete]");
 		return result;
 	}
-
-	public static void print(String msg) {
-		try {
-			checkAccessor("emergencylanding.k.*",
-					StackTraceInfo.getInvokingClassName());
-		} catch (Exception e) {
-			throw new RuntimeException(new IllegalAccessException(
-					"Not EL trusted class"));
-		}
-		System.err.println(DisplayLayer.elPrintStr + " " + msg);
-	}
-
-	public static String elPrintStr = String.format("[EmergencyLanding-%s]",
-	DisplayLayer.VERSION);
 }

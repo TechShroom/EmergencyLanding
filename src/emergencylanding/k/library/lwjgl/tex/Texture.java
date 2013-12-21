@@ -22,6 +22,7 @@ import org.lwjgl.util.glu.MipMap;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
+import emergencylanding.k.library.lwjgl.render.GLData;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
@@ -37,7 +38,7 @@ public abstract class Texture {
 			Texture.currentSpace -= buf.capacity();
 			Texture.removedIDs.add(getID());
 			GL11.glDeleteTextures(getID());
-			texture.onDestruction();
+			texture.destruction0();
 		}
 
 		@Override
@@ -135,9 +136,8 @@ public abstract class Texture {
 								&& id == -1 && Texture.useID == -1) {
 							id = GL11.glGenTextures();
 						} else {
-							LUtils
-									.print("WARNING! Texture limit reached, "
-											+ "not adding new textures!");
+							LUtils.print("WARNING! Texture limit reached, "
+									+ "not adding new textures!");
 							return;
 						}
 						// Create a new texture object in memory and bind it
@@ -183,9 +183,8 @@ public abstract class Texture {
 									dim.height, GL11.GL_RGBA,
 									GL11.GL_UNSIGNED_BYTE, buf);
 							if (err != 0) {
-								LUtils
-										.print("error while running build2dMipMaps: "
-												+ err);
+								LUtils.print("error while running build2dMipMaps: "
+										+ err);
 							}
 						}
 						Texture.texlist.put(id, texObj);
@@ -242,6 +241,11 @@ public abstract class Texture {
 	public void bind() {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, getID());
+	}
+
+	public void unbind() {
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, GLData.NONE);
 	}
 
 	public void glTextureVertex(float s, float t) {
@@ -311,6 +315,11 @@ public abstract class Texture {
 	public void kill() {
 		new DestTexture(this);
 		System.gc();
+	}
+
+	private void destruction0() {
+		unbind();
+		onDestruction();
 	}
 
 	protected abstract void onDestruction();

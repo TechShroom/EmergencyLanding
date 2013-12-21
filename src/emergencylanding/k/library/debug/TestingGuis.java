@@ -26,8 +26,8 @@ public class TestingGuis extends KMain {
 
 	public static void main(String[] args) {
 		try {
-			DisplayLayer.initDisplay(false, 800, 500, "Testing EmergencyLanding",
-					true, args);
+			DisplayLayer.initDisplay(false, 800, 500,
+					"Testing EmergencyLanding", true, args);
 			FPS.enable(TestingGuis.DISPLAY_FPS_INDEX);
 			TestingGuis.startISThreads();
 			System.err.println("percent of 656/1000 = "
@@ -90,6 +90,6 @@ public class TestingGuis extends KMain {
 	public void registerRenders(
 			HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

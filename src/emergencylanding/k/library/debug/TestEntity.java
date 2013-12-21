@@ -21,12 +21,12 @@ public class TestEntity extends Entity {
 	private static Texture[] texmix = {ColorTexture.BLUE, ColorTexture.RED,
 			ColorTexture.GREEN, ColorTexture.PURPLE};
 
-	public TestEntity() {
-		super(0, 0, 0, TestEntity.texmix[0]);
+	public TestEntity(World w) {
+		super(w, 0, 0, 0, TestEntity.texmix[0]);
 	}
 
 	@Override
-	public void updateOnTick(float delta, World w) {
+	public void updateOnTick(float delta) {
 		if (pos.x > Display.getWidth() || pos.x < 0) {
 			setXPos(!(pos.x > Display.getWidth()) ? Display.getWidth() : 0);
 		}
@@ -36,7 +36,7 @@ public class TestEntity extends Entity {
 		if (Math.sqrt(vel.y * vel.y + vel.x * vel.x) < 0.5) {
 			tex = Helper.Arrays.randomArray(TestEntity.texmix)[0];
 		}
-		super.updateOnTick(delta, w);
+		super.updateOnTick(delta);
 		checkForClick();
 		doRandomVelocityChange();
 	}

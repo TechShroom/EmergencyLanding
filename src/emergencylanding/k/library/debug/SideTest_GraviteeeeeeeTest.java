@@ -97,10 +97,10 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
 	public void init(String[] args) {
 		World w = new World();
 		WorldManager.addWorldToSystem(w);
-		e = new TestGravEntity();
+		e = new TestGravEntity(w);
 		w.addEntity(e);
 		for (int i = 0; i < 100; i++) {
-			GravEntity ge = new TestGravEntity();
+			GravEntity ge = new TestGravEntity(w);
 			ge.setXYZ(((float) Math.random() + 0.1f) * 1000f,
 					((float) Math.random() + 2f) * 100f, 0f);
 			w.addEntity(ge);
