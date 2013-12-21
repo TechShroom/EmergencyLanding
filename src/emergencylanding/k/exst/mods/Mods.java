@@ -7,13 +7,13 @@ import emergencylanding.k.library.lwjgl.render.Render;
 
 public class Mods {
 
-	public static void findAndLoad() {
+    public static void findAndLoad() {
 
-	}
+    }
 
-	public static void registerRenders(
-			HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
+    public static void registerRenders(
+	    HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
 
-	}
+    }
 
 }

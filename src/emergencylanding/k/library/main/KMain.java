@@ -8,44 +8,44 @@ import emergencylanding.k.library.util.LUtils;
 import emergencylanding.k.library.util.StackTraceInfo;
 
 public abstract class KMain {
-	private static KMain insts = null;
-	private static Thread displayThread = null;
+    private static KMain insts = null;
+    private static Thread displayThread = null;
 
-	public abstract void onDisplayUpdate(int delta);
+    public abstract void onDisplayUpdate(int delta);
 
-	public abstract void init(String[] args);
+    public abstract void init(String[] args);
 
-	public static void setInst(KMain inst) {
-		try {
-			LUtils.checkAccessor("emergencylanding.k.library.*",
-					StackTraceInfo.getInvokingClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
-		KMain.insts = inst;
+    public static void setInst(KMain inst) {
+	try {
+	    LUtils.checkAccessor("emergencylanding.k.library.*",
+		    StackTraceInfo.getInvokingClassName());
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return;
 	}
+	KMain.insts = inst;
+    }
 
-	public static KMain getInst() {
-		return KMain.insts;
+    public static KMain getInst() {
+	return KMain.insts;
+    }
+
+    public static void setDisplayThread(Thread t) {
+	try {
+	    LUtils.checkAccessor("emergencylanding.k.library.*",
+		    StackTraceInfo.getInvokingClassName());
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    return;
 	}
+	KMain.displayThread = t;
+	LUtils.print("Display thread set");
+    }
 
-	public static void setDisplayThread(Thread t) {
-		try {
-			LUtils.checkAccessor("emergencylanding.k.library.*",
-					StackTraceInfo.getInvokingClassName());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
-		KMain.displayThread = t;
-		LUtils.print("Display thread set");
-	}
+    public static Thread getDisplayThread() {
+	return KMain.displayThread;
+    }
 
-	public static Thread getDisplayThread() {
-		return KMain.displayThread;
-	}
-
-	public abstract void registerRenders(
-			HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender);
+    public abstract void registerRenders(
+	    HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender);
 }
