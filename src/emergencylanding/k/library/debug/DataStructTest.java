@@ -11,7 +11,7 @@ public class DataStructTest {
      */
     public static void main(String[] args) {
 	Object[] all = new Object[] { "string", 1, 1.1d, 1.1f, 1l, (byte) 1,
-		(char) 1, true, new DataStructTest() };
+		'|', true, new DataStructTest() };
 	Helper.Arrays.print(all);
 	// A data struct with all types in one.
 	DataStruct dec = new DataStruct(all);

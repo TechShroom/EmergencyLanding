@@ -48,7 +48,7 @@ public class DataStruct {
 	case KEY_BYTE:
 	    return Byte.valueOf(val);
 	case KEY_CHAR:
-	    return val.charAt(0);
+	    return new String(DatatypeConverter.parseBase64Binary(val));
 	case KEY_DOUBLE:
 	    return Double.valueOf(val);
 	case KEY_FLOAT:
@@ -115,6 +115,7 @@ public class DataStruct {
 	    key = KEY_BYTE;
 	} else if (oc == Character.class || oc == char.class) {
 	    key = KEY_CHAR;
+	    val = DatatypeConverter.printBase64Binary(o.toString().getBytes());
 	} else if (oc == Double.class || oc == double.class) {
 	    key = KEY_DOUBLE;
 	} else if (oc == Float.class || oc == float.class) {
