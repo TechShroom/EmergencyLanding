@@ -14,23 +14,23 @@ import emergencylanding.k.library.util.LUtils;
 
 public class SoundPlayer {
 
-	private static Audio wavA;
-	private static InputStream iStream;
-	private static BufferedInputStream bStream;
+    private static Audio wavA;
+    private static InputStream iStream;
+    private static BufferedInputStream bStream;
 
-	public static void PlayWAV(String soundFile) {
-		try {
-			iStream = LUtils.getInputStream(soundFile);
-			bStream = new BufferedInputStream(iStream);
-			wavA = AudioLoader.getAudio("WAV", bStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		wavA.playAsSoundEffect(1.0f, 1.0f, false);
-		SoundStore.get().poll(0);
-		if(Display.isCloseRequested()){
-			AL.destroy();
-		}
+    public static void playWAV(String soundFile) {
+	try {
+	    iStream = LUtils.getInputStream(soundFile);
+	    bStream = new BufferedInputStream(iStream);
+	    wavA = AudioLoader.getAudio("WAV", bStream);
+	} catch (IOException e) {
+	    e.printStackTrace();
 	}
+
+	wavA.playAsSoundEffect(1.0f, 1.0f, false);
+	SoundStore.get().poll(0);
+	if (Display.isCloseRequested()) {
+	    AL.destroy();
+	}
+    }
 }
