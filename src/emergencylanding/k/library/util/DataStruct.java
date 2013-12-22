@@ -36,7 +36,12 @@ public class DataStruct {
 	for (int i = 0; i < out.length; i++) {
 	    String pair = (String) out[i];
 	    String[] key_val = pair.split("\\Q" + SPLIT_KEYVALUE + "\\E");
-	    out[i] = decode(key_val[0].toCharArray()[0], key_val[1]);
+	    try {
+		out[i] = decode(key_val[0].toCharArray()[0], key_val[1]);
+	    } catch (ArrayIndexOutOfBoundsException e) {
+		System.err.println("Broken pair " + pair);
+		out[i] = "<invalid>";
+	    }
 	}
 	return out;
     }
