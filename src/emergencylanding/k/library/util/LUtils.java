@@ -28,6 +28,13 @@ import emergencylanding.k.library.lwjgl.DisplayLayer;
 
 public class LUtils {
 
+    /**
+     * A dummy method to load this class. Does nothing.
+     */
+    public static void init() {
+
+    }
+
     public static PrintStream sysout = System.out, syserr = System.err;
 
     static {
@@ -541,13 +548,6 @@ public class LUtils {
 	    e.printStackTrace();
 	}
 	return ret;
-    }
-
-    @Deprecated
-    public static InputStream getInputStreamSimple(String path)
-	    throws IOException, ClassNotFoundException {
-	return Class.forName("Reference").getResourceAsStream(path);
-
     }
 
     /**
