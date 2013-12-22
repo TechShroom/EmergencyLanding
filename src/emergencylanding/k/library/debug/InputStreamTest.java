@@ -11,9 +11,9 @@ public class InputStreamTest {
     public static void main(String[] args) throws IOException,
 	    ClassNotFoundException {
 	String path = //
-	LUtils.TOP_LEVEL + "/test2.zip/layers.zip" // txt.txt
+	LUtils.TOP_LEVEL + "/test2.zip/txt.txt" // txt.txt
 		.replace('/', '\\');
-	InputStream is = LUtils.getInputStreamSimple("res/txt.txt");
+	InputStream is = LUtils.getInputStream(path);
 	System.err.println("Got " + is + " for " + path);
 	if (is == null) {
 	    System.err.println("No InputStream, no data?");
