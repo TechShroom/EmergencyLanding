@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,12 @@ import emergencylanding.k.library.lwjgl.DisplayLayer;
 
 public class LUtils {
 
+    public static PrintStream sysout = System.out, syserr = System.err;
+
+    static {
+	overrideStandardStreams();
+    }
+
     public static final String elPrintStr = String.format(
 	    "[EmergencyLanding-%s]", DisplayLayer.VERSION);
 
@@ -39,6 +46,15 @@ public class LUtils {
 		    "Not EL trusted class"));
 	}
 	System.err.println(elPrintStr + " " + msg);
+    }
+
+    private static void overrideStandardStreams() {
+	System.err.println("Replacing streams with methodized...");
+	MethodizedSTDStream sysout = new MethodizedSTDStream(System.out);
+	System.setOut(new PrintStream(sysout));
+	MethodizedSTDStream syserr = new MethodizedSTDStream(System.err);
+	System.setErr(new PrintStream(syserr));
+	System.err.println("Finished.");
     }
 
     /**
