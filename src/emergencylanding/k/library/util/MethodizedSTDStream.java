@@ -28,7 +28,9 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
 	StackTraceElement s = null, sm1;
 	for (; i < ste.length; i++) {
 	    s = ste[i];
-	    if (!s.getClassName().matches("^(java|sun)(.+?)")) {
+	    if (!s.getClassName().matches("^(java|sun)(.+?)")
+		    && !(s.getClassName().equals(LUtils.class.getName()) && s
+			    .getMethodName().equals("print"))) {
 		break;
 	    }
 	}
