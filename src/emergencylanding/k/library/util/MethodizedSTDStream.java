@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 public class MethodizedSTDStream extends ByteArrayOutputStream {
     PrintStream orig = null;
+    private boolean nextWriteIsOff;
     static String sep = System.getProperty("line.seperator", "\n");
 
     public MethodizedSTDStream(PrintStream out) {
@@ -24,7 +25,7 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
 
 	// use 1 to skip over our entry, and also keep var after loop
 	int i = 1;
-	StackTraceElement s = null;
+	StackTraceElement s = null, sm1;
 	for (; i < ste.length; i++) {
 	    s = ste[i];
 	    if (!s.getClassName().matches("^(java|sun)(.+?)")) {
@@ -34,6 +35,15 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
 	if (s == null) {
 	    // there is no stack!
 	    throw new IllegalStateException("No stack!");
+	}
+	sm1 = ste[i - 1];
+	if (sm1.getClassName().equals(PrintStream.class.getName())
+		&& sm1.getMethodName().equals("print")) {
+	    nextWriteIsOff = true;
+	} else if (nextWriteIsOff) {
+	    orig.write(b, off, len);
+	    nextWriteIsOff = false;
+	    return;
 	}
 	String[] classsplit = s.getClassName().split("\\.");
 
