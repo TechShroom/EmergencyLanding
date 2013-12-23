@@ -27,8 +27,6 @@ public class DataStruct {
     public DataStruct(String data) {
 	dataValues = decodeData(data);
 	dataString = data;
-	System.err.println("Decoded to '" + Helper.Arrays.dump0(dataValues)
-		+ "'");
     }
 
     private Object[] decodeData(String s) {
@@ -98,19 +96,25 @@ public class DataStruct {
     public DataStruct(Object[] values) {
 	dataValues = values;
 	dataString = encodeData(values);
-	System.err.println("Encoded to '" + this + "'");
     }
 
     private String encodeData(Object[] enc) {
 	String out = "";
 	for (Object o : enc) {
-	    out += encode(o);
+	    try {
+		out += encode(o);
+	    } catch (NullPointerException e) {
+		System.err.println("npe on " + Helper.Arrays.dump0(enc));
+	    }
 	    out += SPLIT_PAIRS;
+	}
+	if (out.length() < 2) {
+	    return out;
 	}
 	return out.substring(0, out.length() - 1);
     }
 
-    private String encode(Object o) {
+    private String encode(Object o) throws NullPointerException {
 	Class<?> oc = o.getClass();
 	// Doing the toString() here allows for us to skip it in the primitive
 	// if's
