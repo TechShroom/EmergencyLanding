@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import javax.xml.bind.DatatypeConverter;
 
+import k.core.util.Helper;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -25,8 +27,8 @@ public class DataStruct {
     public DataStruct(String data) {
 	dataValues = decodeData(data);
 	dataString = data;
-	System.err.println("Decoded to '"
-		+ Arrays.asList(dataValues).toString() + "'");
+	System.err.println("Decoded to '" + Helper.Arrays.dump0(dataValues)
+		+ "'");
     }
 
     private Object[] decodeData(String s) {
