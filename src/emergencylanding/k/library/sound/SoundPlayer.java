@@ -21,10 +21,6 @@ public class SoundPlayer {
 	});
     }
 
-    private static Audio wavA;
-    private static InputStream iStream;
-    private static BufferedInputStream bStream;
-
     /**
      * Plays .wav file
      * 
@@ -65,9 +61,10 @@ public class SoundPlayer {
      */
     public static void playWAV(String soundFile, float volume, float pitch,
 	    boolean loop) {
+	Audio wavA = null;
 	try {
-	    iStream = LUtils.getInputStream(soundFile);
-	    bStream = new BufferedInputStream(iStream);
+	    InputStream iStream = LUtils.getInputStream(soundFile);
+	    BufferedInputStream bStream = new BufferedInputStream(iStream);
 	    wavA = AudioLoader.getAudio("WAV", bStream);
 	} catch (IOException e) {
 	    e.printStackTrace();
