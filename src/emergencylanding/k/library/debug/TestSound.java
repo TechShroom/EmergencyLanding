@@ -35,7 +35,7 @@ public class TestSound extends KMain {
 	SoundPlayer.playWAV(LUtils.TOP_LEVEL.getAbsolutePath()
 		+ "\\res\\wav\\test.wav", 1.0f, .10f, true);
 	SoundPlayer.playWAV(LUtils.TOP_LEVEL.getAbsolutePath()
-		+ "\\res\\wav\\test.wav", 1.0f, .15f, true);
+		+ "\\res\\wav\\test.wav", 1.0f, 2.15f, true);
     }
 
     @Override
