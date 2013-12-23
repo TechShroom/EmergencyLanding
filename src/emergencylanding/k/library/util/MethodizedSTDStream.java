@@ -1,10 +1,7 @@
 package emergencylanding.k.library.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 
@@ -14,16 +11,6 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
     PrintStream orig = null;
     String data = "";
     boolean lastNewline = true, autoFlush = false;
-    static OutputStream output = null;
-    static PrintStream outputps = null;
-    static {
-	try {
-	    output = new FileOutputStream("mstds.txt");
-	    outputps = new PrintStream(output, true);
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	}
-    }
 
     public MethodizedSTDStream(PrintStream out) {
 	orig = out;
