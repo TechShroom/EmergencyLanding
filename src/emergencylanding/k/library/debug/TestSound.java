@@ -23,25 +23,19 @@ public class TestSound extends KMain {
 	System.exit(0);
     }
 
-    private static boolean toggleNextChance;
-
     @Override
     public void onDisplayUpdate(int delta) {
 	DisplayLayer.readDevices();
-	if (toggleNextChance) {
-	    toggleNextChance = false;
-	    DisplayLayer.toggleFull();
-	}
     }
 
     @Override
     public void init(String[] args) {
 	SoundPlayer.playWAV(LUtils.TOP_LEVEL.getAbsolutePath()
-		+ "\\res\\wav\\test.wav", 1.0f, 5.0f, true);
+		+ "\\res\\wav\\test.wav", 1.0f, .50f, true);
 	SoundPlayer.playWAV(LUtils.TOP_LEVEL.getAbsolutePath()
-		+ "\\res\\wav\\test.wav", 1.0f, 10f, true);
+		+ "\\res\\wav\\test.wav", 1.0f, .10f, true);
 	SoundPlayer.playWAV(LUtils.TOP_LEVEL.getAbsolutePath()
-		+ "\\res\\wav\\test.wav", 1.0f, 15f, true);
+		+ "\\res\\wav\\test.wav", 1.0f, .15f, true);
     }
 
     @Override
