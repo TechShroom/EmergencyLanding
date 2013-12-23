@@ -29,7 +29,6 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
 	orig = out;
 	try {
 	    autoFlush = Reflect.getField(Boolean.class, "autoFlush", out);
-	    outputps.println(autoFlush);
 	} catch (NoSuchFieldException e) {
 	    e.printStackTrace();
 	} catch (SecurityException e) {
@@ -41,21 +40,6 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
 	}
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * Me figuring out how to do this.
-     * 
-     * write() is a actually a string, so convert the proper bytes to a string.
-     * Take that string, and if this is the first string or the last message was
-     * a new line, put the method descriptor data in front.
-     * 
-     * Other things to consider: Newlines at end of string, eg. "newline here\n"
-     * Newlines in string, eg. "newline here\nbut there is more"
-     * 
-     * Possibly do a recursive method with newlines, eg.
-     * "newline here\nwith more" -> "newline here", "\n", "with more"
-     */
     @Override
     public synchronized void write(byte[] b, int off, int len) {
 	try {
