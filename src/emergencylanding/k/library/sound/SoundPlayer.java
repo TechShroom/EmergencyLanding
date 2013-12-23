@@ -26,8 +26,8 @@ public class SoundPlayer {
      * 
      * @param soundFile
      */
-    public static void playWAV(String soundFile) {
-	playWAV(soundFile, 1.0f);
+    public static Audio playWAV(String soundFile) {
+	return playWAV(soundFile, 1.0f);
     }
 
     /**
@@ -36,8 +36,8 @@ public class SoundPlayer {
      * @param soundFile
      * @param volume
      */
-    public static void playWAV(String soundFile, float volume) {
-	playWAV(soundFile, volume, 1.0f);
+    public static Audio playWAV(String soundFile, float volume) {
+	return playWAV(soundFile, volume, 1.0f);
     }
 
     /**
@@ -47,8 +47,8 @@ public class SoundPlayer {
      * @param volume
      * @param pitch
      */
-    public static void playWAV(String soundFile, float volume, float pitch) {
-	playWAV(soundFile, volume, pitch, false);
+    public static Audio playWAV(String soundFile, float volume, float pitch) {
+	return playWAV(soundFile, volume, pitch, false);
     }
 
     /**
@@ -59,7 +59,7 @@ public class SoundPlayer {
      * @param pitch
      * @param loop
      */
-    public static void playWAV(String soundFile, float volume, float pitch,
+    public static Audio playWAV(String soundFile, float volume, float pitch,
 	    boolean loop) {
 	Audio wavA = null;
 	try {
@@ -73,5 +73,6 @@ public class SoundPlayer {
 	SoundStore.get().setSoundVolume(volume);
 
 	wavA.playAsSoundEffect(pitch, 1.0f, loop);
+	return wavA;
     }
 }
