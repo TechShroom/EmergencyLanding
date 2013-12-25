@@ -8,7 +8,7 @@ public abstract class Entity {
     protected Victor pos = new Victor(), posInter = new Victor(),
 	    vel = new Victor(), velInter = new Victor();
     protected float pitch, yaw, roll; // Use rotations with caution, their
-				      // bounding boxes will remain straight.
+    // bounding boxes will remain straight.
     protected float deltaT;
     protected float elapsed;
     protected Texture tex;

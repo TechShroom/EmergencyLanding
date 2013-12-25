@@ -115,7 +115,7 @@ public class Sync {
 	    for (long t0 = getTime(), t1; nextFrame - t0 > sleepDurations.avg(); t0 = t1) {
 		Thread.sleep(1);
 		sleepDurations.add((t1 = getTime()) - t0); // update average
-							   // sleep time
+		// sleep time
 	    }
 
 	    // slowly dampen sleep average if too high to avoid yielding too
@@ -127,7 +127,7 @@ public class Sync {
 	    for (long t0 = getTime(), t1; nextFrame - t0 > yieldDurations.avg(); t0 = t1) {
 		Thread.yield();
 		yieldDurations.add((t1 = getTime()) - t0); // update average
-							   // yield time
+		// yield time
 	    }
 	} catch (InterruptedException e) {
 
@@ -167,7 +167,8 @@ public class Sync {
 
 	private static final long DAMPEN_THRESHOLD = 10 * 1000L * 1000L; // 10ms
 	private static final float DAMPEN_FACTOR = 0.9f; // don't change: 0.9f
-							 // is exactly right!
+
+	// is exactly right!
 
 	public RunningAvg(int slotCount) {
 	    slots = new long[slotCount];
