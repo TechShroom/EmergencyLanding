@@ -75,7 +75,7 @@ public class StackTraceInfo {
     public static String getCurrentMethodName() {
 	return StackTraceInfo
 		.getCurrentMethodName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
-									    // additional
+	// additional
 	// overloaded method
 	// call requires +1 offset
     }
@@ -96,7 +96,7 @@ public class StackTraceInfo {
     public static String getCurrentClassName() {
 	return StackTraceInfo
 		.getCurrentClassName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
-									   // additional
+	// additional
 	// overloaded method
 	// call requires +1 offset
     }
@@ -117,7 +117,7 @@ public class StackTraceInfo {
     public static String getCurrentFileName() {
 	return StackTraceInfo
 		.getCurrentFileName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
-									  // additional
+	// additional
 	// overloaded method
 	// call requires +1 offset
     }
