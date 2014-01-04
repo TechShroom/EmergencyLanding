@@ -2,48 +2,48 @@ package emergencylanding.k.library.internalstate;
 
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
-import emergencylanding.k.library.lwjgl.tex.Texture;
+import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
-public abstract class Entity {
+public abstract class ELEntity {
     protected Victor pos = new Victor(), posInter = new Victor(),
 	    vel = new Victor(), velInter = new Victor();
     protected float pitch, yaw, roll; // Use rotations with caution, their
     // bounding boxes will remain straight.
     protected float deltaT;
     protected float elapsed;
-    protected Texture tex;
+    protected ELTexture tex;
     private boolean isDead;
     public World w = null;
 
-    public Entity(World w) {
+    public ELEntity(World w) {
 	setXYZ(0, 0, 0);
 	tex = ColorTexture.RED;
 	this.w = w;
     }
 
-    public Entity(World w, Texture texture) {
+    public ELEntity(World w, ELTexture texture) {
 	setXYZ(0, 0, 0);
 	tex = texture;
 	this.w = w;
     }
 
-    public Entity(World w, float posX, float posY, float posZ, Texture texture) {
+    public ELEntity(World w, float posX, float posY, float posZ, ELTexture texture) {
 	setXYZ(posX, posY, posZ);
 	tex = texture;
 	this.w = w;
     }
 
-    public Entity(World w, float posX, float posY, float posZ, float xVel,
-	    float yVel, float zVel, Texture texture) {
+    public ELEntity(World w, float posX, float posY, float posZ, float xVel,
+	    float yVel, float zVel, ELTexture texture) {
 	setXYZ(posX, posY, posZ);
 	setXYZVel(xVel, yVel, zVel);
 	tex = texture;
 	this.w = w;
     }
 
-    public Entity(World w, float posX, float posY, float posZ, float xVel,
+    public ELEntity(World w, float posX, float posY, float posZ, float xVel,
 	    float yVel, float zVel, float pitchRot, float yawRot,
-	    float rollRot, Texture texture) {
+	    float rollRot, ELTexture texture) {
 	setXYZ(posX, posY, posZ);
 	setXYZVel(xVel, yVel, zVel);
 	pitch = pitchRot;
@@ -274,7 +274,7 @@ public abstract class Entity {
 	}
     }
 
-    public Texture getTex() {
+    public ELTexture getTex() {
 	return tex;
     }
 }

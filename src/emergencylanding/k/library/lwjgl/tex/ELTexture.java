@@ -26,17 +26,17 @@ import emergencylanding.k.library.lwjgl.render.GLData;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
-public abstract class Texture {
-    public static class DestTexture extends Texture {
+public abstract class ELTexture {
+    public static class DestTexture extends ELTexture {
 
-	public DestTexture(Texture texture) {
+	public DestTexture(ELTexture texture) {
 	    buf = ByteBuffer.allocateDirect(1);
 	    dim = new Dimension(1, 1);
 	    setConstructingOverrideId(texture.id);
 	    init();
-	    Texture.texlist.remove(getID());
-	    Texture.currentSpace -= buf.capacity();
-	    Texture.removedIDs.add(getID());
+	    ELTexture.texlist.remove(getID());
+	    ELTexture.currentSpace -= buf.capacity();
+	    ELTexture.removedIDs.add(getID());
 	    GL11.glDeleteTextures(getID());
 	    texture.destruction0();
 	}
@@ -65,7 +65,7 @@ public abstract class Texture {
     public static final long TOTAL_TEXTURE_SPACE = Runtime.getRuntime()
 	    .maxMemory() / 2;
     // private static IntBuffer ids = BufferUtils.createIntBuffer(1);
-    private static HashMap<Integer, Texture> texlist = new HashMap<Integer, Texture>();
+    private static HashMap<Integer, ELTexture> texlist = new HashMap<Integer, ELTexture>();
     private static ArrayList<Integer> removedIDs = new ArrayList<Integer>();
     public static long currentSpace = 0;
     protected static boolean mipmapsEnabled = true;
@@ -79,23 +79,23 @@ public abstract class Texture {
 	try {
 	    f = ContextCapabilities.class.getDeclaredField("glGenerateMipmap");
 	    f.setAccessible(true);
-	    Texture.mipmapsEnabled = f.getLong(GLContext.getCapabilities()) != 0;
+	    ELTexture.mipmapsEnabled = f.getLong(GLContext.getCapabilities()) != 0;
 	} catch (Exception e) {
-	    Texture.mipmapsEnabled = false;
+	    ELTexture.mipmapsEnabled = false;
 	}
-	LUtils.print("3.0 mipmaps? " + Texture.mipmapsEnabled);
+	LUtils.print("3.0 mipmaps? " + ELTexture.mipmapsEnabled);
     }
 
     // Define static Textures AFTER this comment
 
-    public static final Texture invisible = new ColorTexture(new Color(0, 0, 0,
+    public static final ELTexture invisible = new ColorTexture(new Color(0, 0, 0,
 	    0), new Dimension(1, 1));
 
-    public Texture() {
+    public ELTexture() {
     }
 
     private void bind0() {
-	final Texture texObj = this;
+	final ELTexture texObj = this;
 	Runnable runnable = null;
 	synchronized (glThreadQueue) {
 	    glThreadQueue.add(runnable = new Runnable() {
@@ -112,28 +112,28 @@ public abstract class Texture {
 			buf.rewind();
 		    }
 		    buf.rewind();
-		    Texture lookAlike;
-		    if ((lookAlike = Texture.similar(texObj)) != null) {
+		    ELTexture lookAlike;
+		    if ((lookAlike = ELTexture.similar(texObj)) != null) {
 			id = lookAlike.id;
 			LUtils.print("Overrode id: " + id);
-			Texture.texlist.put(lookAlike.id, texObj);
+			ELTexture.texlist.put(lookAlike.id, texObj);
 		    } else {
 			boolean override = false;
-			Texture.currentSpace += buf.capacity();
-			if (Texture.removedIDs.size() > 0
-				&& Texture.useID == -1) {
-			    id = Texture.removedIDs.get(0);
-			    Texture.removedIDs.remove(0);
+			ELTexture.currentSpace += buf.capacity();
+			if (ELTexture.removedIDs.size() > 0
+				&& ELTexture.useID == -1) {
+			    id = ELTexture.removedIDs.get(0);
+			    ELTexture.removedIDs.remove(0);
 			}
-			if (Texture.useID > -1) {
+			if (ELTexture.useID > -1) {
 			    LUtils.print("Force-overrode id: " + id);
 			    override = true;
-			    id = Texture.useID;
-			    Texture.currentSpace -= Texture.texlist.get(id).buf
+			    id = ELTexture.useID;
+			    ELTexture.currentSpace -= ELTexture.texlist.get(id).buf
 				    .capacity();
 			}
-			if (Texture.currentSpace < Texture.TOTAL_TEXTURE_SPACE
-				&& id == -1 && Texture.useID == -1) {
+			if (ELTexture.currentSpace < ELTexture.TOTAL_TEXTURE_SPACE
+				&& id == -1 && ELTexture.useID == -1) {
 			    id = GL11.glGenTextures();
 			} else {
 			    LUtils.print("WARNING! Texture limit reached, "
@@ -148,7 +148,7 @@ public abstract class Texture {
 			// component is 1
 			// byte
 			GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-			if (!Texture.mipmapsEnabled) {
+			if (!ELTexture.mipmapsEnabled) {
 			    GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
 				    GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 			    GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
@@ -175,7 +175,7 @@ public abstract class Texture {
 				    GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
 			}
 			// buf = tmp;
-			if (Texture.mipmapsEnabled) {
+			if (ELTexture.mipmapsEnabled) {
 			    GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 			} else {
 			    int err = MipMap.gluBuild2DMipmaps(
@@ -187,7 +187,7 @@ public abstract class Texture {
 					+ err);
 			    }
 			}
-			Texture.texlist.put(id, texObj);
+			ELTexture.texlist.put(id, texObj);
 		    }
 		}
 	    });
@@ -204,9 +204,9 @@ public abstract class Texture {
 	}
     }
 
-    private static Texture similar(Texture texture) {
-	Texture t1 = null;
-	for (Texture t : Texture.texlist.values()) {
+    private static ELTexture similar(ELTexture texture) {
+	ELTexture t1 = null;
+	for (ELTexture t : ELTexture.texlist.values()) {
 	    if (t.isLookAlike(texture)) {
 		t1 = t;
 		break;
@@ -224,13 +224,13 @@ public abstract class Texture {
 	}
     }
 
-    public boolean isLookAlike(Texture t) {
+    public boolean isLookAlike(ELTexture t) {
 	return t.buf.equals(buf) && t.dim.equals(dim);
     }
 
     @Override
     public boolean equals(Object o) {
-	return o instanceof Texture && isLookAlike((Texture) o);
+	return o instanceof ELTexture && isLookAlike((ELTexture) o);
     }
 
     public abstract void setup();
@@ -267,7 +267,7 @@ public abstract class Texture {
     }
 
     protected void setConstructingOverrideId(int id) {
-	Texture.useID = id;
+	ELTexture.useID = id;
     }
 
     public BufferedImage toBufferedImage() {
