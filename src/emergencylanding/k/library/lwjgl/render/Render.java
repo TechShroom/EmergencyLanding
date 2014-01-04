@@ -1,16 +1,16 @@
 package emergencylanding.k.library.lwjgl.render;
 
-import emergencylanding.k.library.internalstate.Entity;
+import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.Victor;
 
-public abstract class Render<T extends Entity> {
+public abstract class Render<T extends ELEntity> {
     /**
      * Renders the given entity at it's location, yaw, and pitch.
      * 
      * @param entity
      */
     public void doRender(T entity, Victor interpolated) {
-	doRender(entity, interpolated.x, interpolated.y, interpolated.z);
+        doRender(entity, interpolated.x, interpolated.y, interpolated.z);
     }
 
     /**

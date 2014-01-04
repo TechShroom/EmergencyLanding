@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.lwjgl.opengl.Display;
 
 import emergencylanding.k.imported.Sync.RunningAvg;
-import emergencylanding.k.library.internalstate.Entity;
+import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
@@ -26,38 +26,38 @@ public class VBAOTest extends KMain {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-	DisplayLayer.initDisplay(false, 1000, 600, "VBAO NewElTest", false,
-		false, args);
-	FPS.enable(0);
-	while (!Display.isCloseRequested()) {
-	    DisplayLayer.loop(12000);
-	}
-	DisplayLayer.destroy();
+        DisplayLayer.initDisplay(false, 1000, 600, "VBAO NewElTest", false,
+                false, args);
+        FPS.enable(0);
+        while (!Display.isCloseRequested()) {
+            DisplayLayer.loop(12000);
+        }
+        DisplayLayer.destroy();
     }
 
     @Override
     public void onDisplayUpdate(int delta) {
-	quad.setXYZOff(new Victor(delta, delta, delta));
-	quad.draw();
+        quad.setXYZOff(new Victor(delta, delta, delta));
+        quad.draw();
     }
 
     @Override
     public void init(String[] args) {
-	float[] v1 = { 50, 200, 0, 1f, 1f, 1f };
-	float[] v2 = { 50, 50, 0, 1f, 1f, 1f };
-	float[] v3 = { 200, 50, 0, 1f, 1f, 1f };
-	float[] v4 = { 200, 200, 0, 1f, 1f, 1f };
-	int order = VertexData.COLOR_FIRST;
-	VertexData[] verts = { new VertexData(order, v1),
-		new VertexData(order, v2), new VertexData(order, v3),
-		new VertexData(order, v4) };
-	quad = Shapes.getQuad(verts);
-	quad.setTexture(ColorTexture.BLUE);
+        float[] v1 = { 50, 200, 0, 1f, 1f, 1f };
+        float[] v2 = { 50, 50, 0, 1f, 1f, 1f };
+        float[] v3 = { 200, 50, 0, 1f, 1f, 1f };
+        float[] v4 = { 200, 200, 0, 1f, 1f, 1f };
+        int order = VertexData.COLOR_FIRST;
+        VertexData[] verts = { new VertexData(order, v1),
+                new VertexData(order, v2), new VertexData(order, v3),
+                new VertexData(order, v4) };
+        quad = Shapes.getQuad(verts);
+        quad.setTexture(ColorTexture.BLUE);
     }
 
     @Override
     public void registerRenders(
-	    HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
+            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
     }
 
 }

@@ -1,16 +1,16 @@
 package emergencylanding.k.library.internalstate;
 
 import emergencylanding.k.library.internalstate.world.World;
-import emergencylanding.k.library.lwjgl.tex.Texture;
+import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
-public class GravEntity extends Entity {
+public class GravEntity extends ELEntity {
 
     private float grav;
 
     public GravEntity(World w, float posX, float posY, float posZ,
-	    Texture texture) {
-	super(w, posX, posY, posZ, texture);
-	grav = 9.8f;
+            ELTexture texture) {
+        super(w, posX, posY, posZ, texture);
+        grav = 9.8f;
     }
 
     /**
@@ -27,14 +27,14 @@ public class GravEntity extends Entity {
      *            -Acceleration due to gravity
      */
     public GravEntity(World w, float posX, float posY, float posZ,
-	    Texture texture, float gravity) {
-	super(w, posX, posY, posZ, texture);
-	grav = gravity;
+            ELTexture texture, float gravity) {
+        super(w, posX, posY, posZ, texture);
+        grav = gravity;
     }
 
     @Override
     public void updateOnTick(float delta) {
-	super.updateOnTick(delta);
-	setRelativeXYZVel(0, -grav, 0);
+        super.updateOnTick(delta);
+        setRelativeXYZVel(0, -grav, 0);
     }
 }

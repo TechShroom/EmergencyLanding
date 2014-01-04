@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="jar://$MODULE_DIR$/libs/TWL.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/TWLEffects.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/gson.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/AppleJavaExtensions.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/asm-debug-all.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/jinput.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl_util.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lwjgl.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/lzma.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/slick-util.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/zip4j_1.3.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/libs/netty.jar!/" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
+      <src_folder value="file://$MODULE_DIR$/shaders" expected_position="1" />
+    </src_description>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/bin-kenzie" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/shaders" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="TWL.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/TWL.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="http://l33tlabs.org/dist/javadoc/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="file://C:/Users/Kenzie Togami/Downloads/twl-src" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="TWLEffects.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/TWLEffects.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="http://l33tlabs.org/dist/javadoc/" />
+        </JAVADOC>
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="gson.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/gson.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/libs/javadocs/gsonjavadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/sources/gsonsrc.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module" module-name="KCore" />
+    <orderEntry type="module-library">
+      <library name="AppleJavaExtensions.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/AppleJavaExtensions.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="asm-debug-all.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/asm-debug-all.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="jinput.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jinput.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl_util.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl_util.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar:platform:/resource/NewCrashCourse/libs/javadocs/lwjgl-docs.zip!/javadoc" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/sources/lwjgl-src.zip!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lwjgl.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar:platform:/resource/NewCrashCourse/libs/javadocs/lwjgl-docs.zip!/javadoc" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/lwjgl-290/sources/lwjgl-source-2.9.0.zip!/" />
+          <root url="jar://$MODULE_DIR$/libs/sources/lwjgl-src.zip!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="lzma.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lzma.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="slick-util.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/slick-util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="zip4j_1.3.1.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/zip4j_1.3.1.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/../CrashCourse/libs/javadocs/zip4j-1.3.1-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/sources/zip4j-1.3.1-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="netty.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/netty.jar!/" />
+        </CLASSES>
+        <JAVADOC>
+          <root url="jar://$MODULE_DIR$/libs/javadocs/netty-javadoc.jar!/" />
+        </JAVADOC>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/libs/sources/netty-source.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="inheritedJdk" />
+  </component>
+</module>
+

@@ -6,7 +6,7 @@ import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
 public abstract class ELEntity {
     protected Victor pos = new Victor(), posInter = new Victor(),
-	    vel = new Victor(), velInter = new Victor();
+            vel = new Victor(), velInter = new Victor();
     protected float pitch, yaw, roll; // Use rotations with caution, their
     // bounding boxes will remain straight.
     protected float deltaT;
@@ -16,41 +16,42 @@ public abstract class ELEntity {
     public World w = null;
 
     public ELEntity(World w) {
-	setXYZ(0, 0, 0);
-	tex = ColorTexture.RED;
-	this.w = w;
+        setXYZ(0, 0, 0);
+        tex = ColorTexture.RED;
+        this.w = w;
     }
 
     public ELEntity(World w, ELTexture texture) {
-	setXYZ(0, 0, 0);
-	tex = texture;
-	this.w = w;
+        setXYZ(0, 0, 0);
+        tex = texture;
+        this.w = w;
     }
 
-    public ELEntity(World w, float posX, float posY, float posZ, ELTexture texture) {
-	setXYZ(posX, posY, posZ);
-	tex = texture;
-	this.w = w;
-    }
-
-    public ELEntity(World w, float posX, float posY, float posZ, float xVel,
-	    float yVel, float zVel, ELTexture texture) {
-	setXYZ(posX, posY, posZ);
-	setXYZVel(xVel, yVel, zVel);
-	tex = texture;
-	this.w = w;
+    public ELEntity(World w, float posX, float posY, float posZ,
+            ELTexture texture) {
+        setXYZ(posX, posY, posZ);
+        tex = texture;
+        this.w = w;
     }
 
     public ELEntity(World w, float posX, float posY, float posZ, float xVel,
-	    float yVel, float zVel, float pitchRot, float yawRot,
-	    float rollRot, ELTexture texture) {
-	setXYZ(posX, posY, posZ);
-	setXYZVel(xVel, yVel, zVel);
-	pitch = pitchRot;
-	yaw = yawRot;
-	roll = rollRot;
-	tex = texture;
-	this.w = w;
+            float yVel, float zVel, ELTexture texture) {
+        setXYZ(posX, posY, posZ);
+        setXYZVel(xVel, yVel, zVel);
+        tex = texture;
+        this.w = w;
+    }
+
+    public ELEntity(World w, float posX, float posY, float posZ, float xVel,
+            float yVel, float zVel, float pitchRot, float yawRot,
+            float rollRot, ELTexture texture) {
+        setXYZ(posX, posY, posZ);
+        setXYZVel(xVel, yVel, zVel);
+        pitch = pitchRot;
+        yaw = yawRot;
+        roll = rollRot;
+        tex = texture;
+        this.w = w;
     }
 
     /**
@@ -61,12 +62,12 @@ public abstract class ELEntity {
      *            - the float value of the time elapsed to update.
      */
     public void updateOnTick(float delta) {
-	elapsed = 0;
+        elapsed = 0;
 
-	setXYZ(pos.x + vel.x * delta, pos.y + vel.y * delta, pos.z + vel.z
-		* delta);
+        setXYZ(pos.x + vel.x * delta, pos.y + vel.y * delta, pos.z + vel.z
+                * delta);
 
-	deltaT = delta;
+        deltaT = delta;
     }
 
     /**
@@ -80,7 +81,7 @@ public abstract class ELEntity {
      *            - new posZ
      */
     public void setXYZ(float newX, float newY, float newZ) {
-	pos.init(newX, newY, newZ);
+        pos.init(newX, newY, newZ);
     }
 
     /**
@@ -94,7 +95,7 @@ public abstract class ELEntity {
      *            - relative change in posZ.
      */
     public void setRelativeXYZ(float relX, float relY, float relZ) {
-	setXYZ(pos.x + relX, pos.y + relY, pos.z + relZ);
+        setXYZ(pos.x + relX, pos.y + relY, pos.z + relZ);
     }
 
     /**
@@ -108,7 +109,7 @@ public abstract class ELEntity {
      *            - new velZ
      */
     public void setXYZVel(float newXVel, float newYVel, float newZVel) {
-	vel.update(newXVel, newYVel, newZVel);
+        vel.update(newXVel, newYVel, newZVel);
     }
 
     /**
@@ -122,7 +123,7 @@ public abstract class ELEntity {
      *            - Relative velZ
      */
     public void setRelativeXYZVel(float relXVel, float relYVel, float relZVel) {
-	setXYZVel(vel.x + relXVel, vel.y + relYVel, vel.z + relZVel);
+        setXYZVel(vel.x + relXVel, vel.y + relYVel, vel.z + relZVel);
     }
 
     /**
@@ -131,7 +132,7 @@ public abstract class ELEntity {
      * @return thisEntity.posX
      */
     public float getX() {
-	return pos.x;
+        return pos.x;
     }
 
     /**
@@ -140,7 +141,7 @@ public abstract class ELEntity {
      * @return thisEntity.posY
      */
     public float getY() {
-	return pos.y;
+        return pos.y;
     }
 
     /**
@@ -149,7 +150,7 @@ public abstract class ELEntity {
      * @return thisEntity.posZ
      */
     public float getZ() {
-	return pos.z;
+        return pos.z;
     }
 
     /**
@@ -158,7 +159,7 @@ public abstract class ELEntity {
      * @return thisEntity.velX
      */
     public float getXVel() {
-	return vel.x;
+        return vel.x;
     }
 
     /**
@@ -167,7 +168,7 @@ public abstract class ELEntity {
      * @return thisEntity.velY
      */
     public float getYVel() {
-	return vel.y;
+        return vel.y;
     }
 
     /**
@@ -176,7 +177,7 @@ public abstract class ELEntity {
      * @return thisEntity.velZ
      */
     public float getZVel() {
-	return vel.z;
+        return vel.z;
     }
 
     /**
@@ -186,7 +187,7 @@ public abstract class ELEntity {
      *            the new value for posX
      */
     public void setXPos(float newX) {
-	setXYZ(newX, pos.y, pos.z);
+        setXYZ(newX, pos.y, pos.z);
     }
 
     /**
@@ -196,7 +197,7 @@ public abstract class ELEntity {
      *            the new value for posY
      */
     public void setYPos(float newY) {
-	setXYZ(pos.x, newY, pos.z);
+        setXYZ(pos.x, newY, pos.z);
     }
 
     /**
@@ -206,7 +207,7 @@ public abstract class ELEntity {
      *            the new value for posZ
      */
     public void setZPos(float newZ) {
-	setXYZ(pos.x, pos.y, newZ);
+        setXYZ(pos.x, pos.y, newZ);
     }
 
     /**
@@ -216,7 +217,7 @@ public abstract class ELEntity {
      *            the new value for velX
      */
     public void setXVel(float newXVel) {
-	setXYZVel(newXVel, vel.y, vel.z);
+        setXYZVel(newXVel, vel.y, vel.z);
     }
 
     /**
@@ -226,7 +227,7 @@ public abstract class ELEntity {
      *            the new value for velY
      */
     public void setYVel(float newYVel) {
-	setXYZVel(vel.x, newYVel, vel.z);
+        setXYZVel(vel.x, newYVel, vel.z);
     }
 
     /**
@@ -236,45 +237,45 @@ public abstract class ELEntity {
      *            the new value for velZ
      */
     public void setZVel(float newZVel) {
-	setXYZVel(vel.x, newZVel, vel.z);
+        setXYZVel(vel.x, newZVel, vel.z);
     }
 
     public void setDead() {
-	isDead = true;
+        isDead = true;
     }
 
     public boolean isDead() {
-	return isDead;
+        return isDead;
     }
 
     public void interpolate(float elap) {
-	synchronized (posInter) {
-	    synchronized (pos) {
-		posInter = pos;
-	    }
-	}
-	synchronized (velInter) {
-	    velInter = vel;
-	}
+        synchronized (posInter) {
+            synchronized (pos) {
+                posInter = pos;
+            }
+        }
+        synchronized (velInter) {
+            velInter = vel;
+        }
     }
 
     public Victor getInterpolated() {
-	synchronized (posInter) {
-	    synchronized (velInter) {
-		posInter.update(posInter.x + velInter.x, posInter.y
-			+ velInter.y, posInter.z + velInter.z);
-		return posInter;
-	    }
-	}
+        synchronized (posInter) {
+            synchronized (velInter) {
+                posInter.update(posInter.x + velInter.x, posInter.y
+                        + velInter.y, posInter.z + velInter.z);
+                return posInter;
+            }
+        }
     }
 
     public Victor getPosition() {
-	synchronized (pos) {
-	    return pos;
-	}
+        synchronized (pos) {
+            return pos;
+        }
     }
 
     public ELTexture getTex() {
-	return tex;
+        return tex;
     }
 }

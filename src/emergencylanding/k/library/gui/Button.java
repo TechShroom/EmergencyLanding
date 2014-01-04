@@ -10,7 +10,7 @@ import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.render.VBAO;
 import emergencylanding.k.library.lwjgl.render.VertexData;
-import emergencylanding.k.library.lwjgl.tex.Texture;
+import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
 public class Button extends GuiElement {
 
@@ -20,44 +20,44 @@ public class Button extends GuiElement {
     private Action onC = null;
 
     public Button(float x, float y, float xLength, float yLength,
-	    Texture unpressedT, Texture pressedT, Action onClick) {
-	super(x, y);
-	xLen = xLength;
-	yLen = yLength;
-	onC = onClick;
-	unpressed = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
-		new VertexData().setXYZ(xLen, yLen, 0), Shapes.XY);
-	unpressed.setTexture(unpressedT);
-	pressedv = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
-		new VertexData().setXYZ(xLen, yLen, 0), Shapes.XY);
-	pressedv.setTexture(pressedT);
+            ELTexture unpressedT, ELTexture pressedT, Action onClick) {
+        super(x, y);
+        xLen = xLength;
+        yLen = yLength;
+        onC = onClick;
+        unpressed = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
+                new VertexData().setXYZ(xLen, yLen, 0), Shapes.XY);
+        unpressed.setTexture(unpressedT);
+        pressedv = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
+                new VertexData().setXYZ(xLen, yLen, 0), Shapes.XY);
+        pressedv.setTexture(pressedT);
     }
 
     @Override
     public void drawAt(float x, float y) {
-	VBAO drawing = null;
-	if (pressed) {
-	    drawing = pressedv;
-	} else {
-	    drawing = unpressed;
-	}
-	drawing.setXYZOff(new Victor(x, y, 0));
-	drawing.draw();
+        VBAO drawing = null;
+        if (pressed) {
+            drawing = pressedv;
+        } else {
+            drawing = unpressed;
+        }
+        drawing.setXYZOff(new Victor(x, y, 0));
+        drawing.draw();
     }
 
     @Override
     public void updateAt(float x, float y) {
-	if (MouseHelp.clickingInRect(new Rectangle((int) x, (int) y,
-		(int) xLen, (int) yLen), MouseHelp.ANY)) {
-	    pressed = true;
-	} else {
-	    pressed = false;
-	}
-	if (MouseHelp.clickedInRect(new Rectangle((int) x, (int) y, (int) xLen,
-		(int) yLen), MouseHelp.ANY)) {
-	    onC.actionPerformed(new ActionEvent(this, this.hashCode(),
-		    "ButtonClick"));
-	}
+        if (MouseHelp.clickingInRect(new Rectangle((int) x, (int) y,
+                (int) xLen, (int) yLen), MouseHelp.ANY)) {
+            pressed = true;
+        } else {
+            pressed = false;
+        }
+        if (MouseHelp.clickedInRect(new Rectangle((int) x, (int) y, (int) xLen,
+                (int) yLen), MouseHelp.ANY)) {
+            onC.actionPerformed(new ActionEvent(this, this.hashCode(),
+                    "ButtonClick"));
+        }
     }
 
 }

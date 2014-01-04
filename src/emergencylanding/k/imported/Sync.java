@@ -59,39 +59,39 @@ public class Sync {
     private RunningAvg yieldDurations = new RunningAvg(10);
 
     static {
-	// Starts Windows hack if needed
-	String osName = System.getProperty("os.name");
+        // Starts Windows hack if needed
+        String osName = System.getProperty("os.name");
 
-	// Prevents this class from starting extra thread as
-	// org.lwjgl.opengl.Sync usually does this part.
-	Thread[] t_s = new Thread[Thread.activeCount()];
-	Thread.enumerate(t_s);
-	boolean needsAccuracy = true;
-	for (Thread t : t_s) {
-	    if (t.getName().equals("LWJGL Timer")) {
-		needsAccuracy = false;
-	    }
-	}
+        // Prevents this class from starting extra thread as
+        // org.lwjgl.opengl.Sync usually does this part.
+        Thread[] t_s = new Thread[Thread.activeCount()];
+        Thread.enumerate(t_s);
+        boolean needsAccuracy = true;
+        for (Thread t : t_s) {
+            if (t.getName().equals("LWJGL Timer")) {
+                needsAccuracy = false;
+            }
+        }
 
-	if (osName.startsWith("Win") && needsAccuracy) {
-	    // On windows the sleep functions can be highly inaccurate by
-	    // over 10ms making in unusable. However it can be forced to
-	    // be a bit more accurate by running a separate sleeping daemon
-	    // thread.
-	    Thread timerAccuracyThread = new Thread(new Runnable() {
-		@Override
-		public void run() {
-		    try {
-			Thread.sleep(Long.MAX_VALUE);
-		    } catch (Exception e) {
-		    }
-		}
-	    });
+        if (osName.startsWith("Win") && needsAccuracy) {
+            // On windows the sleep functions can be highly inaccurate by
+            // over 10ms making in unusable. However it can be forced to
+            // be a bit more accurate by running a separate sleeping daemon
+            // thread.
+            Thread timerAccuracyThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(Long.MAX_VALUE);
+                    } catch (Exception e) {
+                    }
+                }
+            });
 
-	    timerAccuracyThread.setName("LWJGL Timer");
-	    timerAccuracyThread.setDaemon(true);
-	    timerAccuracyThread.start();
-	}
+            timerAccuracyThread.setName("LWJGL Timer");
+            timerAccuracyThread.setDaemon(true);
+            timerAccuracyThread.start();
+        }
     }
 
     /**
@@ -102,39 +102,39 @@ public class Sync {
      *            - the desired frame rate, in frames per second
      */
     public void sync(int fps) {
-	if (fps <= 0) {
-	    return;
-	}
-	if (!initialised) {
-	    initialise();
-	}
+        if (fps <= 0) {
+            return;
+        }
+        if (!initialised) {
+            initialise();
+        }
 
-	try {
-	    // sleep until the average sleep time is greater than the time
-	    // remaining till nextFrame
-	    for (long t0 = getTime(), t1; nextFrame - t0 > sleepDurations.avg(); t0 = t1) {
-		Thread.sleep(1);
-		sleepDurations.add((t1 = getTime()) - t0); // update average
-		// sleep time
-	    }
+        try {
+            // sleep until the average sleep time is greater than the time
+            // remaining till nextFrame
+            for (long t0 = getTime(), t1; nextFrame - t0 > sleepDurations.avg(); t0 = t1) {
+                Thread.sleep(1);
+                sleepDurations.add((t1 = getTime()) - t0); // update average
+                // sleep time
+            }
 
-	    // slowly dampen sleep average if too high to avoid yielding too
-	    // much
-	    sleepDurations.dampenForLowResTicker();
+            // slowly dampen sleep average if too high to avoid yielding too
+            // much
+            sleepDurations.dampenForLowResTicker();
 
-	    // yield until the average yield time is greater than the time
-	    // remaining till nextFrame
-	    for (long t0 = getTime(), t1; nextFrame - t0 > yieldDurations.avg(); t0 = t1) {
-		Thread.yield();
-		yieldDurations.add((t1 = getTime()) - t0); // update average
-		// yield time
-	    }
-	} catch (InterruptedException e) {
+            // yield until the average yield time is greater than the time
+            // remaining till nextFrame
+            for (long t0 = getTime(), t1; nextFrame - t0 > yieldDurations.avg(); t0 = t1) {
+                Thread.yield();
+                yieldDurations.add((t1 = getTime()) - t0); // update average
+                // yield time
+            }
+        } catch (InterruptedException e) {
 
-	}
+        }
 
-	// schedule next frame, drop frame(s) if already too late for next frame
-	nextFrame = Math.max(nextFrame + Sync.NANOS_IN_SECOND / fps, getTime());
+        // schedule next frame, drop frame(s) if already too late for next frame
+        nextFrame = Math.max(nextFrame + Sync.NANOS_IN_SECOND / fps, getTime());
     }
 
     /**
@@ -144,12 +144,12 @@ public class Sync {
      * 
      */
     private void initialise() {
-	initialised = true;
+        initialised = true;
 
-	sleepDurations.init(1000 * 1000);
-	yieldDurations.init((int) (-(getTime() - getTime()) * 1.333));
+        sleepDurations.init(1000 * 1000);
+        yieldDurations.init((int) (-(getTime() - getTime()) * 1.333));
 
-	nextFrame = getTime();
+        nextFrame = getTime();
     }
 
     /**
@@ -158,48 +158,48 @@ public class Sync {
      * @return will return the current time in nano's
      */
     private long getTime() {
-	return Sys.getTime() * Sync.NANOS_IN_SECOND / Sys.getTimerResolution();
+        return Sys.getTime() * Sync.NANOS_IN_SECOND / Sys.getTimerResolution();
     }
 
     public static class RunningAvg {
-	private final long[] slots;
-	private int offset;
+        private final long[] slots;
+        private int offset;
 
-	private static final long DAMPEN_THRESHOLD = 10 * 1000L * 1000L; // 10ms
-	private static final float DAMPEN_FACTOR = 0.9f; // don't change: 0.9f
+        private static final long DAMPEN_THRESHOLD = 10 * 1000L * 1000L; // 10ms
+        private static final float DAMPEN_FACTOR = 0.9f; // don't change: 0.9f
 
-	// is exactly right!
+        // is exactly right!
 
-	public RunningAvg(int slotCount) {
-	    slots = new long[slotCount];
-	    offset = 0;
-	}
+        public RunningAvg(int slotCount) {
+            slots = new long[slotCount];
+            offset = 0;
+        }
 
-	public void init(long value) {
-	    while (offset < slots.length) {
-		slots[offset++] = value;
-	    }
-	}
+        public void init(long value) {
+            while (offset < slots.length) {
+                slots[offset++] = value;
+            }
+        }
 
-	public void add(long value) {
-	    slots[offset++ % slots.length] = value;
-	    offset %= slots.length;
-	}
+        public void add(long value) {
+            slots[offset++ % slots.length] = value;
+            offset %= slots.length;
+        }
 
-	public long avg() {
-	    long sum = 0;
-	    for (int i = 0; i < slots.length; i++) {
-		sum += slots[i];
-	    }
-	    return sum / slots.length;
-	}
+        public long avg() {
+            long sum = 0;
+            for (int i = 0; i < slots.length; i++) {
+                sum += slots[i];
+            }
+            return sum / slots.length;
+        }
 
-	public void dampenForLowResTicker() {
-	    if (avg() > RunningAvg.DAMPEN_THRESHOLD) {
-		for (int i = 0; i < slots.length; i++) {
-		    slots[i] *= RunningAvg.DAMPEN_FACTOR;
-		}
-	    }
-	}
+        public void dampenForLowResTicker() {
+            if (avg() > RunningAvg.DAMPEN_THRESHOLD) {
+                for (int i = 0; i < slots.length; i++) {
+                    slots[i] *= RunningAvg.DAMPEN_FACTOR;
+                }
+            }
+        }
     }
 }

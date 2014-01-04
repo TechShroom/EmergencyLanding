@@ -8,7 +8,7 @@ import java.util.HashMap;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
-import emergencylanding.k.library.internalstate.Entity;
+import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.control.Keys;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
@@ -24,32 +24,32 @@ public class MouseyTest extends KMain implements KeyListener {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-	DisplayLayer.initDisplay(false, 800, 600, "Testing EmergencyLanding",
-		true, args);
-	Keys.registerListener(new MouseyTest());
-	while (!Display.isCloseRequested()) {
-	    DisplayLayer.loop(120);
-	}
-	DisplayLayer.destroy();
-	System.exit(0);
+        DisplayLayer.initDisplay(false, 1024, 640, "Testing EmergencyLanding",
+                true, args);
+        Keys.registerListener(new MouseyTest());
+        while (!Display.isCloseRequested()) {
+            DisplayLayer.loop(120);
+        }
+        DisplayLayer.destroy();
+        System.exit(0);
     }
 
     private static boolean toggleNextChance;
 
     @Override
     public void onDisplayUpdate(int delta) {
-	DisplayLayer.readDevices();
-	if (toggleNextChance) {
-	    toggleNextChance = false;
-	    DisplayLayer.toggleFull();
-	}
+        DisplayLayer.readDevices();
+        if (toggleNextChance) {
+            toggleNextChance = false;
+            DisplayLayer.toggleFull();
+        }
     }
 
     @Override
     public void init(String[] args) {
-	BufferedImage colorRed = ColorTexture.RED.toBufferedImage();
-	colorRed = DrawableUtils.scaledBufferedImage(colorRed, 10, 10);
-	MouseHelp.createFollowCursor(colorRed, 0, 0);
+        BufferedImage colorRed = ColorTexture.RED.toBufferedImage();
+        colorRed = DrawableUtils.scaledBufferedImage(colorRed, 10, 10);
+        MouseHelp.createFollowCursor(colorRed, 0, 0);
     }
 
     @Override
@@ -64,16 +64,16 @@ public class MouseyTest extends KMain implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-	System.err.println(e);
-	if (e.getKeyCode() == Keyboard.KEY_ESCAPE) {
-	    toggleNextChance = true;
-	}
+        System.err.println(e);
+        if (e.getKeyCode() == Keyboard.KEY_ESCAPE) {
+            toggleNextChance = true;
+        }
     }
 
     @Override
     public void registerRenders(
-	    HashMap<Class<? extends Entity>, Render<? extends Entity>> classToRender) {
-	// TODO Auto-generated method stub
+            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+        // TODO Auto-generated method stub
 
     }
 }

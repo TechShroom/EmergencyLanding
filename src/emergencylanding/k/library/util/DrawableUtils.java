@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
-import emergencylanding.k.library.lwjgl.tex.Texture;
+import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
 public class DrawableUtils {
 
@@ -22,29 +22,29 @@ public class DrawableUtils {
      * @return -The position (actually an average of pos1/pos2 + pos1).
      */
     public static float lerp(float pos1, float pos2, float v) {
-	return pos1 + (pos2 - pos1) * v;
+        return pos1 + (pos2 - pos1) * v;
     }
 
     public static BufferedImage scaledBufferedImage(BufferedImage image,
-	    int sw, int sh) {
-	LUtils.print("Requested x and y of image is " + sw + " " + sh);
-	LUtils.print("Actual x and y is " + image.getWidth() + " "
-		+ image.getHeight());
-	int type = 0;
-	type = image.getType() == BufferedImage.TYPE_CUSTOM ? BufferedImage.TYPE_INT_ARGB
-		: image.getType();
-	BufferedImage resizedImage = new BufferedImage(sw, sh, type);
-	Graphics2D g = resizedImage.createGraphics();
-	boolean isDone = g.drawImage(image, 0, 0, sw, sh, null);
-	if (!isDone) {
-	    LUtils.print("Scaler not done?!");
-	    throw new IllegalStateException(
-		    "Scaling not complete, and callback not implemented");
-	}
-	g.dispose();
-	LUtils.print("Resultant x and y of image is " + resizedImage.getWidth()
-		+ " " + resizedImage.getHeight());
-	return resizedImage;
+            int sw, int sh) {
+        LUtils.print("Requested x and y of image is " + sw + " " + sh);
+        LUtils.print("Actual x and y is " + image.getWidth() + " "
+                + image.getHeight());
+        int type = 0;
+        type = image.getType() == BufferedImage.TYPE_CUSTOM ? BufferedImage.TYPE_INT_ARGB
+                : image.getType();
+        BufferedImage resizedImage = new BufferedImage(sw, sh, type);
+        Graphics2D g = resizedImage.createGraphics();
+        boolean isDone = g.drawImage(image, 0, 0, sw, sh, null);
+        if (!isDone) {
+            LUtils.print("Scaler not done?!");
+            throw new IllegalStateException(
+                    "Scaling not complete, and callback not implemented");
+        }
+        g.dispose();
+        LUtils.print("Resultant x and y of image is " + resizedImage.getWidth()
+                + " " + resizedImage.getHeight());
+        return resizedImage;
     }
 
     /**
@@ -68,45 +68,45 @@ public class DrawableUtils {
      * @return the chopped buffer
      */
     public static ByteBuffer chopBuffer(ByteBuffer buf,
-	    Dimension oldWidthHeight, int choppedWidth, int choppedHeight,
-	    int extraDimensions) {
-	if (buf.capacity() < choppedWidth * choppedHeight * extraDimensions
-		|| oldWidthHeight.height < choppedHeight
-		|| oldWidthHeight.width < choppedWidth || extraDimensions < 1) {
-	    throw new IndexOutOfBoundsException(
-		    "One of the dimensions is breaking the bounds of the buffer!");
-	}
-	if (buf.capacity() > buf.remaining()) {
-	    buf.rewind();
-	}
-	ByteBuffer newBuf = ByteBuffer.allocateDirect(choppedWidth
-		* choppedHeight * extraDimensions);
-	byte[][][] arrayOfStuff = new byte[choppedWidth][choppedHeight][extraDimensions];
-	for (int i = 0; i < oldWidthHeight.width * oldWidthHeight.height
-		* extraDimensions; i += extraDimensions) {
-	    int x = i / extraDimensions / oldWidthHeight.width;
-	    int y = i / extraDimensions % oldWidthHeight.height;
-	    LUtils.print("x/y=" + String.format("%s/%s", x, y));
-	    if (x >= choppedWidth || y >= choppedHeight) {
-		continue;
-	    }
-	    for (int extra = 0; extra < extraDimensions; extra++) {
-		arrayOfStuff[x][y][extra] = buf.get(i + extra);
-	    }
-	}
-	for (byte[][] b2d : arrayOfStuff) {
-	    for (byte[] b1d : b2d) {
-		for (byte b : b1d) {
-		    newBuf.put(b);
-		}
-	    }
-	}
-	newBuf.rewind();
-	return newBuf;
+            Dimension oldWidthHeight, int choppedWidth, int choppedHeight,
+            int extraDimensions) {
+        if (buf.capacity() < choppedWidth * choppedHeight * extraDimensions
+                || oldWidthHeight.height < choppedHeight
+                || oldWidthHeight.width < choppedWidth || extraDimensions < 1) {
+            throw new IndexOutOfBoundsException(
+                    "One of the dimensions is breaking the bounds of the buffer!");
+        }
+        if (buf.capacity() > buf.remaining()) {
+            buf.rewind();
+        }
+        ByteBuffer newBuf = ByteBuffer.allocateDirect(choppedWidth
+                * choppedHeight * extraDimensions);
+        byte[][][] arrayOfStuff = new byte[choppedWidth][choppedHeight][extraDimensions];
+        for (int i = 0; i < oldWidthHeight.width * oldWidthHeight.height
+                * extraDimensions; i += extraDimensions) {
+            int x = i / extraDimensions / oldWidthHeight.width;
+            int y = i / extraDimensions % oldWidthHeight.height;
+            LUtils.print("x/y=" + String.format("%s/%s", x, y));
+            if (x >= choppedWidth || y >= choppedHeight) {
+                continue;
+            }
+            for (int extra = 0; extra < extraDimensions; extra++) {
+                arrayOfStuff[x][y][extra] = buf.get(i + extra);
+            }
+        }
+        for (byte[][] b2d : arrayOfStuff) {
+            for (byte[] b1d : b2d) {
+                for (byte b : b1d) {
+                    newBuf.put(b);
+                }
+            }
+        }
+        newBuf.rewind();
+        return newBuf;
     }
 
-    public static Texture scaledTexture(Texture tex, int width, int height) {
-	return new BufferedTexture(scaledBufferedImage(tex.toBufferedImage(),
-		width, height));
+    public static ELTexture scaledTexture(ELTexture tex, int width, int height) {
+        return new BufferedTexture(scaledBufferedImage(tex.toBufferedImage(),
+                width, height));
     }
 }

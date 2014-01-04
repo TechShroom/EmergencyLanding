@@ -14,8 +14,8 @@ public abstract class GuiElement {
      *            -The y position of the GUI element.
      */
     public GuiElement(float x, float y) {
-	xPos = x;
-	yPos = y;
+        xPos = x;
+        yPos = y;
     }
 
     /**
@@ -25,7 +25,7 @@ public abstract class GuiElement {
      *            -The x position of the GUI element.
      */
     public void setXPos(float newX) {
-	xPos = newX;
+        xPos = newX;
     }
 
     /**
@@ -35,7 +35,7 @@ public abstract class GuiElement {
      *            -The y position of the GUI element.
      */
     public void setYPos(float newY) {
-	yPos = newY;
+        yPos = newY;
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class GuiElement {
      * @return -The x position of this GUI element.
      */
     public float getXPos() {
-	return xPos;
+        return xPos;
     }
 
     /**
@@ -53,15 +53,15 @@ public abstract class GuiElement {
      * @return -The y position of this GUI element.
      */
     public float getYPos() {
-	return yPos;
+        return yPos;
     }
 
     public void draw() {
-	drawAt(this.xPos, this.yPos);
+        drawAt(this.xPos, this.yPos);
     }
 
     public void update() {
-	updateAt(this.xPos, this.yPos);
+        updateAt(this.xPos, this.yPos);
     }
 
     public abstract void drawAt(float x, float y);

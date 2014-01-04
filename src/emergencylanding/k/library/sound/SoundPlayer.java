@@ -13,12 +13,12 @@ import emergencylanding.k.library.util.LUtils;
 
 public class SoundPlayer {
     static {
-	Runtime.getRuntime().addShutdownHook(new Thread() {
-	    @Override
-	    public void run() {
-		AL.destroy();
-	    }
-	});
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                AL.destroy();
+            }
+        });
     }
 
     /**
@@ -27,7 +27,7 @@ public class SoundPlayer {
      * @param soundFile
      */
     public static Audio playWAV(String soundFile) {
-	return playWAV(soundFile, 1.0f);
+        return playWAV(soundFile, 1.0f);
     }
 
     /**
@@ -37,7 +37,7 @@ public class SoundPlayer {
      * @param volume
      */
     public static Audio playWAV(String soundFile, float volume) {
-	return playWAV(soundFile, volume, 1.0f);
+        return playWAV(soundFile, volume, 1.0f);
     }
 
     /**
@@ -48,7 +48,7 @@ public class SoundPlayer {
      * @param pitch
      */
     public static Audio playWAV(String soundFile, float volume, float pitch) {
-	return playWAV(soundFile, volume, pitch, false);
+        return playWAV(soundFile, volume, pitch, false);
     }
 
     /**
@@ -60,19 +60,19 @@ public class SoundPlayer {
      * @param loop
      */
     public static Audio playWAV(String soundFile, float volume, float pitch,
-	    boolean loop) {
-	Audio wavA = null;
-	try {
-	    InputStream iStream = LUtils.getInputStream(soundFile);
-	    BufferedInputStream bStream = new BufferedInputStream(iStream);
-	    wavA = AudioLoader.getAudio("WAV", bStream);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
+            boolean loop) {
+        Audio wavA = null;
+        try {
+            InputStream iStream = LUtils.getInputStream(soundFile);
+            BufferedInputStream bStream = new BufferedInputStream(iStream);
+            wavA = AudioLoader.getAudio("WAV", bStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	SoundStore.get().setSoundVolume(volume);
+        SoundStore.get().setSoundVolume(volume);
 
-	wavA.playAsSoundEffect(pitch, 1.0f, loop);
-	return wavA;
+        wavA.playAsSoundEffect(pitch, 1.0f, loop);
+        return wavA;
     }
 }
