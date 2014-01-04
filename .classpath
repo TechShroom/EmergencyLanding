@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="shaders"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="libs/TWL.jar" sourcepath="C:/Users/Kenzie Togami/Downloads/twl-src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://l33tlabs.org/dist/javadoc/"/>
@@ -45,5 +43,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/EmergencyLanding/libs/javadocs/netty-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin-kenzie/"/>
 </classpath>
