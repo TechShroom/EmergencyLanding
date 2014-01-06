@@ -34,7 +34,7 @@ public class TestEntity extends ELEntity {
             setYPos(!(pos.y > Display.getHeight()) ? Display.getHeight() : 0);
         }
         if (Math.sqrt(vel.y * vel.y + vel.x * vel.x) < 0.5) {
-            tex = Helper.Arrays.randomArray(TestEntity.texmix)[0];
+            tex = Helper.BetterArrays.randomArray(TestEntity.texmix)[0];
         }
         super.updateOnTick(delta);
         checkForClick();

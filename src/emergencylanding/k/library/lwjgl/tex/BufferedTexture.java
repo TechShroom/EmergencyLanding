@@ -30,7 +30,7 @@ public class BufferedTexture extends ELTexture {
                     .getData();
             byte newI[] = new byte[intI.length * 4];
             for (int i = 0; i < intI.length; i++) {
-                byte b[] = Helper.Arrays.intToByteArray(intI[i]);
+                byte b[] = Helper.BetterArrays.intToByteArray(intI[i]);
                 int newIndex = i * 4;
 
                 newI[newIndex] = b[1];

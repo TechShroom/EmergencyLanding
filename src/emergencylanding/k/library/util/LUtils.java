@@ -258,7 +258,7 @@ public class LUtils {
         }
         throw new IllegalAccessException("Access denied to " + className
                 + " because it wasn't in the following list: "
-                + Helper.Arrays.dump0(accepts));
+                + Helper.BetterArrays.dump0(accepts));
     }
 
     /**

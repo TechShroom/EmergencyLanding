@@ -104,7 +104,7 @@ public class DataStruct {
             try {
                 out += encode(o);
             } catch (NullPointerException e) {
-                System.err.println("npe on " + Helper.Arrays.dump0(enc));
+                System.err.println("npe on " + Helper.BetterArrays.dump0(enc));
             }
             out += SPLIT_PAIRS;
         }

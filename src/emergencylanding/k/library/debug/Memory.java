@@ -72,7 +72,7 @@ public class Memory {
         } else {
             lines[2] = "Total memory is more!";
         }
-        Helper.Arrays.dump(lines);
+        Helper.BetterArrays.dump(lines);
     }
 
     public static void gc() {
