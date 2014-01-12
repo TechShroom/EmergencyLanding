@@ -95,33 +95,33 @@ public class Shapes {
         float l = vert2[2] + z;
         if (dir == Shapes.XZ) {
             data_array[0].setXYZ(x, y, l);// Top (x:0,y=y,z:0)
-            data_array[0].setUV(0, 1);
+            data_array[0].setUV(0, 0);
             data_array[1].setXYZ(x, y, z);
-            data_array[1].setUV(0, 0);
+            data_array[1].setUV(0, 1);
             data_array[2].setXYZ(w, y, z);
-            data_array[2].setUV(1, 0);
+            data_array[2].setUV(1, 1);
             data_array[3].setXYZ(z, y, l);
-            data_array[3].setUV(1, 1);
+            data_array[3].setUV(1, 0);
         }
         if (dir == Shapes.XY) {
             data_array[0].setXYZ(x, h, z);// Front (x:0,y:0,z=z)
-            data_array[0].setUV(0, 1);
+            data_array[0].setUV(0, 0);
             data_array[1].setXYZ(x, y, z);
-            data_array[1].setUV(0, 0);
+            data_array[1].setUV(0, 1);
             data_array[2].setXYZ(w, y, z);
-            data_array[2].setUV(1, 0);
+            data_array[2].setUV(1, 1);
             data_array[3].setXYZ(w, h, z);
-            data_array[3].setUV(1, 1);
+            data_array[3].setUV(1, 0);
         }
         if (dir == Shapes.YZ) {
             data_array[0].setXYZ(x, y, l);// Left (x=x,y:0,z:0)
-            data_array[0].setUV(0, 1);
+            data_array[0].setUV(0, 0);
             data_array[1].setXYZ(x, y, z);
-            data_array[1].setUV(0, 0);
+            data_array[1].setUV(0, 1);
             data_array[2].setXYZ(x, h, z);
-            data_array[2].setUV(1, 0);
+            data_array[2].setUV(1, 1);
             data_array[3].setXYZ(x, h, l);
-            data_array[3].setUV(1, 1);
+            data_array[3].setUV(1, 0);
         }
         return getQuad(data_array);
     }
