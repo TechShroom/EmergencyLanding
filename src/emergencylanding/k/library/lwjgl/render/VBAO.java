@@ -2,6 +2,7 @@ package emergencylanding.k.library.lwjgl.render;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -255,4 +256,10 @@ public class VBAO {
         GL15.glDeleteBuffers(vbo);
         GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(data) + "->" + Arrays.toString(icdata);
+    }
+
 }
