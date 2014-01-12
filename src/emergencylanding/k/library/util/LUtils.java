@@ -79,6 +79,9 @@ public class LUtils {
         }
     }
 
+    public static final int debugLevel = Integer.parseInt(System.getProperty(
+            "el.debug.level", "0"));
+
     /**
      * Gets a boolean argument safely
      * 
