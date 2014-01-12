@@ -68,7 +68,8 @@ public class Sync {
         Thread.enumerate(t_s);
         boolean needsAccuracy = true;
         for (Thread t : t_s) {
-            if (t.getName().equals("LWJGL Timer")) {
+            if (t.getName().equals("LWJGL Timer")
+                    || t.getName().equals("KCore Win Fix")) {
                 needsAccuracy = false;
             }
         }
