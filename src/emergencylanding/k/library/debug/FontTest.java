@@ -26,13 +26,14 @@ public class FontTest extends KMain {
 
     @Override
     public void onDisplayUpdate(int delta) {
+        strrend.drawString(10, 10, "A", 1, 1);
         strrend.drawString(100, 100, "Font is TNR Bold!!", 1, 1);
     }
 
     @Override
     public void init(String[] args) {
         strrend = new StringRenderer(
-                new Font("times new roman", Font.PLAIN, 16), false);
+                new Font("times new roman", Font.PLAIN, 16), true);
     }
 
     @Override
