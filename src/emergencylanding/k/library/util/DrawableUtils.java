@@ -1,7 +1,11 @@
 package emergencylanding.k.library.util;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
@@ -108,5 +112,48 @@ public class DrawableUtils {
     public static ELTexture scaledTexture(ELTexture tex, int width, int height) {
         return new BufferedTexture(scaledBufferedImage(tex.toBufferedImage(),
                 width, height));
+    }
+
+    public static BufferedImage getFontImage(char ch, boolean antiAlias,
+            Font font, int fontSize) {
+        // Create a temporary image to extract the character's size
+        BufferedImage tempfontImage = new BufferedImage(1, 1,
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) tempfontImage.getGraphics();
+        if (antiAlias == true) {
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        g.setFont(font);
+        FontMetrics fontMetrics = g.getFontMetrics();
+        int charwidth = fontMetrics.charWidth(ch) + 8;
+
+        if (charwidth <= 0) {
+            charwidth = 7;
+        }
+        int charheight = fontMetrics.getHeight() + 3;
+        if (charheight <= 0) {
+            charheight = fontSize;
+        }
+
+        // Create another image holding the character we are creating
+        BufferedImage fontImage;
+        fontImage = new BufferedImage(charwidth, charheight,
+                BufferedImage.TYPE_INT_ARGB);
+        Graphics2D gt = (Graphics2D) fontImage.getGraphics();
+        if (antiAlias == true) {
+            gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        gt.setFont(font);
+
+        gt.setColor(Color.WHITE);
+        int charx = 3;
+        int chary = 1;
+        gt.drawString(String.valueOf(ch), (charx),
+                (chary) + fontMetrics.getAscent());
+
+        return fontImage;
+
     }
 }
