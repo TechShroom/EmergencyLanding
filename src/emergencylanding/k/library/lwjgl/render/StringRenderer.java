@@ -1,11 +1,7 @@
 package emergencylanding.k.library.lwjgl.render;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +10,7 @@ import k.core.util.arrays.ResizableArray;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
 /**
@@ -48,9 +45,6 @@ public class StringRenderer {
     /** A reference to Java's AWT Font that we create our font texture from */
     private Font font;
 
-    /** The font metrics for our Java AWT font */
-    private FontMetrics fontMetrics;
-
     private int correctL = 9, correctR = 8;
 
     public StringRenderer(Font font, boolean antiAlias, char[] additionalChars) {
@@ -75,48 +69,6 @@ public class StringRenderer {
         }
     }
 
-    private BufferedImage getFontImage(char ch) {
-        // Create a temporary image to extract the character's size
-        BufferedImage tempfontImage = new BufferedImage(1, 1,
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = (Graphics2D) tempfontImage.getGraphics();
-        if (antiAlias == true) {
-            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-        g.setFont(font);
-        fontMetrics = g.getFontMetrics();
-        int charwidth = fontMetrics.charWidth(ch) + 8;
-
-        if (charwidth <= 0) {
-            charwidth = 7;
-        }
-        int charheight = fontMetrics.getHeight() + 3;
-        if (charheight <= 0) {
-            charheight = fontSize;
-        }
-
-        // Create another image holding the character we are creating
-        BufferedImage fontImage;
-        fontImage = new BufferedImage(charwidth, charheight,
-                BufferedImage.TYPE_INT_ARGB);
-        Graphics2D gt = (Graphics2D) fontImage.getGraphics();
-        if (antiAlias == true) {
-            gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
-        }
-        gt.setFont(font);
-
-        gt.setColor(Color.WHITE);
-        int charx = 3;
-        int chary = 1;
-        gt.drawString(String.valueOf(ch), (charx),
-                (chary) + fontMetrics.getAscent());
-
-        return fontImage;
-
-    }
-
     private void createSet(char[] customCharsArray) {
         try {
 
@@ -129,7 +81,8 @@ public class StringRenderer {
                 char ch = (i < 256) ? (char) i : customCharsArray[i - 256];
 
                 // create image
-                BufferedImage fontImage = getFontImage(ch);
+                BufferedImage fontImage = DrawableUtils.getFontImage(ch,
+                        antiAlias, font, fontSize);
 
                 // inc height if needed
                 fontHeight = Math.max(fontHeight, fontImage.getHeight());
