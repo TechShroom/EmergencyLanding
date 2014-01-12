@@ -102,11 +102,12 @@ public class VBAO {
         GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
-    public void setTexture(ELTexture t) {
+    public VBAO setTexture(ELTexture t) {
         tex = t;
+        return this;
     }
 
-    public void setXYZOff(Victor pos) {
+    public VBAO setXYZOff(Victor pos) {
         xyzoffset = pos;
         VertexData[] newDataTemp = new VertexData[data.length];
         for (int i = 0; i < newDataTemp.length; i++) {
@@ -120,9 +121,10 @@ public class VBAO {
             newDataTemp[i] = v;
         }
         updateData(newDataTemp, icdata);
+        return this;
     }
 
-    public void updateData(VertexData[] verts, byte[] indexControl) {
+    public VBAO updateData(VertexData[] verts, byte[] indexControl) {
         vertData = VertexData.toFB(verts);
         indexData = BufferUtils.createByteBuffer(indexControl.length);
         indexData.put(indexControl);
@@ -140,7 +142,7 @@ public class VBAO {
                 GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
         GLData.notifyOnGLError("updateData -> overwrite IC");
-        //
+        return this;
     }
 
     private void init() {
@@ -193,7 +195,7 @@ public class VBAO {
         GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
-    public void draw() {
+    public VBAO draw() {
 
         if (tex != null) {
             tex.bind();
@@ -223,6 +225,7 @@ public class VBAO {
             tex.unbind();
         }
         GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        return this;
     }
 
     private void vertexDraw() {
