@@ -32,7 +32,7 @@ public class FontTest extends KMain {
     @Override
     public void init(String[] args) {
         strrend = new StringRenderer(
-                new Font("times new roman", Font.BOLD, 16), false);
+                new Font("times new roman", Font.PLAIN, 16), false);
     }
 
     @Override
