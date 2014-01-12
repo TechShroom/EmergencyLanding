@@ -58,12 +58,12 @@ public abstract class ELTexture {
     }
 
     private int id = -1;
-    private static int useID = -1;
+    private int useID = -1;
     static {
         System.gc();
     }
     public static final long TOTAL_TEXTURE_SPACE = Runtime.getRuntime()
-            .maxMemory() / 2;
+            .maxMemory() * 2 / 3;
     // private static IntBuffer ids = BufferUtils.createIntBuffer(1);
     private static HashMap<Integer, ELTexture> texlist = new HashMap<Integer, ELTexture>();
     private static ArrayList<Integer> removedIDs = new ArrayList<Integer>();
@@ -115,25 +115,31 @@ public abstract class ELTexture {
                     ELTexture lookAlike;
                     if ((lookAlike = ELTexture.similar(texObj)) != null) {
                         id = lookAlike.id;
-                        LUtils.print("Overrode id: " + id);
+                        LUtils.print("Overrode id: " + id + " (obj=" + texObj
+                                + ")");
                         ELTexture.texlist.put(lookAlike.id, texObj);
                     } else {
                         boolean override = false;
                         ELTexture.currentSpace += buf.capacity();
-                        if (ELTexture.removedIDs.size() > 0
-                                && ELTexture.useID == -1) {
+                        if (ELTexture.removedIDs.size() > 0 && useID == -1) {
                             id = ELTexture.removedIDs.get(0);
                             ELTexture.removedIDs.remove(0);
                         }
-                        if (ELTexture.useID > -1) {
-                            LUtils.print("Force-overrode id: " + id);
+                        if (useID > -1) {
                             override = true;
-                            id = ELTexture.useID;
-                            ELTexture.currentSpace -= ELTexture.texlist.get(id).buf
-                                    .capacity();
+                            id = useID;
+                            LUtils.print("Force-overrode id: " + id);
+                            if (ELTexture.texlist.get(id) != null) {
+                                ELTexture.currentSpace -= ELTexture.texlist
+                                        .get(id).buf.capacity();
+                            } else {
+                                LUtils.print("Interesting, it appears that id "
+                                        + id
+                                        + " is null. This shouldn't be happening, but we'll let it slide for now.");
+                            }
                         }
                         if (ELTexture.currentSpace < ELTexture.TOTAL_TEXTURE_SPACE
-                                && id == -1 && ELTexture.useID == -1) {
+                                && id == -1 && useID == -1) {
                             id = GL11.glGenTextures();
                         } else {
                             LUtils.print("WARNING! Texture limit reached, "
@@ -267,7 +273,7 @@ public abstract class ELTexture {
     }
 
     protected void setConstructingOverrideId(int id) {
-        ELTexture.useID = id;
+        useID = id;
     }
 
     public BufferedImage toBufferedImage() {
@@ -315,6 +321,9 @@ public abstract class ELTexture {
     }
 
     public void kill() {
+        if (removedIDs.contains(this.id)) {
+            return;
+        }
         new DestTexture(this);
         System.gc();
     }
