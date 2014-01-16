@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import k.core.util.arrays.ResizableArray;
+import k.core.util.strings.Strings;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
@@ -141,7 +142,7 @@ public class StringRenderer {
     }
 
     public int getHeight(String HeightString) {
-        return fontHeight;
+        return fontHeight * Strings.count(HeightString, '\n');
     }
 
     public int getLineHeight() {
