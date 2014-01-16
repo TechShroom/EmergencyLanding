@@ -1,5 +1,6 @@
 package emergencylanding.k.library.debug;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -44,17 +45,17 @@ public class FontTest extends KMain {
     @Override
     public void init(String[] args) {
         final Font f = new Font("times new roman", Font.PLAIN, 16);
-        strrend = new StringRenderer(f, true);
+        strrend = new StringRenderer(f, true, Color.RED);
 
         final BufferedImage strrendimg1 = DrawableUtils.getFontImage('A', true,
-                f, 19);
+                f, 19, Color.BLUE);
 
         image = Shapes.getQuad(
                 new VertexData().setXYZ(300, 300, 0),
                 new VertexData().setXYZ(strrendimg1.getWidth(),
                         strrendimg1.getHeight(), 0), Shapes.XY).setTexture(
                 new BufferedTexture(strrendimg1));
-        
+
         System.err.println(image);
 
         // draw the matching data using a JFrame's graphics

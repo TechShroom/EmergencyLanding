@@ -1,5 +1,6 @@
 package emergencylanding.k.library.lwjgl.render;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
@@ -48,15 +49,24 @@ public class StringRenderer {
     private int correctL = 9, correctR = 8;
 
     public StringRenderer(Font font, boolean antiAlias, char[] additionalChars) {
+        this(font, antiAlias, additionalChars, Color.WHITE);
+    }
+
+    public StringRenderer(Font font, boolean antiAlias) {
+        this(font, antiAlias, Color.WHITE);
+    }
+
+    public StringRenderer(Font font, boolean antiAlias, char[] additionalChars,
+            Color c) {
         this.font = font;
         this.fontSize = font.getSize() + 3;
         this.antiAlias = antiAlias;
 
-        createSet(additionalChars);
+        createSet(additionalChars, c);
     }
 
-    public StringRenderer(Font font, boolean antiAlias) {
-        this(font, antiAlias, null);
+    public StringRenderer(Font font, boolean antiAlias, Color c) {
+        this(font, antiAlias, null, c);
     }
 
     public void setCorrection(boolean on) {
@@ -69,7 +79,7 @@ public class StringRenderer {
         }
     }
 
-    private void createSet(char[] customCharsArray) {
+    private void createSet(char[] customCharsArray, Color c) {
         try {
 
             int customCharsLength = (customCharsArray != null) ? customCharsArray.length
@@ -82,7 +92,7 @@ public class StringRenderer {
 
                 // create image
                 BufferedImage fontImage = DrawableUtils.getFontImage(ch,
-                        antiAlias, font, fontSize);
+                        antiAlias, font, fontSize, c);
 
                 // inc height if needed
                 fontHeight = Math.max(fontHeight, fontImage.getHeight());
