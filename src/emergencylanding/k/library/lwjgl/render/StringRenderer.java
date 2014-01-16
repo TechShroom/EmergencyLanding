@@ -31,7 +31,7 @@ public class StringRenderer {
     /** Array that holds necessary information about the font characters */
     private ELTexture[] charArray = new ELTexture[256];
 
-    /** Map of user defined font characters (Character <-> IntObject) */
+    /** Map of user defined font characters (Character <-> ELTexture) */
     private Map<Character, ELTexture> customChars = new HashMap<Character, ELTexture>();
 
     /** Boolean flag on whether AntiAliasing is enabled or not */
@@ -103,11 +103,13 @@ public class StringRenderer {
         }
     }
 
-    private void drawQuad(float drawX, float drawY, float drawX2, float drawY2,
+    private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
             ELTexture tex) {
-        Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
-                new VertexData().setXYZ(drawX, drawY, 0), Shapes.XY)
-                .setTexture(tex).draw().destroy();
+        VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
+                new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
+                Shapes.XY);
+        v.setTexture(tex);
+        v.draw();
     }
 
     public int getWidth(String whatchars) {
