@@ -116,6 +116,13 @@ public class DrawableUtils {
 
     public static BufferedImage getFontImage(char ch, boolean antiAlias,
             Font font, int fontSize) {
+        return getFontImage(ch, antiAlias, font, fontSize, Color.WHITE);
+    }
+
+    private static final int charx = 3, chary = 1;
+
+    public static BufferedImage getFontImage(char ch, boolean antiAlias,
+            Font font, int fontSize, Color c) {
         // Create a temporary image to extract the character's size
         BufferedImage tempfontImage = new BufferedImage(1, 1,
                 BufferedImage.TYPE_INT_ARGB);
@@ -137,23 +144,21 @@ public class DrawableUtils {
         }
 
         // Create another image holding the character we are creating
-        BufferedImage fontImage;
-        fontImage = new BufferedImage(charwidth, charheight,
+        BufferedImage fontImage = new BufferedImage(charwidth, charheight,
                 BufferedImage.TYPE_INT_ARGB);
+
         Graphics2D gt = (Graphics2D) fontImage.getGraphics();
+
         if (antiAlias == true) {
             gt.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
-        gt.setFont(font);
 
-        gt.setColor(Color.WHITE);
-        int charx = 3;
-        int chary = 1;
+        gt.setFont(font);
+        gt.setColor(c);
         gt.drawString(String.valueOf(ch), (charx),
                 (chary) + fontMetrics.getAscent());
 
         return fontImage;
-
     }
 }
