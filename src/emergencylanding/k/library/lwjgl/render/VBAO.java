@@ -21,7 +21,7 @@ import emergencylanding.k.library.util.StackTraceInfo;
  * @author Kenzie Togami
  * 
  */
-public class VBAO {
+public class VBAO implements Cloneable {
     /**
      * Index of the position attribute in the {@link VBAO#vbo vbo}
      */
@@ -260,6 +260,27 @@ public class VBAO {
     @Override
     public String toString() {
         return Arrays.toString(data) + "->" + Arrays.toString(icdata);
+    }
+
+    @Override
+    public VBAO clone() {
+        VBAO c = null;
+        try {
+            c = (VBAO) super.clone();
+            c.data = data.clone();
+            c.icdata = icdata.clone();
+            c.indexData = indexData.duplicate();
+            c.tex = tex;
+            c.vaoId = vaoId;
+            c.vbo = vbo;
+            c.vbo_i = vbo_i;
+            c.vertData = vertData.duplicate();
+            c.verticesCount = verticesCount;
+            c.xyzoffset = xyzoffset;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError("not clonable");
+        }
+        return c;
     }
 
 }
