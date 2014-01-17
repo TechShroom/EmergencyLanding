@@ -18,3 +18,9 @@ System Requirements:
 * Linux
     * OpenGL 3.2
     * Any graphics card driver after 2009
+
+This also relies on KCore, here are the parts required from the distributed libs:
+* Arrays
+* Core
+* Reflect
+* Strings
