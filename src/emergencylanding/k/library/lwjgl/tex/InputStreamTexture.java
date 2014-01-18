@@ -18,8 +18,10 @@ import emergencylanding.k.library.util.LUtils;
 public class InputStreamTexture extends ELTexture {
     private InputStream tex = null;
 
-    private static final String endswith = "^(.+)" + File.separator + "$",
-            startswith = "^" + File.separator + "(.+)$";
+    private static final String regexdsep = File.separator
+            .replace("\\", "\\\\");
+    private static final String endswith = "^(.+)" + regexdsep + "$",
+            startswith = "^" + regexdsep + "(.+)$";
 
     public InputStreamTexture(String parentDir, String name) {
         if (parentDir == null) {
