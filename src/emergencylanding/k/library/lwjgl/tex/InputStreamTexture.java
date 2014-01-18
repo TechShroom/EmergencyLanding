@@ -2,12 +2,14 @@ package emergencylanding.k.library.lwjgl.tex;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
+import org.lwjgl.LWJGLUtil;
 import org.newdawn.slick.opengl.PNGDecoder;
 import org.newdawn.slick.opengl.PNGDecoder.Format;
 
@@ -16,16 +18,28 @@ import emergencylanding.k.library.util.LUtils;
 public class InputStreamTexture extends ELTexture {
     private InputStream tex = null;
 
+    private static final String endswith = "^(.+)" + File.separator + "$",
+            startswith = "^" + File.separator + "(.+)$";
+
     public InputStreamTexture(String parentDir, String name) {
         if (parentDir == null) {
-            parentDir = System.getProperty("user.home", "/");
+            parentDir = System
+                    .getProperty(
+                            "user.home",
+                            (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS ? "C:"
+                                    : "")
+                                    + File.separator);
         }
         if (name == null) {
             LUtils.print("Creating a null src!");
             return;
         }
         try {
-            tex = LUtils.getInputStream(parentDir + "/" + name);
+            tex = LUtils
+                    .getInputStream(parentDir
+                            + ((parentDir.matches(endswith) || name
+                                    .matches(startswith)) ? "" : File.separator)
+                            + name);
         } catch (IOException e) {
             throw new RuntimeException("Error retriving stream", e);
         }

@@ -95,11 +95,11 @@ public class GLData {
     private static void addVertexAndFragmentShaders() {
         shaders.add(loadShader(
                 LUtils.getELTop()
-                        + "/shaders/vertex.glsl".replace('/',
+                        + "/res/shaders/vertex.glsl".replace('/',
                                 File.separatorChar), GL20.GL_VERTEX_SHADER));
         shaders.add(loadShader(
                 LUtils.getELTop()
-                        + "/shaders/texture.glsl".replace('/',
+                        + "/res/shaders/texture.glsl".replace('/',
                                 File.separatorChar), GL20.GL_FRAGMENT_SHADER));
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }

@@ -151,8 +151,8 @@ public class DisplayLayer {
             KMain main) throws Exception {
         System.err.println(LUtils.getELTop());
         System.setProperty("org.lwjgl.librarypath", LUtils.getELTop()
-                + File.separator + "libs" + File.separator + "natives"
-                + File.separator + PLATFORM_NAME);
+                + File.separator + "res" + File.separator + "libs"
+                + File.separator + "natives" + File.separator + PLATFORM_NAME);
         LUtils.print("Using LWJGL v" + Sys.getVersion());
         DisplayMode dm = LUtils.getDisplayMode(width, height, fullscreen);
         if (!dm.isFullscreenCapable() && fullscreen) {

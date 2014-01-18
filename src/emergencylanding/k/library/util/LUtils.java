@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -95,17 +94,15 @@ public class LUtils {
     static {
         String tempName = LUtils.class.getPackage().getName();
         int levels = Strings.count(tempName, '.') + 2;
-        try {
-            tempName = LUtils.class.getResource("LUtils.class").toURI()
-                    .toString();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
+        tempName = LUtils.class.getResource("LUtils.class").getFile()
+                .replace('/', File.separatorChar).substring(1)
+                .replace("%20", " ");
         for (int i = 0; i < levels; i++) {
-            tempName = tempName.substring(0, tempName.lastIndexOf('/'));
+            tempName = tempName.substring(0,
+                    tempName.lastIndexOf(File.separatorChar));
         }
         EL_TOP = tempName;
+        LUtils.print("Using EL_TOP " + EL_TOP);
     }
 
     public static final int debugLevel = Integer.parseInt(System.getProperty(
