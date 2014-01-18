@@ -586,7 +586,6 @@ public class LUtils {
      * @throws IOException
      *             if there are I/O errors
      */
-    @SuppressWarnings("resource")
     public static InputStream getInputStream(String path) throws IOException {
         LUtils.print("[Retriving InputStream for '" + path + "']");
         // Normalize to UNIX style
