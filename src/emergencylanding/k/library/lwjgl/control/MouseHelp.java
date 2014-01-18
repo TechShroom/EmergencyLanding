@@ -20,15 +20,12 @@ import java.nio.IntBuffer;
 public class MouseHelp {
     private static class FakeCursor {
         VBAO display = null;
-        int hx, hy;
 
         public FakeCursor(ELTexture image, int hotx, int hoty) {
             display = Shapes.getQuad(new VertexData().setXYZ(-hotx, -hoty, 0),
                     new VertexData().setXYZ(image.getWidth(),
                             image.getHeight(), 0), Shapes.XY);
             display.setTexture(image);
-            hx = hotx;
-            hy = hoty;
         }
 
         public void drawAt(int x, int y) {
