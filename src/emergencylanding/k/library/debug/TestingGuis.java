@@ -52,7 +52,7 @@ public class TestingGuis extends KMain {
                 FPS.init(TestingGuis.IS_INDEX);
                 while (TestingGuis.run) {
                     s.sync(TestingGuis.TICKS_PER_SECOND);
-                    int delta = FPS.update(TestingGuis.IS_INDEX);
+                    FPS.update(TestingGuis.IS_INDEX);
                     DisplayLayer.readDevices();
                     TestingGuis.g.update();
                 }
