@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import k.core.util.Helper;
+import k.core.util.strings.Strings;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
@@ -35,6 +37,14 @@ public class LUtils {
 
     }
 
+    /**
+     * What packages are accepted for EL
+     */
+    private static final String[] ACCEPT = { "emergencylanding.k.*" };
+
+    /**
+     * The default system streams, before overload.
+     */
     public static PrintStream sysout = System.out, syserr = System.err;
 
     static {
@@ -46,8 +56,7 @@ public class LUtils {
 
     public static void print(String msg) {
         try {
-            checkAccessor("emergencylanding.k.*",
-                    StackTraceInfo.getInvokingClassName());
+            checkAccessor(ACCEPT, StackTraceInfo.getInvokingClassName());
         } catch (Exception e) {
             throw new RuntimeException(new IllegalAccessException(
                     "Not EL trusted class"));
@@ -67,16 +76,36 @@ public class LUtils {
     /**
      * The top level of the game/tool
      */
-    public static File TOP_LEVEL = null;
+    public static String TOP_LEVEL = null;
     static {
         try {
             // reuse KCore's data
-            LUtils.TOP_LEVEL = Helper.Files.topLevel;
-            LUtils.TOP_LEVEL.mkdirs();
-            LUtils.print("Using TOP_LEVEL " + TOP_LEVEL.getAbsolutePath());
+            LUtils.TOP_LEVEL = Helper.Files.topLevel.replaceFirst("/$", "");
+            LUtils.print("Using TOP_LEVEL " + TOP_LEVEL);
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(-1);
         }
+    }
+
+    /**
+     * The top level of emergency landing, used to load our shaders.
+     */
+    private static String EL_TOP = null;
+    static {
+        String tempName = LUtils.class.getPackage().getName();
+        int levels = Strings.count(tempName, '.') + 2;
+        try {
+            tempName = LUtils.class.getResource("LUtils.class").toURI()
+                    .toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        for (int i = 0; i < levels; i++) {
+            tempName = tempName.substring(0, tempName.lastIndexOf('/'));
+        }
+        EL_TOP = tempName;
     }
 
     public static final int debugLevel = Integer.parseInt(System.getProperty(
@@ -615,5 +644,18 @@ public class LUtils {
 
         LUtils.print("[Complete]");
         return result;
+    }
+
+    /**
+     * Protected method to access EL's top level
+     */
+    public static String getELTop() {
+        try {
+            checkAccessor(ACCEPT, StackTraceInfo.getInvokingClassName());
+        } catch (Exception e) {
+            throw new RuntimeException(new IllegalAccessException(
+                    "Not EL trusted class"));
+        }
+        return EL_TOP;
     }
 }

@@ -149,11 +149,10 @@ public class DisplayLayer {
     public static void initDisplay(boolean fullscreen, int width, int height,
             String title, boolean resizable, boolean vsync, String[] args,
             KMain main) throws Exception {
-        System.err.println(LUtils.TOP_LEVEL.getAbsolutePath());
-        System.setProperty("org.lwjgl.librarypath",
-                LUtils.TOP_LEVEL.getAbsolutePath() + File.separator + "libs"
-                        + File.separator + "natives" + File.separator
-                        + PLATFORM_NAME);
+        System.err.println(LUtils.getELTop());
+        System.setProperty("org.lwjgl.librarypath", LUtils.getELTop()
+                + File.separator + "libs" + File.separator + "natives"
+                + File.separator + PLATFORM_NAME);
         LUtils.print("Using LWJGL v" + Sys.getVersion());
         DisplayMode dm = LUtils.getDisplayMode(width, height, fullscreen);
         if (!dm.isFullscreenCapable() && fullscreen) {
