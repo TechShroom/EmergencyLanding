@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import k.core.util.Helper;
+import k.core.util.classes.StackTraceInfo;
 import k.core.util.strings.Strings;
 
 import org.lwjgl.LWJGLException;

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 
+import k.core.util.classes.StackTraceInfo;
 import k.core.util.reflect.Reflect;
 
 public class MethodizedSTDStream extends ByteArrayOutputStream {

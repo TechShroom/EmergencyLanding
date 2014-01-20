@@ -8,6 +8,8 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
+import k.core.util.classes.StackTraceInfo;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
@@ -16,7 +18,6 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
 
 import emergencylanding.k.library.util.LUtils;
-import emergencylanding.k.library.util.StackTraceInfo;
 
 /** All OpenGL will be handled here */
 public class GLData {

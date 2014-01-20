@@ -5,6 +5,8 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.lang.instrument.IllegalClassFormatException;
 
+import k.core.util.classes.StackTraceInfo;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.Sys;
@@ -23,7 +25,6 @@ import emergencylanding.k.library.lwjgl.render.GLData;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
-import emergencylanding.k.library.util.StackTraceInfo;
 
 public class DisplayLayer {
 
