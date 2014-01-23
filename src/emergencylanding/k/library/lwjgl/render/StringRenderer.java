@@ -17,7 +17,7 @@ import emergencylanding.k.library.util.LUtils;
 
 /**
  * A TrueType font implementation originally for Slick, edited for Bobjob's
- * Engine, and now for CrashCourse
+ * Engine, and now for EmergencyLanding
  * 
  * @original author: James Chambers (Jimmy)
  * @original author: Jeremy Adams (elias4444)
