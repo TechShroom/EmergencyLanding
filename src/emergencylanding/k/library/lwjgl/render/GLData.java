@@ -158,8 +158,7 @@ public class GLData {
         GL20.glCompileShader(shaderID);
         if (GL20.glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == 0) {
             int len = GL20.glGetShaderi(shaderID, GL20.GL_INFO_LOG_LENGTH);
-            ByteBuffer chars = BufferUtils.createByteBuffer(len);
-            if (chars.capacity() == 0) {
+            if (len == 0) {
                 throw new IllegalStateException(
                         "No errors, shaders broken SEVERELY");
             }
