@@ -13,9 +13,13 @@ public class RenderManager {
     private static HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender = new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
 
     public static void registerRenders() {
-        Mods.registerRenders(RenderManager.classToRender);
+        HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> temp = new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
+        Mods.registerRenders(temp);
+        classToRender.putAll(temp);
+        temp = new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
+        KMain.getInst().registerRenders(temp);
+        classToRender.putAll(temp);
         RenderManager.classToRender.put(ELEntity.class, new DefaultRender());
-        KMain.getInst().registerRenders(RenderManager.classToRender);
     }
 
     public static void doRender(World w, int delta) {
