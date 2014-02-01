@@ -28,7 +28,7 @@ import emergencylanding.k.library.util.LUtils;
 
 public class DisplayLayer {
 
-    public static String VERSION = "1.1";
+    public static String VERSION = "1.2";
     public static String PLATFORM_NAME = "unknown";
     static {
         PLATFORM_NAME = LWJGLUtil.getPlatformName();
