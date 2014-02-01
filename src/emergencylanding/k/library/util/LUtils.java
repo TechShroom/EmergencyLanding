@@ -102,7 +102,7 @@ public class LUtils {
             tempName = tempName.substring(0,
                     tempName.lastIndexOf(File.separatorChar));
         }
-        EL_TOP = tempName;
+        EL_TOP = File.separator + tempName;
         LUtils.print("Using EL_TOP " + EL_TOP);
     }
 
