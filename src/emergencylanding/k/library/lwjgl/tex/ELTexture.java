@@ -7,18 +7,13 @@ import java.awt.image.DataBuffer;
 import java.awt.image.Raster;
 import java.awt.image.SinglePixelPackedSampleModel;
 import java.awt.image.WritableRaster;
-import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLContext;
-import org.lwjgl.util.glu.MipMap;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
@@ -68,22 +63,12 @@ public abstract class ELTexture {
     private static HashMap<Integer, ELTexture> texlist = new HashMap<Integer, ELTexture>();
     private static ArrayList<Integer> removedIDs = new ArrayList<Integer>();
     public static long currentSpace = 0;
-    protected static boolean mipmapsEnabled = true;
     public ByteBuffer buf = null;
     public Dimension dim = null;
     private static ArrayList<Runnable> glThreadQueue = new ArrayList<Runnable>();
     static {
         System.gc();
         Memory.printAll();
-        Field f;
-        try {
-            f = ContextCapabilities.class.getDeclaredField("glGenerateMipmap");
-            f.setAccessible(true);
-            ELTexture.mipmapsEnabled = f.getLong(GLContext.getCapabilities()) != 0;
-        } catch (Exception e) {
-            ELTexture.mipmapsEnabled = false;
-        }
-        LUtils.print("3.0 mipmaps? " + ELTexture.mipmapsEnabled);
     }
 
     // Define static Textures AFTER this comment
@@ -154,23 +139,8 @@ public abstract class ELTexture {
                         // component is 1
                         // byte
                         GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-                        if (!ELTexture.mipmapsEnabled) {
-                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                                    GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                                    GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                                    GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                                    GL11.GL_TEXTURE_MIN_FILTER,
-                                    GL11.GL_LINEAR_MIPMAP_LINEAR);
-                            GL11.glTexParameteri(GL11.GL_TEXTURE_2D,
-                                    GL14.GL_GENERATE_MIPMAP, GL11.GL_TRUE);
-                        }
                         // Upload the texture data and generate mip maps (for
                         // scaling)
-                        // ByteBuffer tmp = buf.duplicate();
-                        // buf.rewind();
                         if (override) {
                             GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0,
                                     dim.width, dim.height, GL11.GL_RGBA,
@@ -180,19 +150,7 @@ public abstract class ELTexture {
                                     GL11.GL_RGBA, dim.width, dim.height, 0,
                                     GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
                         }
-                        // buf = tmp;
-                        if (ELTexture.mipmapsEnabled) {
-                            GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-                        } else {
-                            int err = MipMap.gluBuild2DMipmaps(
-                                    GL11.GL_TEXTURE_2D, id, dim.width,
-                                    dim.height, GL11.GL_RGBA,
-                                    GL11.GL_UNSIGNED_BYTE, buf);
-                            if (err != 0) {
-                                LUtils.print("error while running build2dMipMaps: "
-                                        + err);
-                            }
-                        }
+                        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
                         ELTexture.texlist.put(id, texObj);
                     }
                 }
