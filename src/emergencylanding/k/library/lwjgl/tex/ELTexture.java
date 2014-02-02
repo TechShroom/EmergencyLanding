@@ -25,6 +25,8 @@ import emergencylanding.k.library.util.LUtils;
 public abstract class ELTexture {
     public static class DestTexture extends ELTexture {
 
+        public static HashMap<Integer, Integer> removed = new HashMap<Integer, Integer>();
+
         public DestTexture(ELTexture texture) {
             buf = ByteBuffer.allocateDirect(1);
             dim = new Dimension(1, 1);
@@ -32,8 +34,8 @@ public abstract class ELTexture {
             init();
             ELTexture.texlist.remove(getID());
             ELTexture.currentSpace -= buf.capacity();
-            ELTexture.removedIDs.add(getID());
             GL11.glDeleteTextures(getID());
+            removed.put(getID(), getID());
             texture.destruction0();
         }
 
@@ -62,7 +64,6 @@ public abstract class ELTexture {
             .maxMemory() * 2 / 3;
     // private static IntBuffer ids = BufferUtils.createIntBuffer(1);
     private static HashMap<Integer, ELTexture> texlist = new HashMap<Integer, ELTexture>();
-    private static ArrayList<Integer> removedIDs = new ArrayList<Integer>();
     public static long currentSpace = 0;
     public ByteBuffer buf = null;
     public Dimension dim = null;
@@ -110,10 +111,6 @@ public abstract class ELTexture {
                     } else {
                         boolean override = false;
                         ELTexture.currentSpace += buf.capacity();
-                        if (ELTexture.removedIDs.size() > 0 && useID == -1) {
-                            id = ELTexture.removedIDs.get(0);
-                            ELTexture.removedIDs.remove(0);
-                        }
                         if (useID > -1) {
                             override = true;
                             id = useID;
@@ -136,6 +133,9 @@ public abstract class ELTexture {
                                     + TOTAL_TEXTURE_SPACE + " < "
                                     + currentSpace + ")");
                             return;
+                        }
+                        if (DestTexture.removed.containsKey(id)) {
+                            DestTexture.removed.remove(id);
                         }
                         // Create a new texture object in memory and bind it
                         GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -293,7 +293,7 @@ public abstract class ELTexture {
     }
 
     public void kill() {
-        if (removedIDs.contains(this.id)) {
+        if (DestTexture.removed.containsKey(this.id)) {
             return;
         }
         new DestTexture(this);
