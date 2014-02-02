@@ -17,7 +17,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="src/res/libs/jinput.jar"/>
 	<classpathentry kind="lib" path="src/res/libs/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="src/res/libs/lwjgl-debug.jar"/>
+	<classpathentry kind="lib" path="src/res/libs/lwjgl-debug.jar" sourcepath="src/res/libs/sources/lwjgl-src.zip"/>
 	<classpathentry kind="lib" path="src/res/libs/lwjgl.jar" sourcepath="src/res/libs/sources/lwjgl-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/EmergencyLanding/src/res/libs/javadocs/lwjgl-docs.zip!/javadoc"/>
