@@ -129,7 +129,7 @@ public abstract class ELTexture {
                         if (ELTexture.currentSpace < ELTexture.TOTAL_TEXTURE_SPACE
                                 && id == -1 && useID == -1) {
                             id = GL11.glGenTextures();
-                        } else {
+                        } else if (!(id == -1 && useID == -1)) {
                             LUtils.print("WARNING! Texture limit reached, "
                                     + "not adding new textures! ("
                                     + TOTAL_TEXTURE_SPACE + " < "
