@@ -76,7 +76,8 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
         }
         String[] classsplit = s.getClassName().split("\\.");
         return "[" + classsplit[classsplit.length - 1] + "."
-                + s.getMethodName() + "()@" + Thread.currentThread().getName()
+                + s.getMethodName() + "(" + s.getFileName() + ":"
+                + s.getLineNumber() + ")@" + Thread.currentThread().getName()
                 + "] ";
     }
 
