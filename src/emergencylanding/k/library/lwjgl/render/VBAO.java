@@ -11,9 +11,11 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.GL32;
 
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.util.LUtils;
 
 /**
  * A virtual buffer/array object, used for speedy rendering.
@@ -70,6 +72,11 @@ public class VBAO implements Cloneable {
      * The VBO id that holds the IC data.
      */
     private int vbo_i = GLData.NONE;
+    /**
+     * Determines if this data is used with {@link GL15#GL_STATIC_DRAW} or
+     * {@link GL15#GL_DYNAMIC_DRAW}.
+     */
+    private boolean staticdata = false;
     /**
      * The texture used by this VBAO, if any.
      */
@@ -226,7 +233,9 @@ public class VBAO implements Cloneable {
         if (tex != null) {
             tex.unbind();
         }
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
         return this;
     }
 
@@ -234,7 +243,9 @@ public class VBAO implements Cloneable {
         // Draw the vertices
         GL11.glDrawElements(GL11.GL_TRIANGLES, verticesCount,
                 GL11.GL_UNSIGNED_BYTE, 0);
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     public void destroy() {
