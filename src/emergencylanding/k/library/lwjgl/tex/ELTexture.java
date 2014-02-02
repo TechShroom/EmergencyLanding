@@ -131,7 +131,9 @@ public abstract class ELTexture {
                             id = GL11.glGenTextures();
                         } else {
                             LUtils.print("WARNING! Texture limit reached, "
-                                    + "not adding new textures!");
+                                    + "not adding new textures! ("
+                                    + TOTAL_TEXTURE_SPACE + " < "
+                                    + currentSpace + ")");
                             return;
                         }
                         // Create a new texture object in memory and bind it
