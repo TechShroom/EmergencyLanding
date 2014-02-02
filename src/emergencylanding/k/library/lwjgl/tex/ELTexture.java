@@ -14,6 +14,7 @@ import java.util.HashMap;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.OpenGLException;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
@@ -138,7 +139,15 @@ public abstract class ELTexture {
                         }
                         // Create a new texture object in memory and bind it
                         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-                        GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+                        try {
+                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+                        } catch (OpenGLException ogle) {
+                            System.err
+                                    .println("OpenGL encountered an error while binding id #"
+                                            + id
+                                            + ": "
+                                            + ogle.getLocalizedMessage());
+                        }
 
                         // All RGB bytes are aligned to each other and each
                         // component is 1
