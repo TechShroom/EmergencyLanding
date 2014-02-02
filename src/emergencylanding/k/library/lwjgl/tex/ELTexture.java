@@ -219,7 +219,12 @@ public abstract class ELTexture {
 
     public void bind() {
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, getID());
+        try {
+            GL11.glBindTexture(GL11.GL_TEXTURE_2D, getID());
+        } catch (OpenGLException ogle) {
+            System.err.println("OpenGL encountered an error while binding id #"
+                    + id + ": " + ogle.getLocalizedMessage());
+        }
     }
 
     public void unbind() {
