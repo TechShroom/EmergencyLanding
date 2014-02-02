@@ -101,7 +101,7 @@ public abstract class ELTexture {
                     if ((lookAlike = ELTexture.similar(texObj)) != null) {
                         id = lookAlike.id;
                         LUtils.print("Overrode id: " + id + " (obj=" + texObj
-                                + ", overriden=" + lookAlike + ")");
+                                + ", overridden=" + lookAlike + ")");
                         if (LUtils.debugLevel > 3) {
                             new Throwable().printStackTrace();
                         }
