@@ -40,6 +40,7 @@ public class DisplayLayer {
     private static String reqTitle = "";
     private static boolean wasResizable;
     private static LWJGLRenderer renderer;
+    private static boolean init = false;
 
     /**
      * Initializes the display and KMain instance. Parameter notes are found on
@@ -189,6 +190,7 @@ public class DisplayLayer {
         main.init(args);
         GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         LUtils.print("Using OpenGL v" + LUtils.getGLVer());
+        init = true;
     }
 
     public static void loop(int dfps) throws LWJGLException {
@@ -224,7 +226,9 @@ public class DisplayLayer {
     }
 
     public static void destroy() {
-        Display.destroy();
+        if (init) {
+            Display.destroy();
+        }
         Frame[] frms = Frame.getFrames();
         for (Frame frm : frms) {
             if (frm.isVisible()) {
