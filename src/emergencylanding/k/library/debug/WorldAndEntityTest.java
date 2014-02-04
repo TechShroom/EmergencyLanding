@@ -17,7 +17,7 @@ public class WorldAndEntityTest extends KMain {
     private static Thread is, ip;
     private static boolean run = true;
     private static final int TICKS_PER_SECOND = 20;
-    private static final int FRAMES_PER_SECOND = 120;
+    private static final int FRAMES_PER_SECOND = 1200;
     public static final int DISPLAY_FPS_INDEX = 0, IS_INDEX = FPS.genIndex(),
             INTERPOLATE_INDEX = FPS.genIndex();
 
