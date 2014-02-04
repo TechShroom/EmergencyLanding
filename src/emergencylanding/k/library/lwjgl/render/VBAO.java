@@ -120,6 +120,9 @@ public class VBAO implements Cloneable {
     }
 
     public VBAO setXYZOff(Victor pos) {
+        if (staticdata) {
+            throw new IllegalStateException("static data");
+        }
         xyzoffset = pos;
         VertexData[] newDataTemp = new VertexData[data.length];
         for (int i = 0; i < newDataTemp.length; i++) {
