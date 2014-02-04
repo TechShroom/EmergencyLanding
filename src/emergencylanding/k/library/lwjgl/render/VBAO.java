@@ -140,6 +140,9 @@ public class VBAO implements Cloneable {
     }
 
     public VBAO updateData(VertexData[] verts, byte[] indexControl) {
+        if (staticdata) {
+            throw new IllegalStateException("static data");
+        }
         vertData = VertexData.toFB(verts);
         indexData = BufferUtils.createByteBuffer(indexControl.length);
         indexData.put(indexControl);
