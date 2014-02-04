@@ -1,5 +1,14 @@
 package emergencylanding.k.library.lwjgl.control;
 
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.nio.IntBuffer;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Cursor;
+import org.lwjgl.input.Mouse;
+
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.render.VBAO;
@@ -8,14 +17,6 @@ import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Cursor;
-import org.lwjgl.input.Mouse;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.nio.IntBuffer;
 
 public class MouseHelp {
     private static class FakeCursor {
