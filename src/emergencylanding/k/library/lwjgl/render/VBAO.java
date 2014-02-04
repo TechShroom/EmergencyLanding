@@ -15,7 +15,6 @@ import java.util.Arrays;
 import k.core.util.classes.StackTraceInfo;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL15;
 
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
@@ -77,8 +76,8 @@ public class VBAO implements Cloneable {
      */
     private int vbo_i = GLData.NONE;
     /**
-     * Determines if this data is used with {@link GL15#GL_STATIC_DRAW} or
-     * {@link GL15#GL_DYNAMIC_DRAW}.
+     * Determines if this data is used with {@link #GL_STATIC_DRAW} or
+     * {@link #GL_DYNAMIC_DRAW}.
      */
     private boolean staticdata = false;
     /**
@@ -181,8 +180,7 @@ public class VBAO implements Cloneable {
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         // null pointer the original data (disabled until LWJGL 3)
         /*
-         * glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) null,
-         * GL_DYNAMIC_DRAW);
+         * glBufferData(GL_ARRAY_BUFFER, (FloatBuffer) null, GL_DYNAMIC_DRAW);
          */
         glBufferData(GL_ARRAY_BUFFER, vertData, GL_DYNAMIC_DRAW);
         if (LUtils.debugLevel >= 1) {
@@ -191,8 +189,7 @@ public class VBAO implements Cloneable {
         glBindVertexArray(GLData.NONE);
         // IC
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_i);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData,
-                GL_DYNAMIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData, GL_DYNAMIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError("updateData -> overwrite IC");
@@ -224,21 +221,19 @@ public class VBAO implements Cloneable {
         // A VBO is a collection of Vectors used to represent data
         vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertData,
-                (staticdata ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW));
+        glBufferData(GL_ARRAY_BUFFER, vertData, (staticdata ? GL_STATIC_DRAW
+                : GL_DYNAMIC_DRAW));
         // Put the VBO in the attributes list at index 0 (position)
-        glVertexAttribPointer(POS_VBO_INDEX,
-                VertexData.FLOATS_PER_POSTITON, GL_FLOAT, false,
-                VertexData.VERTEX_SIZE, 0);
+        glVertexAttribPointer(POS_VBO_INDEX, VertexData.FLOATS_PER_POSTITON,
+                GL_FLOAT, false, VertexData.VERTEX_SIZE, 0);
         // Put the VBO in the attributes list at index 1 (color)
-        glVertexAttribPointer(COLOR_VBO_INDEX,
-                VertexData.FLOATS_PER_COLOR, GL_FLOAT, false,
-                VertexData.VERTEX_SIZE, VertexData.POSITION_SIZE);
+        glVertexAttribPointer(COLOR_VBO_INDEX, VertexData.FLOATS_PER_COLOR,
+                GL_FLOAT, false, VertexData.VERTEX_SIZE,
+                VertexData.POSITION_SIZE);
         // Put the VBO in the attributes list at index 2 (tex)
-        glVertexAttribPointer(TEX_VBO_INDEX,
-                VertexData.FLOATS_PER_TEXTURE, GL_FLOAT, false,
-                VertexData.VERTEX_SIZE, VertexData.POSITION_SIZE
-                        + VertexData.COLOR_SIZE);
+        glVertexAttribPointer(TEX_VBO_INDEX, VertexData.FLOATS_PER_TEXTURE,
+                GL_FLOAT, false, VertexData.VERTEX_SIZE,
+                VertexData.POSITION_SIZE + VertexData.COLOR_SIZE);
         // Deselect (bind to 0) the VBO
         glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
         if (LUtils.debugLevel >= 1) {
@@ -294,8 +289,7 @@ public class VBAO implements Cloneable {
 
     private void vertexDraw() {
         // Draw the vertices
-        glDrawElements(GL_TRIANGLES, verticesCount,
-                GL_UNSIGNED_BYTE, 0);
+        glDrawElements(GL_TRIANGLES, verticesCount, GL_UNSIGNED_BYTE, 0);
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         }
