@@ -151,7 +151,10 @@ public class VBAO implements Cloneable {
         // Overwrite data
         GL30.glBindVertexArray(vaoId);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertData, GL15.GL_STATIC_DRAW);
+        // null pointer the original data
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, (FloatBuffer) null,
+                GL15.GL_DYNAMIC_DRAW);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertData, GL15.GL_DYNAMIC_DRAW);
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError("updateData -> overwrite vertData");
         }
