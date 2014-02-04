@@ -194,7 +194,8 @@ public class VBAO implements Cloneable {
         // A VBO is a collection of Vectors used to represent data
         vbo = GL15.glGenBuffers();
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertData, GL15.GL_STATIC_DRAW);
+        GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertData,
+                (staticdata ? GL15.GL_STATIC_DRAW : GL15.GL_DYNAMIC_DRAW));
         // Put the VBO in the attributes list at index 0 (position)
         GL20.glVertexAttribPointer(POS_VBO_INDEX,
                 VertexData.FLOATS_PER_POSTITON, GL11.GL_FLOAT, false,
