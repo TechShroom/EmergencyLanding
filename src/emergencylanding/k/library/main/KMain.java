@@ -3,7 +3,6 @@ package emergencylanding.k.library.main;
 import java.util.HashMap;
 
 import k.core.util.classes.StackTraceInfo;
-
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.util.LUtils;
