@@ -123,6 +123,13 @@ public class VBAO implements Cloneable {
         if (staticdata) {
             throw new IllegalStateException("static data");
         }
+        if (pos == null) {
+            throw new NullPointerException("position");
+        }
+        if (pos.equals(xyzoffset)) {
+            // same position, no-op
+            return this;
+        }
         xyzoffset = pos;
         VertexData[] newDataTemp = new VertexData[data.length];
         for (int i = 0; i < newDataTemp.length; i++) {
