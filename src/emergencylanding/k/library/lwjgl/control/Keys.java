@@ -9,6 +9,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
+import emergencylanding.k.imported.Sync;
 import emergencylanding.k.library.util.LUtils;
 
 /**
@@ -89,9 +90,12 @@ public class Keys {
     static {
         Thread t = new Thread(new Runnable() {
 
+            Sync keySync = new Sync();
+            
             @Override
             public void run() {
                 while (Keyboard.isCreated()) {
+                    keySync.sync(1000);
                     synchronized (q_l) {
                         for (KeyEvent ke : q) {
                             fireEvent(ke);
