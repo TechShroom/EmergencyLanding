@@ -1,8 +1,6 @@
 package emergencylanding.k.library.debug;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import emergencylanding.k.library.util.LUtils;
 

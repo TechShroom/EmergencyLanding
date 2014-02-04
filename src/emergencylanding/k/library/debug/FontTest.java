@@ -1,8 +1,6 @@
 package emergencylanding.k.library.debug;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -13,10 +11,7 @@ import org.lwjgl.opengl.Display;
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
-import emergencylanding.k.library.lwjgl.render.Render;
-import emergencylanding.k.library.lwjgl.render.StringRenderer;
-import emergencylanding.k.library.lwjgl.render.VBAO;
-import emergencylanding.k.library.lwjgl.render.VertexData;
+import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.DrawableUtils;

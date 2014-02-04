@@ -1,13 +1,9 @@
 package emergencylanding.k.library.sound;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 import org.lwjgl.openal.AL;
-import org.newdawn.slick.openal.Audio;
-import org.newdawn.slick.openal.AudioLoader;
-import org.newdawn.slick.openal.SoundStore;
+import org.newdawn.slick.openal.*;
 
 import emergencylanding.k.library.util.LUtils;
 

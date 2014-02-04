@@ -1,8 +1,6 @@
 package emergencylanding.k.library.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.Arrays;
 
 import k.core.util.classes.StackTraceInfo;

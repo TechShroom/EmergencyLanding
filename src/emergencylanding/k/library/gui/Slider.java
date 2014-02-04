@@ -5,9 +5,7 @@ import java.awt.Rectangle;
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
-import emergencylanding.k.library.lwjgl.render.StringRenderer;
-import emergencylanding.k.library.lwjgl.render.VBAO;
-import emergencylanding.k.library.lwjgl.render.VertexData;
+import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
 public class Slider extends GuiElement {

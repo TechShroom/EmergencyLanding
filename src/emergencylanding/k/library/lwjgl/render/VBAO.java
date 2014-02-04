@@ -7,10 +7,7 @@ import java.util.Arrays;
 import k.core.util.classes.StackTraceInfo;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;

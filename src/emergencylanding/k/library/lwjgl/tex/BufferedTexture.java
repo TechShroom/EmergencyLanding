@@ -1,9 +1,7 @@
 package emergencylanding.k.library.lwjgl.tex;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.DataBufferInt;
+import java.awt.image.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 

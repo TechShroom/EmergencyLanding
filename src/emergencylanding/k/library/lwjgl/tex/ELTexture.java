@@ -2,19 +2,12 @@ package emergencylanding.k.library.lwjgl.tex;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
-import java.awt.image.Raster;
-import java.awt.image.SinglePixelPackedSampleModel;
-import java.awt.image.WritableRaster;
+import java.awt.image.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.OpenGLException;
+import org.lwjgl.opengl.*;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
