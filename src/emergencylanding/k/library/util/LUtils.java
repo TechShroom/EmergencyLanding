@@ -1,5 +1,7 @@
 package emergencylanding.k.library.util;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.awt.Dimension;
 import java.io.*;
 import java.util.*;
@@ -547,7 +549,7 @@ public class LUtils {
      * @return {@link GL11#GL_VERSION}
      */
     public static String getGLVer() {
-        return GL11.glGetString(GL11.GL_VERSION);
+        return glGetString(GL_VERSION);
     }
 
     /**

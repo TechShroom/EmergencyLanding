@@ -1,5 +1,11 @@
 package emergencylanding.k.library.lwjgl.tex;
 
+import static org.lwjgl.opengl.GL11.*;
+
+import static org.lwjgl.opengl.GL13.*;
+
+import static org.lwjgl.opengl.GL30.*;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.image.*;
@@ -7,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.OpenGLException;
 
 import emergencylanding.k.library.debug.Memory;
 import emergencylanding.k.library.exceptions.lwjgl.TextureBindException0;
@@ -27,7 +33,7 @@ public abstract class ELTexture {
             init();
             ELTexture.texlist.remove(getID());
             ELTexture.currentSpace -= buf.capacity();
-            GL11.glDeleteTextures(getID());
+            glDeleteTextures(getID());
             removed.put(getID(), getID());
             texture.destruction0();
         }
@@ -119,7 +125,7 @@ public abstract class ELTexture {
                         }
                         if (ELTexture.currentSpace < ELTexture.TOTAL_TEXTURE_SPACE
                                 && id == -1 && useID == -1) {
-                            id = GL11.glGenTextures();
+                            id = glGenTextures();
                         } else if (id == -1 && useID == -1) {
                             LUtils.print("WARNING! Texture limit reached, "
                                     + "not adding new textures! ("
@@ -131,9 +137,9 @@ public abstract class ELTexture {
                             DestTexture.removed.remove(id);
                         }
                         // Create a new texture object in memory and bind it
-                        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+                        glActiveTexture(GL_TEXTURE0);
                         try {
-                            GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
+                            glBindTexture(GL_TEXTURE_2D, id);
                         } catch (OpenGLException ogle) {
                             System.err
                                     .println("OpenGL encountered an error while binding id #"
@@ -145,19 +151,19 @@ public abstract class ELTexture {
                         // All RGB bytes are aligned to each other and each
                         // component is 1
                         // byte
-                        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+                        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                         // Upload the texture data and generate mip maps (for
                         // scaling)
                         if (override) {
-                            GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0,
-                                    dim.width, dim.height, GL11.GL_RGBA,
-                                    GL11.GL_UNSIGNED_BYTE, buf);
+                            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
+                                    dim.width, dim.height, GL_RGBA,
+                                    GL_UNSIGNED_BYTE, buf);
                         } else {
-                            GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0,
-                                    GL11.GL_RGBA, dim.width, dim.height, 0,
-                                    GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buf);
+                            glTexImage2D(GL_TEXTURE_2D, 0,
+                                    GL_RGBA, dim.width, dim.height, 0,
+                                    GL_RGBA, GL_UNSIGNED_BYTE, buf);
                         }
-                        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+                        glGenerateMipmap(GL_TEXTURE_2D);
                         ELTexture.texlist.put(id, texObj);
                     }
                 }
@@ -211,9 +217,9 @@ public abstract class ELTexture {
     }
 
     public void bind() {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0);
         try {
-            GL11.glBindTexture(GL11.GL_TEXTURE_2D, getID());
+            glBindTexture(GL_TEXTURE_2D, getID());
         } catch (OpenGLException ogle) {
             System.err.println("OpenGL encountered an error while binding id #"
                     + id + ": " + ogle.getLocalizedMessage());
@@ -221,12 +227,12 @@ public abstract class ELTexture {
     }
 
     public void unbind() {
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, GLData.NONE);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, GLData.NONE);
     }
 
     public void glTextureVertex(float s, float t) {
-        GL11.glTexCoord2f(s, t);
+        glTexCoord2f(s, t);
     }
 
     public int getWidth() {
