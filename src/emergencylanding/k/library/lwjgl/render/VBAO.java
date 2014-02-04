@@ -11,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL32;
 
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
@@ -46,7 +45,7 @@ public class VBAO implements Cloneable {
      * An empty VBAO for returning valid values for invalid input.
      */
     public static final VBAO EMPTY = new VBAO(
-            new VertexData[] { new VertexData() }, new byte[] { 0, 1, 2 });
+            new VertexData[] { new VertexData() }, new byte[] { 0, 1, 2 }, true);
 
     /**
      * The vertex data
@@ -94,11 +93,12 @@ public class VBAO implements Cloneable {
      */
     public Victor xyzoffset = new Victor();
 
-    public VBAO(VertexData[] verts, byte[] indexControl) {
-        this(verts, indexControl, null);
+    public VBAO(VertexData[] verts, byte[] indexControl, boolean stat) {
+        this(verts, indexControl, null, stat);
     }
 
-    public VBAO(VertexData[] verts, byte[] indexControl, ELTexture t) {
+    public VBAO(VertexData[] verts, byte[] indexControl, ELTexture t,
+            boolean stat) {
         data = verts;
         icdata = indexControl;
         vertData = VertexData.toFB(verts);
@@ -106,9 +106,12 @@ public class VBAO implements Cloneable {
         indexData.put(indexControl);
         indexData.flip();
         verticesCount = indexControl.length;
+        staticdata = stat;
         tex = t;
         init();
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     public VBAO setTexture(ELTexture t) {
@@ -143,14 +146,18 @@ public class VBAO implements Cloneable {
         GL30.glBindVertexArray(vaoId);
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbo);
         GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertData, GL15.GL_STATIC_DRAW);
-        GLData.notifyOnGLError("updateData -> overwrite vertData");
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError("updateData -> overwrite vertData");
+        }
         GL30.glBindVertexArray(GLData.NONE);
         // IC
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vbo_i);
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indexData,
                 GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
-        GLData.notifyOnGLError("updateData -> overwrite IC");
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError("updateData -> overwrite IC");
+        }
         return this;
     }
 
@@ -168,7 +175,9 @@ public class VBAO implements Cloneable {
 
         // Create the IC VBO
         createIndexControlVBO();
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     private void createVertexVBO() {
@@ -192,7 +201,9 @@ public class VBAO implements Cloneable {
                         + VertexData.COLOR_SIZE);
         // Deselect (bind to 0) the VBO
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, GLData.NONE);
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     private void createIndexControlVBO() {
@@ -201,7 +212,9 @@ public class VBAO implements Cloneable {
         GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, indexData,
                 GL15.GL_STATIC_DRAW);
         GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     public VBAO draw() {
@@ -259,19 +272,24 @@ public class VBAO implements Cloneable {
         // Delete the VAO
         GL30.glBindVertexArray(GLData.NONE);
         GL30.glDeleteVertexArrays(vaoId);
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     private void deleteVertexVBO() {
         // Delete the VBO
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, GLData.NONE);
         GL15.glDeleteBuffers(vbo);
-        GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
     }
 
     @Override
     public String toString() {
-        return Arrays.toString(data) + "->" + Arrays.toString(icdata);
+        return Arrays.toString(data) + "->" + Arrays.toString(icdata) + " ("
+                + (staticdata ? "static" : "dynamic") + ")";
     }
 
     @Override
@@ -289,6 +307,7 @@ public class VBAO implements Cloneable {
             c.vertData = vertData.duplicate();
             c.verticesCount = verticesCount;
             c.xyzoffset = xyzoffset;
+            c.staticdata = staticdata;
         } catch (CloneNotSupportedException e) {
             throw new InternalError("not clonable");
         }
