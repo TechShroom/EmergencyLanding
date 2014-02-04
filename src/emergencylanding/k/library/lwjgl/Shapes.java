@@ -60,7 +60,7 @@ public class Shapes {
             LUtils.print("Triangle requires ONLY 3 vertices");
             return VBAO.EMPTY;
         }
-        return new VBAO(vertices, TRI_IC);
+        return new VBAO(vertices, TRI_IC, false);
     }
 
     /**
@@ -146,7 +146,7 @@ public class Shapes {
             LUtils.print("Quad requires ONLY 4 vertices");
             return VBAO.EMPTY;
         }
-        return new VBAO(vertices, QUAD_IC);
+        return new VBAO(vertices, QUAD_IC, false);
     }
 
     /**
@@ -177,7 +177,7 @@ public class Shapes {
             LUtils.print("Cube requires ONLY 8 vertices");
             return VBAO.EMPTY;
         }
-        return new VBAO(vertices, CUBE_IC);
+        return new VBAO(vertices, CUBE_IC, false);
     }
 
     /**
@@ -208,6 +208,6 @@ public class Shapes {
         if (vertices == null) {
             throw new IllegalArgumentException("vertices cannot be null");
         }
-        return new VBAO(vertices, SPHERE_IC);
+        return new VBAO(vertices, SPHERE_IC, false);
     }
 }
