@@ -31,6 +31,8 @@ public class DisplayLayer {
     public static String VERSION = "1.2";
     public static String PLATFORM_NAME = "unknown";
     static {
+        LUtils.init(); // need to setup LUtils before LWJGLUtil calls, so that
+                       // CHECKS is set to false.
         PLATFORM_NAME = LWJGLUtil.getPlatformName();
         String osName = System.getProperty("os.name");
         if (osName.startsWith("SunOS")) {
