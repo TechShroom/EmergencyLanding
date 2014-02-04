@@ -31,10 +31,11 @@ public class WorldAndEntityTest extends KMain {
                 WorldAndEntityTest.run = !Display.isCloseRequested();
                 DisplayLayer.loop(WorldAndEntityTest.FRAMES_PER_SECOND);
             }
-            DisplayLayer.destroy();
-            System.exit(0);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            DisplayLayer.destroy();
+            System.exit(0);
         }
     }
 
