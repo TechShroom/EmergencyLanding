@@ -42,6 +42,22 @@ public class Victor {
         update(xVal, yVal, zVal);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof Victor) {
+            Victor v = (Victor) o;
+            /*
+             * Note: possible want to consider comparing lastX/Y/Z, as that
+             * makes calls to interpolate() different.
+             */
+            return v.x == x && v.y == y && v.z == z;
+        }
+        return super.equals(o);
+    }
+
     public synchronized static void flip() {
         Victor.state = 1 - Victor.state;
     }
