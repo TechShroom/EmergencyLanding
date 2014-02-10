@@ -65,7 +65,6 @@ public class LUtils {
 	}
 
 	static {
-		injectNatives();
 		overrideStandardStreams();
 	}
 
@@ -129,6 +128,8 @@ public class LUtils {
 		EL_TOP = (tempName.startsWith(File.separator) ? "" : File.separator)
 				+ tempName;
 		LUtils.print("Using EL_TOP " + EL_TOP);
+
+		injectNatives();
 	}
 
 	public static final int debugLevel = Integer.parseInt(System.getProperty(
