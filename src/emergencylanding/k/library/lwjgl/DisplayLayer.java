@@ -2,13 +2,16 @@ package emergencylanding.k.library.lwjgl;
 
 import java.awt.Frame;
 import java.awt.Toolkit;
-import java.io.File;
 import java.lang.instrument.IllegalClassFormatException;
 
 import k.core.util.classes.StackTraceInfo;
 
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
+import org.lwjgl.opengl.ContextAttribs;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.PixelFormat;
 
 import de.matthiasmann.twl.renderer.Renderer;
 import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
@@ -24,16 +27,6 @@ import emergencylanding.k.library.util.LUtils;
 public class DisplayLayer {
 
     public static String VERSION = "1.2";
-    public static String PLATFORM_NAME = "unknown";
-    static {
-        LUtils.init(); // need to setup LUtils before LWJGLUtil calls, so that
-                       // CHECKS is set to false.
-        PLATFORM_NAME = LWJGLUtil.getPlatformName();
-        String osName = System.getProperty("os.name");
-        if (osName.startsWith("SunOS")) {
-            PLATFORM_NAME = "solaris";
-        }
-    }
     private static String reqTitle = "";
     private static boolean wasResizable;
     private static LWJGLRenderer renderer;
@@ -148,10 +141,6 @@ public class DisplayLayer {
     public static void initDisplay(boolean fullscreen, int width, int height,
             String title, boolean resizable, boolean vsync, String[] args,
             KMain main) throws Exception {
-        System.err.println(LUtils.getELTop());
-        System.setProperty("org.lwjgl.librarypath", LUtils.getELTop()
-                + File.separator + "res" + File.separator + "libs"
-                + File.separator + "natives" + File.separator + PLATFORM_NAME);
         LUtils.print("Using LWJGL v" + Sys.getVersion());
         DisplayMode dm = LUtils.getDisplayMode(width, height, fullscreen);
         if (!dm.isFullscreenCapable() && fullscreen) {
