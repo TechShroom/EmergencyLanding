@@ -46,6 +46,7 @@ public abstract class KMain {
         return KMain.displayThread;
     }
 
-    public abstract void registerRenders(
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender);
+    public void registerRenders(
+            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+    }
 }
