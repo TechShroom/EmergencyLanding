@@ -34,7 +34,7 @@ public class OrgLWJGLOpenGLPackageAccess {
         } catch (IllegalAccessException e) {
             throw new IllegalStateException("Could not access update method", e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Error during impl update", e);
+            throw new RuntimeException("Error during impl update", e.getCause());
         }
     }
 
@@ -59,7 +59,7 @@ public class OrgLWJGLOpenGLPackageAccess {
             throw new IllegalStateException(
                     "Could not access pollDevices method", e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Error during device polling", e);
+            throw new RuntimeException("Error during device polling", e.getCause());
         }
     }
 
