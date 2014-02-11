@@ -82,8 +82,7 @@ public class GLData {
         for (int shader : shaders) {
             glAttachShader(comboShaderProgram, shader);
         }
-        glBindAttribLocation(comboShaderProgram, POSITION_INDEX,
-                "in_Position");
+        glBindAttribLocation(comboShaderProgram, POSITION_INDEX, "in_Position");
         glBindAttribLocation(comboShaderProgram, COLOR_INDEX, "in_Color");
         glBindAttribLocation(comboShaderProgram, TEX_INDEX, "in_texCoord");
         glLinkProgram(comboShaderProgram);

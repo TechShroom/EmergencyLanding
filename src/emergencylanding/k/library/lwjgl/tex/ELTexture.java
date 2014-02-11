@@ -155,13 +155,12 @@ public abstract class ELTexture {
                         // Upload the texture data and generate mip maps (for
                         // scaling)
                         if (override) {
-                            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-                                    dim.width, dim.height, GL_RGBA,
-                                    GL_UNSIGNED_BYTE, buf);
+                            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, dim.width,
+                                    dim.height, GL_RGBA, GL_UNSIGNED_BYTE, buf);
                         } else {
-                            glTexImage2D(GL_TEXTURE_2D, 0,
-                                    GL_RGBA, dim.width, dim.height, 0,
-                                    GL_RGBA, GL_UNSIGNED_BYTE, buf);
+                            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, dim.width,
+                                    dim.height, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                                    buf);
                         }
                         glGenerateMipmap(GL_TEXTURE_2D);
                         ELTexture.texlist.put(id, texObj);
