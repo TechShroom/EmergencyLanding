@@ -21,7 +21,10 @@ import emergencylanding.k.library.util.LUtils;
  */
 public class Keys {
 
-    private static ArrayList<KeyListener> listeners = new ArrayList<KeyListener>();
+    private static ArrayList<KeyListener> listeners = new ArrayList<KeyListener>(
+            1);
+    private static ArrayList<KeyListener> usesLWJGLCodes = new ArrayList<KeyListener>(
+            1);
     private static ArrayList<KeyEvent> q = new ArrayList<KeyEvent>();
     private static Object l_l = new Object();
     private static Object q_l = new Object();
@@ -63,20 +66,33 @@ public class Keys {
     }
 
     /**
-     * Add a new listener for receiving events
+     * Add a new listener for receiving events. Uses LWJGL codes.
      * 
      * @param k
      *            - the {@link KeyListener} for the events to be received on
      */
     public static void registerListener(KeyListener k) {
-        synchronized (l_l) {
-            listeners.add(k);
-            LUtils.print("Registered new KeyListener " + k);
-        }
+        registerListener(k, true);
     }
 
+    /**
+     * Add a new listener for receiving events, uses the code system specified
+     * by the boolean.
+     * 
+     * @param k
+     *            - the {@link KeyListener} for the events to be received on
+     * @param lwjgl
+     *            - true to use the LWJGL key system, false to use AWT
+     */
     public static void registerListener(KeyListener k, boolean lwjgl) {
-
+        synchronized (l_l) {
+            listeners.add(k);
+            if (lwjgl) {
+                // we only put it in if it uses it
+                usesLWJGLCodes.add(k);
+            }
+            LUtils.print("Registered new KeyListener " + k);
+        }
     }
 
     /**
@@ -548,6 +564,11 @@ public class Keys {
     private static void fireEvent(KeyEvent keyEvent) {
         synchronized (l_l) {
             for (KeyListener l : listeners) {
+                int code = keyEvent.getKeyCode();
+                if (!usesLWJGLCodes.contains(l)) {
+                    code = translateToAWT(code);
+                }
+                keyEvent.setKeyCode(code);
                 if (keyEvent.getID() == KeyEvent.KEY_PRESSED) {
                     l.keyPressed(keyEvent);
                 } else {
