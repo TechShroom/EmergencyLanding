@@ -125,8 +125,8 @@ public class LUtils {
             tempName = tempName.substring(0,
                     tempName.lastIndexOf(File.separatorChar));
         }
-        EL_TOP = (tempName.startsWith(File.separator) ? "" : File.separator)
-                + tempName;
+        EL_TOP = ((tempName.startsWith(File.separator) ? "" : File.separator) + tempName)
+                .substring(1);
         LUtils.print("Using EL_TOP " + EL_TOP);
 
         injectNatives();
