@@ -9,7 +9,7 @@ public class InputStreamTest {
     public static void main(String[] args) throws IOException,
             ClassNotFoundException {
         String path = //
-        LUtils.TOP_LEVEL + "/res/test2.zip/txt.txt" // txt.txt
+        LUtils.getELTop() + "/res/test2.zip/txt.txt" // txt.txt
                 .replace('/', '\\');
         InputStream is = LUtils.getInputStream(path);
         System.err.println("Got " + is + " for " + path);
