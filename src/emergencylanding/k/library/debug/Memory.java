@@ -8,13 +8,7 @@ public class Memory {
     private static long lastT = Memory.getTotal();
 
     private Memory() {
-        System.out.println("AHEM! Don't create this class!");
-        byte[] chrs = "POTATO".getBytes();
-        int res = 0;
-        for (byte b : chrs) {
-            res += b;
-        }
-        System.exit(res);
+        throw new AssertionError();
     }
 
     public static void printFree() {
