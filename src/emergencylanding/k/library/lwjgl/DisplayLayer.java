@@ -25,6 +25,10 @@ import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
 public class DisplayLayer {
+    
+    static {
+        LUtils.init();
+    }
 
     public static String VERSION = "1.2";
     private static String reqTitle = "";
