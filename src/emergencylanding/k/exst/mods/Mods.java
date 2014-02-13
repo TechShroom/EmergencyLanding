@@ -16,7 +16,13 @@ public class Mods {
 
     public static void findAndLoad() {
         System.err.println("EL Mod System starting...");
-        injectModsFolder();
+        if (!injectModsFolder()) {
+            System.err
+                    .println("[WARNING] Mods folder does not exist or is a file, "
+                            + "add it if you want mods to be loaded from there.");
+
+            return;
+        }
         ArrayList<IMod> injected = ModInjector.findAndInject();
         System.err.println("Loaded mods from classpath.");
         System.err.println("Letting game mess with mods list...");
@@ -41,16 +47,27 @@ public class Mods {
         System.err.println("EL Mod System loaded.");
     }
 
-    private static void injectModsFolder() {
+    private static boolean injectModsFolder() {
         String topLevel = LUtils.TOP_LEVEL;
         File mods = new File(topLevel, "mods");
-        try {
-            ClassPathHack.addFile(mods);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
+        if (!mods.exists() || mods.isFile()) {
+            return false;
+        }
+
+        File[] files = mods.listFiles();
+        for (File f : files) {
+            if (f.isDirectory()) {
+                // add support for recursive directory searching later
+                continue;
+            }
+            try {
+                ClassPathHack.addFile(f);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         System.err.println("Injected '" + mods + "' into classpath.");
+        return true;
     }
 
     public static void registerRenders(
