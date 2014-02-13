@@ -135,6 +135,9 @@ public class LUtils {
     public static final int debugLevel = Integer.parseInt(System.getProperty(
             "el.debug.level", "0"));
 
+    // the range between which the "close enough" guesser in getDisplayMode uses
+    private static final int WIDTH_RANGE = 300, HEIGHT_RANGE = 300;
+
     /**
      * Gets a boolean argument safely
      * 
@@ -364,34 +367,31 @@ public class LUtils {
      */
     public static DisplayMode getDisplayMode(int width, int height,
             boolean fullscreen) {
+        ArrayList<DisplayMode> possibleExtras = new ArrayList<DisplayMode>();
         try {
             for (DisplayMode m : Display.getAvailableDisplayModes()) {
+                int w = m.getWidth();
+                int h = m.getHeight();
                 if (m.isFullscreenCapable() || !fullscreen) {
-                    if (m.getWidth() == width) {
-                        if (m.getHeight() == height) {
-                            if (m.isFullscreenCapable()) {
-                                return m;
-                            } else {
-                                LUtils.print(String
-                                        .format("A non-aspect-compat mode"
-                                                + " is being used:"
-                                                + " Width: %s Height: %s"
-                                                + " Fullscreen: %s."
-                                                + " Fullscreen may not work as expected!",
-                                                width, height, fullscreen));
-                            }
+                    if (w == width) {
+                        if (h == height) {
+                            return m;
                         }
                     }
                 }
-                if (m.isFullscreenCapable()) {
-                    LUtils.print(String.format("A non-args-compat mode"
-                            + " is avaliable:" + " Width: %s Height: %s"
-                            + " Fullscreen: %s", m.getWidth(), m.getHeight(),
-                            m.isFullscreenCapable()));
+                if (m.isFullscreenCapable()
+                        && ((w < (width + WIDTH_RANGE)) && (w > (width - WIDTH_RANGE)))
+                        && ((h < (height + HEIGHT_RANGE)) && (h > (height - HEIGHT_RANGE)))) {
+                    possibleExtras.add(m);
                 }
             }
         } catch (LWJGLException e) {
             e.printStackTrace();
+        }
+        print("Using non-fullscreen compatible display mode, no default ones found.");
+        if (fullscreen) {
+            print("Fullscreen was requested. Here are some close matches that support fullscreen: "
+                    + possibleExtras);
         }
         return new DisplayMode(width, height);
     }
