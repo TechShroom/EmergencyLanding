@@ -50,14 +50,22 @@ public class Mods {
     private static boolean injectModsFolder() {
         String topLevel = LUtils.TOP_LEVEL;
         File mods = new File(topLevel, "mods");
-        if (!mods.exists() || mods.isFile()) {
+        if (!loadDirectory(mods)) {
+            return false;
+        }
+        System.err.println("Injected '" + mods + "' into classpath.");
+        return true;
+    }
+
+    private static boolean loadDirectory(File dir) {
+        if (!dir.exists() || dir.isFile()) {
             return false;
         }
 
-        File[] files = mods.listFiles();
+        File[] files = dir.listFiles();
         for (File f : files) {
             if (f.isDirectory()) {
-                // add support for recursive directory searching later
+                loadDirectory(f);
                 continue;
             }
             try {
@@ -66,7 +74,6 @@ public class Mods {
                 e.printStackTrace();
             }
         }
-        System.err.println("Injected '" + mods + "' into classpath.");
         return true;
     }
 
