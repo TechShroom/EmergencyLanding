@@ -126,7 +126,7 @@ public class LUtils {
                     tempName.lastIndexOf(File.separatorChar));
         }
         EL_TOP = ((tempName.startsWith(File.separator) ? "" : File.separator) + tempName)
-                .substring(1);
+                .replace("/C:/", "C:/");
         LUtils.print("Using EL_TOP " + EL_TOP);
 
         injectNatives();
