@@ -1,9 +1,7 @@
 package emergencylanding.k.library.lwjgl.tex;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import static org.lwjgl.opengl.GL13.*;
-
 import static org.lwjgl.opengl.GL30.*;
 
 import java.awt.Color;
@@ -197,6 +195,16 @@ public abstract class ELTexture {
                 r.run();
             }
             glThreadQueue.clear();
+        }
+    }
+
+    public static void addRunnableToQueue(Runnable r) {
+        if (Thread.currentThread() == KMain.getDisplayThread()) {
+            r.run();
+            return;
+        }
+        synchronized (glThreadQueue) {
+            glThreadQueue.add(r);
         }
     }
 
