@@ -25,12 +25,13 @@ import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
 public class DisplayLayer {
-    
+
+    public static String VERSION = "1.2";
+
     static {
         LUtils.init();
     }
-
-    public static String VERSION = "1.2";
+    
     private static String reqTitle = "";
     private static boolean wasResizable;
     private static LWJGLRenderer renderer;
