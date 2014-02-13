@@ -536,9 +536,7 @@ public class LUtils {
     public static Dimension getDimensionFromUserAndArgs(Dimension[] dimensions,
             String[] normalized) {
         if (normalized.length >= 4) {
-            LUtils.print("This is the args sector");
             List<String> strs = Arrays.asList(normalized);
-            LUtils.print(strs.toString());
             if (strs.indexOf("-width") == -1 || strs.indexOf("-height") == -1) {
             } else {
                 String w = strs.get(strs.indexOf("-width") + 1);
@@ -551,7 +549,6 @@ public class LUtils {
         }
         Dimension get = LUtils.getDimensionFromUser(dimensions);
         if (get == null) {
-            LUtils.print("This is the args length " + normalized.length);
             get = new Dimension(600, 600);
         }
 
