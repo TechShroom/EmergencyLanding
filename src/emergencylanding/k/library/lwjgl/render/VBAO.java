@@ -29,15 +29,15 @@ import emergencylanding.k.library.util.LUtils;
  */
 public class VBAO implements Cloneable {
     /**
-     * Index of the position attribute in the {@link VBAO#vbo vbo}
+     * Index of the position attribute in the {@link #vbo}
      */
     public static final int POS_VBO_INDEX = GLData.POSITION_INDEX;
     /**
-     * Index of the color attribute in the {@link VBAO#vbo vbo}
+     * Index of the color attribute in the {@link #vbo}
      */
     public static final int COLOR_VBO_INDEX = GLData.COLOR_INDEX;
     /**
-     * Index of the texCoord attribute in the {@link VBAO#vbo vbo}
+     * Index of the texCoord attribute in the {@link #vbo}
      */
     public static final int TEX_VBO_INDEX = GLData.TEX_INDEX;
 
