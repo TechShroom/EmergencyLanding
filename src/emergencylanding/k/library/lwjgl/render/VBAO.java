@@ -1,11 +1,8 @@
 package emergencylanding.k.library.lwjgl.render;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import static org.lwjgl.opengl.GL15.*;
-
 import static org.lwjgl.opengl.GL20.*;
-
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.ByteBuffer;
@@ -262,6 +259,12 @@ public class VBAO implements Cloneable {
     }
 
     public VBAO draw() {
+        
+        if(vaoId == GLData.NONE || vbo == GLData.NONE || vbo_i == GLData.NONE) {
+            // no longer valid!
+            destroy();
+            return null;
+        }
 
         if (tex != null) {
             tex.bind();
@@ -271,6 +274,7 @@ public class VBAO implements Cloneable {
 
         // Bind to the VAO that has all the information about the vertices
         glBindVertexArray(vaoId);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glEnableVertexAttribArray(POS_VBO_INDEX);
         glEnableVertexAttribArray((tex == null) ? COLOR_VBO_INDEX
                 : TEX_VBO_INDEX);
@@ -285,6 +289,7 @@ public class VBAO implements Cloneable {
         glDisableVertexAttribArray(POS_VBO_INDEX);
         glDisableVertexAttribArray((tex == null) ? COLOR_VBO_INDEX
                 : TEX_VBO_INDEX);
+        glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
         glBindVertexArray(GLData.NONE);
 
         if (tex != null) {

@@ -1,7 +1,6 @@
 package emergencylanding.k.library.lwjgl.render;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import static org.lwjgl.opengl.GL20.*;
 
 import java.io.*;
@@ -12,6 +11,7 @@ import k.core.util.classes.StackTraceInfo;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
 
@@ -44,7 +44,10 @@ public class GLData {
 
     public static void unload() {
         glUseProgram(NONE);
-        notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        try {
+            notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        } catch (OpenGLException ogle) {
+        }
     }
 
     public static void initOpenGL() {
@@ -199,7 +202,7 @@ public class GLData {
         if (err != GL_NO_ERROR) {
             LUtils.print("[GLErrorReporter] GLError in " + location + ": "
                     + GLU.gluErrorString(err) + " (id: " + err + ")");
-            System.exit(-10);
+            throw new OpenGLException(err);
         }
     }
 }
