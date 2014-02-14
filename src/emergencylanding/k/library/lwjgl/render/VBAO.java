@@ -198,22 +198,31 @@ public class VBAO implements Cloneable {
     }
 
     private void init() {
-        // Create a new Vertex Array Object in memory and select it (bind)
-        // A VAO can have up to 16 attributes (VBO's) assigned to it by default
-        vaoId = glGenVertexArrays();
-        glBindVertexArray(vaoId);
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                // Create a new Vertex Array Object in memory and select it
+                // (bind)
+                // A VAO can have up to 16 attributes (VBO's) assigned to it by
+                // default
+                vaoId = glGenVertexArrays();
+                glBindVertexArray(vaoId);
 
-        // Create the vertex VBO
-        createVertexVBO();
+                // Create the vertex VBO
+                createVertexVBO();
 
-        // Deselect (bind to 0) the VAO
-        glBindVertexArray(GLData.NONE);
+                // Deselect (bind to 0) the VAO
+                glBindVertexArray(GLData.NONE);
 
-        // Create the IC VBO
-        createIndexControlVBO();
-        if (LUtils.debugLevel >= 1) {
-            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
-        }
+                // Create the IC VBO
+                createIndexControlVBO();
+                if (LUtils.debugLevel >= 1) {
+                    GLData.notifyOnGLError(StackTraceInfo
+                            .getCurrentMethodName());
+                }
+            }
+        };
+        ELTexture.addRunnableToQueue(r);
     }
 
     private void createVertexVBO() {
