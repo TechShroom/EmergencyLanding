@@ -20,8 +20,6 @@ public class Mods {
             System.err
                     .println("[WARNING] Mods folder does not exist or is a file, "
                             + "add it if you want mods to be loaded from there.");
-
-            return;
         }
         ArrayList<IMod> injected = ModInjector.findAndInject();
         System.err.println("Loaded mods from classpath.");
