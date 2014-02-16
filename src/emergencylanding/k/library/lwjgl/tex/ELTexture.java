@@ -10,6 +10,7 @@ import java.awt.image.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.opengl.OpenGLException;
 
@@ -65,6 +66,8 @@ public abstract class ELTexture {
     public ByteBuffer buf = null;
     public Dimension dim = null;
     private static ArrayList<Runnable> glThreadQueue = new ArrayList<Runnable>();
+    private static ArrayList<Runnable> queueLater = new ArrayList<Runnable>();
+    private static volatile AtomicBoolean binding = new AtomicBoolean(false);
     static {
         System.gc();
         Memory.printAll();
@@ -190,17 +193,37 @@ public abstract class ELTexture {
     }
 
     public static void doBindings() {
-        synchronized (glThreadQueue) {
-            for (Runnable r : glThreadQueue) {
-                r.run();
+        while (true) {
+            // keep processing and reloading until no more are here. This could
+            // potentially cause infinite loops, so be careful!
+            synchronized (glThreadQueue) {
+                binding.set(true);
+                for (Runnable r : glThreadQueue) {
+                    r.run();
+                }
+                glThreadQueue.clear();
             }
-            glThreadQueue.clear();
+            binding.set(false);
+            synchronized (queueLater) {
+                if (queueLater.size() == 0) {
+                    return;
+                }
+                synchronized (glThreadQueue) {
+                    glThreadQueue.addAll(queueLater);
+                }
+            }
         }
     }
 
     public static void addRunnableToQueue(Runnable r) {
         if (Thread.currentThread() == KMain.getDisplayThread()) {
             r.run();
+            return;
+        }
+        if (binding.get()) {
+            synchronized (queueLater) {
+                queueLater.add(r);
+            }
             return;
         }
         synchronized (glThreadQueue) {
