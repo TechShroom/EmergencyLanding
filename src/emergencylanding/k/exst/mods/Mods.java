@@ -2,10 +2,10 @@ package emergencylanding.k.exst.mods;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import k.core.util.classes.ClassPathHack;
+import emergencylanding.k.exst.modules.ModuleSystem;
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.main.KMain;
@@ -13,8 +13,14 @@ import emergencylanding.k.library.util.LUtils;
 
 public class Mods {
     private static ArrayList<IMod> loaded = new ArrayList<IMod>();
+    private static boolean loaded_mods = false;
 
     public static void findAndLoad() {
+        if (loaded_mods) {
+            System.err
+                    .println("Already loaded mod system, trying to load again?");
+            return;
+        }
         System.err.println("EL Mod System starting...");
         if (!injectModsFolder()) {
             System.err
@@ -42,7 +48,9 @@ public class Mods {
         System.err.println("Complete.");
         loaded = injected;
         loaded.trimToSize();
+        loaded_mods = true;
         System.err.println("EL Mod System loaded.");
+        ModuleSystem.loadModulesFromMods();
     }
 
     private static boolean injectModsFolder() {
@@ -77,10 +85,22 @@ public class Mods {
 
     public static void registerRenders(
             HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+        if (!loaded_mods) {
+            throw new IllegalStateException(
+                    "Registering renderers before loading mods!");
+        }
         for (IMod m : loaded) {
             HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> tmp = new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
             m.registerRenders(tmp);
             classToRender.putAll(tmp);
         }
+    }
+
+    public static List<IMod> getLoadedMods() {
+        if (!loaded_mods) {
+            throw new IllegalStateException(
+                    "Getting loaded mods list before loading mods!");
+        }
+        return Collections.unmodifiableList(loaded);
     }
 }
