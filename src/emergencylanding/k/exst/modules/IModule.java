@@ -1,5 +1,6 @@
 package emergencylanding.k.exst.modules;
 
+import emergencylanding.k.exst.mods.ELMod;
 import emergencylanding.k.exst.mods.IMod;
 
 /**
@@ -9,6 +10,5 @@ import emergencylanding.k.exst.mods.IMod;
  * 
  * @author Kenzie Togami
  */
-public abstract class IModule implements IMod {
-
+public abstract class IModule extends ELMod implements IMod {
 }
