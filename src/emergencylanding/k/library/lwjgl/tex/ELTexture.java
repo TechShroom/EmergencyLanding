@@ -1,7 +1,9 @@
 package emergencylanding.k.library.lwjgl.tex;
 
 import static org.lwjgl.opengl.GL11.*;
+
 import static org.lwjgl.opengl.GL13.*;
+
 import static org.lwjgl.opengl.GL30.*;
 
 import java.awt.Color;
@@ -82,6 +84,9 @@ public abstract class ELTexture {
     }
 
     private void bind0() {
+        if (KMain.getDisplayThread() == null) {
+            throw new NullPointerException("Display Thread not init yet!");
+        }
         final ELTexture texObj = this;
         Runnable runnable = null;
         synchronized (glThreadQueue) {
@@ -172,6 +177,7 @@ public abstract class ELTexture {
         if (Thread.currentThread() == KMain.getDisplayThread()) {
             runnable.run();
             glThreadQueue.remove(runnable);
+            return;
         }
         while (glThreadQueue.contains(runnable)) {
             try {
