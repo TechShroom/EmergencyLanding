@@ -1,6 +1,6 @@
 package emergencylanding.k.library.debug;
 
-import k.core.util.Helper;
+import k.core.util.core.Helper;
 
 public class Memory {
     private static long lastF = Memory.getFree();

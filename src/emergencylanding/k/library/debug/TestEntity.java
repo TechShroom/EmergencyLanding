@@ -3,7 +3,7 @@ package emergencylanding.k.library.debug;
 import java.awt.Rectangle;
 import java.util.Random;
 
-import k.core.util.Helper;
+import k.core.util.core.Helper;
 
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;

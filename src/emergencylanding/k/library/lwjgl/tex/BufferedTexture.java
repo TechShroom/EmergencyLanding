@@ -5,7 +5,7 @@ import java.awt.image.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import k.core.util.Helper;
+import k.core.util.core.Helper;
 
 public class BufferedTexture extends ELTexture {
     BufferedImage img = null;
