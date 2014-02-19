@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -82,9 +83,43 @@ public class LUtils {
     }
 
     private static void injectNatives() {
-        System.setProperty("org.lwjgl.librarypath", LUtils.getELTop()
-                + File.separator + "res" + File.separator + "libs"
-                + File.separator + "natives" + File.separator + PLATFORM_NAME);
+        String natives = LUtils.getELTop() + File.separator + "res"
+                + File.separator + "libs" + File.separator + "natives"
+                + File.separator + PLATFORM_NAME;
+        System.setProperty("org.lwjgl.librarypath", natives);
+        try {
+            addLibraryPath(natives);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    /**
+     * Adds the specified path to the java library path
+     *
+     * @param pathToAdd
+     *            the path to add
+     * @throws Exception
+     */
+    public static void addLibraryPath(String pathToAdd) throws Exception {
+        final Field usrPathsField = ClassLoader.class
+                .getDeclaredField("usr_paths");
+        usrPathsField.setAccessible(true);
+
+        // get array of paths
+        final String[] paths = (String[]) usrPathsField.get(null);
+
+        // check if the path to add is already present
+        for (String path : paths) {
+            if (path.equals(pathToAdd)) {
+                return;
+            }
+        }
+
+        // add the new path
+        final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
+        newPaths[newPaths.length - 1] = pathToAdd;
+        usrPathsField.set(null, newPaths);
     }
 
     private static void overrideStandardStreams() {
@@ -126,7 +161,7 @@ public class LUtils {
                     tempName.lastIndexOf(File.separatorChar));
         }
         EL_TOP = ((tempName.startsWith(File.separator) ? "" : File.separator) + tempName)
-                .replace("/C:/", "C:/");
+                .replace("/C:/", "C:/").replace("\\C:\\", "C:\\");
         LUtils.print("Using EL_TOP " + EL_TOP);
 
         injectNatives();
