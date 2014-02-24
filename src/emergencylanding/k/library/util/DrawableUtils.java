@@ -2,10 +2,12 @@ package emergencylanding.k.library.util;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.nio.ByteBuffer;
 
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.lwjgl.tex.InputStreamTexture;
 
 public class DrawableUtils {
 
@@ -155,5 +157,12 @@ public class DrawableUtils {
                 (chary) + fontMetrics.getAscent());
 
         return fontImage;
+    }
+
+    public static ELTexture getTextureFromFile(String file) {
+        ELTexture t = new InputStreamTexture("/", file.replace(
+                '/', File.separatorChar));
+        System.err.println("Loaded " + file);
+        return t;
     }
 }
