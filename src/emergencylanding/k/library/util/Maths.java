@@ -11,7 +11,7 @@ public final class Maths {
      * collisions.
      * 
      * @param thetaSurface
-     *            - The angle of the surface to be projected upon makes with the
+     *            - The angle the surface to be projected upon makes with the
      *            horizontal
      * @param thetaLineToProject
      *            - The angle the line makes with the horizontal
