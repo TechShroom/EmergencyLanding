@@ -15,8 +15,9 @@ import emergencylanding.k.library.lwjgl.render.RenderManager;
 import emergencylanding.k.library.main.KMain;
 
 public class CollisionsTest extends KMain {
-    private static Thread is, ip;
+    private static Thread is;
     private static boolean run = true;
+    private static Thread ip;
     private static final int TICKS_PER_SECOND = 20;
     private static final int FRAMES_PER_SECOND = 1200;
     public static final int DISPLAY_FPS_INDEX = 0, IS_INDEX = FPS.genIndex(),
@@ -55,7 +56,7 @@ public class CollisionsTest extends KMain {
                 	e.setRelativeXYZ(0,1,0);
                 	if(e.testCollide(e2))
                 	{
-                		System.exit(0);
+                		run = false;
                 	}
                     s.sync(CollisionsTest.TICKS_PER_SECOND);
                     int delta = FPS.update(CollisionsTest.IS_INDEX);
@@ -101,7 +102,7 @@ public class CollisionsTest extends KMain {
         w = new World();
         WorldManager.addWorldToSystem(w);
         e = new TestCollisionEntity(w, 50, 50, 50);
-        e2 = new TestCollisionEntity(w, 50, 100, 50);
+        e2 = new TestCollisionEntity(w, 50, 500, 50);
         w.addEntity(e);
         w.addEntity(e2);
     }
