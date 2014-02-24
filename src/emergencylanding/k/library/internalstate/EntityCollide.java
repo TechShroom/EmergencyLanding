@@ -3,7 +3,7 @@ package emergencylanding.k.library.internalstate;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 
-public class EntityCollide extends ELEntity {
+public abstract class EntityCollide extends ELEntity {
 
     private double xLen, yLen;
 
@@ -75,7 +75,7 @@ public class EntityCollide extends ELEntity {
     	}
     	return Math.cos(Math.toRadians(theta))*magnitude;
     }
-    
+
 	/**
 	 * @return the xLen
 	 */
@@ -103,5 +103,4 @@ public class EntityCollide extends ELEntity {
 	public void setyLen(double yLen) {
 		this.yLen = yLen;
 	}
-    
 }
