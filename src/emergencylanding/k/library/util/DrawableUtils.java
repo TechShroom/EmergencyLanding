@@ -160,8 +160,8 @@ public class DrawableUtils {
     }
 
     public static ELTexture getTextureFromFile(String file) {
-        ELTexture t = new InputStreamTexture("/", file.replace(
-                '/', File.separatorChar));
+        ELTexture t = new InputStreamTexture("/", file.replace('/',
+                File.separatorChar));
         System.err.println("Loaded " + file);
         return t;
     }

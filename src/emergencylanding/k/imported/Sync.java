@@ -68,7 +68,7 @@ public class Sync {
         Thread.enumerate(t_s);
         boolean needsAccuracy = true;
         for (Thread t : t_s) {
-            if(t == null || t.getName() == null) {
+            if (t == null || t.getName() == null) {
                 continue;
             }
             if (t.getName().equals("LWJGL Timer")

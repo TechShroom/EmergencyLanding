@@ -31,7 +31,7 @@ public class DisplayLayer {
     static {
         LUtils.init();
     }
-    
+
     private static String reqTitle = "";
     private static boolean wasResizable;
     private static LWJGLRenderer renderer;

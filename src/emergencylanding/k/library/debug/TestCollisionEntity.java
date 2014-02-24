@@ -10,8 +10,9 @@ import emergencylanding.k.library.util.LUtils;
 
 public class TestCollisionEntity extends EntityCollide {
 
-	public TestCollisionEntity(World w, float posX, float posY, float posZ) {
-		super(w, posX, posY, posZ, DrawableUtils.getTextureFromFile(LUtils.getELTop()+"/res/help.png"));
-	}
+    public TestCollisionEntity(World w, float posX, float posY, float posZ) {
+        super(w, posX, posY, posZ, DrawableUtils.getTextureFromFile(LUtils
+                .getELTop() + "/res/help.png"));
+    }
 
 }

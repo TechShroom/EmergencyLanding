@@ -259,8 +259,8 @@ public class VBAO implements Cloneable {
     }
 
     public VBAO draw() {
-        
-        if(vaoId == GLData.NONE || vbo == GLData.NONE || vbo_i == GLData.NONE) {
+
+        if (vaoId == GLData.NONE || vbo == GLData.NONE || vbo_i == GLData.NONE) {
             // no longer valid!
             destroy();
             return null;

@@ -10,7 +10,7 @@ public interface IMod {
 
     public void registerRenders(
             HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender);
-    
+
     public void init(KMain instance);
 
 }

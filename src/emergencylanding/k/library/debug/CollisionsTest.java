@@ -26,11 +26,11 @@ public class CollisionsTest extends KMain {
     private static World w;
     private static EntityCollide e;
     private static EntityCollide e2;
-    
+
     public static void main(String[] args) {
         try {
-            DisplayLayer.initDisplay(false, 800, 500,
-                    "Testing Collisions", false, false, args);
+            DisplayLayer.initDisplay(false, 800, 500, "Testing Collisions",
+                    false, false, args);
             FPS.enable(CollisionsTest.DISPLAY_FPS_INDEX);
             CollisionsTest.startISThreads();
             while (CollisionsTest.run) {
@@ -53,11 +53,10 @@ public class CollisionsTest extends KMain {
             public void run() {
                 FPS.init(CollisionsTest.IS_INDEX);
                 while (CollisionsTest.run) {
-                	e.setRelativeXYZ(0,1,0);
-                	if(e.testCollide(e2))
-                	{
-                		run = false;
-                	}
+                    e.setRelativeXYZ(0, 1, 0);
+                    if (e.testCollide(e2)) {
+                        run = false;
+                    }
                     s.sync(CollisionsTest.TICKS_PER_SECOND);
                     int delta = FPS.update(CollisionsTest.IS_INDEX);
                     DisplayLayer.readDevices();
@@ -78,8 +77,7 @@ public class CollisionsTest extends KMain {
                 FPS.init(CollisionsTest.INTERPOLATE_INDEX);
                 while (CollisionsTest.run) {
                     s.sync(CollisionsTest.FRAMES_PER_SECOND);
-                    int delta = FPS
-                            .update(CollisionsTest.INTERPOLATE_INDEX);
+                    int delta = FPS.update(CollisionsTest.INTERPOLATE_INDEX);
                     WorldManager.interpolate(delta);
                 }
             }

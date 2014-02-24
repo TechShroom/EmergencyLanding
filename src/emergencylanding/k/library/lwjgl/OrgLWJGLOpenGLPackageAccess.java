@@ -59,7 +59,8 @@ public class OrgLWJGLOpenGLPackageAccess {
             throw new IllegalStateException(
                     "Could not access pollDevices method", e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Error during device polling", e.getCause());
+            throw new RuntimeException("Error during device polling",
+                    e.getCause());
         }
     }
 
