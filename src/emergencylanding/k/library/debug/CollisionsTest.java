@@ -12,6 +12,7 @@ import emergencylanding.k.library.internalstate.world.WorldManager;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.lwjgl.render.RenderManager;
+import emergencylanding.k.library.lwjgl.render.TextureRender;
 import emergencylanding.k.library.main.KMain;
 
 public class CollisionsTest extends KMain {
@@ -100,7 +101,7 @@ public class CollisionsTest extends KMain {
         w = new World();
         WorldManager.addWorldToSystem(w);
         e = new TestCollisionEntity(w, 50, 50, 50);
-        e2 = new TestCollisionEntity(w, 50, 500, 50);
+        e2 = new TestCollisionEntity(w, 50, 400, 50);
         w.addEntity(e);
         w.addEntity(e2);
     }
@@ -108,7 +109,6 @@ public class CollisionsTest extends KMain {
     @Override
     public void registerRenders(
             HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
-        // TODO Auto-generated method stub
-
+            classToRender.put(EntityCollide.class, new TextureRender());
     }
 }
