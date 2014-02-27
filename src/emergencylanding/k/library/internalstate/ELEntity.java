@@ -7,8 +7,7 @@ import emergencylanding.k.library.lwjgl.tex.ELTexture;
 public abstract class ELEntity {
     protected Victor pos = new Victor(), posInter = new Victor(),
             vel = new Victor(), velInter = new Victor();
-    protected float pitch, yaw, roll; // Use rotations with caution, their
-    // bounding boxes will remain straight.
+    protected float pitch, yaw, roll;
     protected float deltaT;
     protected float elapsed;
     protected ELTexture tex;
