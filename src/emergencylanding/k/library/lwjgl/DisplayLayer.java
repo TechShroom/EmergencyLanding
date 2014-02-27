@@ -159,8 +159,7 @@ public class DisplayLayer {
             Display.setTitle(DisplayLayer.reqTitle);
         }
         PixelFormat pixelFormat = new PixelFormat();
-        ContextAttribs contextAtrributes = new ContextAttribs(3, 2)
-                .withForwardCompatible(true).withProfileCore(true);
+        ContextAttribs contextAtrributes = new ContextAttribs(3, 0);
         System.err.println("Using contexAttributes " + contextAtrributes);
         Display.create(pixelFormat, contextAtrributes);
         Display.setFullscreen(fullscreen);
