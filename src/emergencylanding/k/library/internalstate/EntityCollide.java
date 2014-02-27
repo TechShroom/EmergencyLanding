@@ -6,13 +6,9 @@ import emergencylanding.k.library.util.Maths;
 
 public abstract class EntityCollide extends ELEntity {
 
-    private double xLen, yLen;
-
     public EntityCollide(World w, float posX, float posY, float posZ,
             ELTexture texture) {
         super(w, posX, posY, posZ, texture);
-        xLen = texture.getWidth();
-        yLen = texture.getHeight();
     }
 
     @Override
@@ -26,10 +22,10 @@ public abstract class EntityCollide extends ELEntity {
     }
 
     public boolean testCollide(EntityCollide other) {
-        double xCenterThis = this.getX() + this.getxLen();
-        double yCenterThis = this.getY() + this.getyLen();
-        double xCenterOther = other.getX() + other.getxLen();
-        double yCenterOther = other.getY() + other.getyLen();
+        double xCenterThis = this.getX() + this.getTex().getWidth();
+        double yCenterThis = this.getY() + this.getTex().getHeight();
+        double xCenterOther = other.getX() + other.getTex().getWidth();
+        double yCenterOther = other.getY() + other.getTex().getHeight();
 
         double gapX = xCenterOther - xCenterThis;
         double gapY = yCenterOther - yCenterThis;
@@ -41,50 +37,21 @@ public abstract class EntityCollide extends ELEntity {
         double y_newGap = Maths.projectLineAlongSurface(this.yaw, angleToOther,
                 Math.sqrt(gapX * gapX + gapY * gapY), true);
 
-        double thisXLenOnNewGrid = this.getxLen();
-        double thisYLenOnNewGrid = this.getyLen();
+        double thisXLenOnNewGrid = this.getTex().getWidth();
+        double thisYLenOnNewGrid = this.getTex().getHeight();
 
         double otherXLenOnNewGrid = Maths.projectLineAlongSurface(this.yaw,
-                other.yaw, other.getxLen(), false)
+                other.yaw, other.getTex().getWidth(), false)
                 + Maths.projectLineAlongSurface(this.yaw, other.yaw,
-                        other.getyLen(), true);
+                        other.getTex().getHeight(), true);
         double otherYLenOnNewGrid = Maths.projectLineAlongSurface(this.yaw,
-                other.yaw, other.getxLen(), true)
+                other.yaw, other.getTex().getWidth(), true)
                 + Maths.projectLineAlongSurface(this.yaw, other.yaw,
-                        other.getyLen(), false);
+                        other.getTex().getHeight(), false);
 
-        System.out.println(y_newGap + " " + thisYLenOnNewGrid + " " + otherYLenOnNewGrid);
-        return (x_newGap < thisXLenOnNewGrid/2 + otherXLenOnNewGrid/2 && y_newGap < thisYLenOnNewGrid/2
-                + otherYLenOnNewGrid/2);
-    }
-
-    /**
-     * @return the xLen
-     */
-    public double getxLen() {
-        return xLen;
-    }
-
-    /**
-     * @param xLen
-     *            the xLen to set
-     */
-    public void setxLen(double xLen) {
-        this.xLen = xLen;
-    }
-
-    /**
-     * @return the yLen
-     */
-    public double getyLen() {
-        return yLen;
-    }
-
-    /**
-     * @param yLen
-     *            the yLen to set
-     */
-    public void setyLen(double yLen) {
-        this.yLen = yLen;
+        System.out.println(y_newGap + " " + thisYLenOnNewGrid + " "
+                + otherYLenOnNewGrid);
+        return (x_newGap < thisXLenOnNewGrid / 2 + otherXLenOnNewGrid / 2 && y_newGap < thisYLenOnNewGrid
+                / 2 + otherYLenOnNewGrid / 2);
     }
 }
