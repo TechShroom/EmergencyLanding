@@ -1,6 +1,6 @@
 package emergencylanding.k.library.internalstate;
 
-import emergencylanding.k.library.util.DrawableUtils;
+import emergencylanding.k.library.util.Maths;
 
 public class Victor {
     protected static int state = 0;
@@ -20,9 +20,9 @@ public class Victor {
         if (del > 1) {
             System.err.println("del > 1 (" + del + ")");
         }
-        inter.x = DrawableUtils.lerp(lastX, x, del);
-        inter.y = DrawableUtils.lerp(lastY, y, del);
-        inter.z = DrawableUtils.lerp(lastZ, z, del);
+        inter.x = Maths.lerp(lastX, x, del);
+        inter.y = Maths.lerp(lastY, y, del);
+        inter.z = Maths.lerp(lastZ, z, del);
         return inter;
     }
 

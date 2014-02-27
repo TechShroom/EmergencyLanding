@@ -30,4 +30,19 @@ public final class Maths {
         return Math.cos(Math.toRadians(theta)) * magnitude;
     }
 
+    /**
+     * Perform linear interpolation on positions
+     * 
+     * @param pos1
+     *            -The first position (does not matter x or y)
+     * @param pos2
+     *            -The second position
+     * @param v
+     *            -The interpolaty-bit. Decimal between 0 and 1.
+     * @return -The position (actually an average of pos1/pos2 + pos1).
+     */
+    public static float lerp(float pos1, float pos2, float v) {
+        return pos1 + (pos2 - pos1) * v;
+    }
+
 }
