@@ -53,8 +53,9 @@ public abstract class EntityCollide extends ELEntity {
                 + Maths.projectLineAlongSurface(this.yaw, other.yaw,
                         other.getyLen(), false);
 
-        return (x_newGap < thisXLenOnNewGrid + otherXLenOnNewGrid && y_newGap < thisYLenOnNewGrid
-                + otherYLenOnNewGrid);
+        System.out.println(y_newGap + " " + thisYLenOnNewGrid + " " + otherYLenOnNewGrid);
+        return (x_newGap < thisXLenOnNewGrid/2 + otherXLenOnNewGrid/2 && y_newGap < thisYLenOnNewGrid/2
+                + otherYLenOnNewGrid/2);
     }
 
     /**
