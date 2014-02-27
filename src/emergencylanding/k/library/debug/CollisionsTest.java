@@ -56,6 +56,7 @@ public class CollisionsTest extends KMain {
                 while (CollisionsTest.run) {
                     e.setRelativeXYZ(0, 1, 0);
                     if (e.testCollide(e2)) {
+                        System.err.println("**BOOM**");
                         run = false;
                     }
                     s.sync(CollisionsTest.TICKS_PER_SECOND);
