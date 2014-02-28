@@ -150,8 +150,12 @@ public class DrawableUtils {
         System.err.println("Loaded " + file);
         return t;
     }
-    
-    public static GLRotator newRotater() {
-        return new GLRotator();
+
+    public static void glBeginRot(double theta, double rx, double ry, double rz) {
+        GLRotator.glBeginRot(theta, rx, ry, rz);
+    }
+
+    public static void glEndRot() {
+        GLRotator.glEndRot();
     }
 }

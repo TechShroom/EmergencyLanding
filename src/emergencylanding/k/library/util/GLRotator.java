@@ -2,23 +2,27 @@ package emergencylanding.k.library.util;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public final class GLRotator {
-    private static final double[] EMPTY = new double[4];
-    private double[] rotReset = EMPTY;
+import java.util.LinkedList;
 
-    GLRotator() {
+final class GLRotator {
+    private static LinkedList<GLRotator> rots = null;
+    private double irx, iry, irz, itheta; // inverse values, theta is normal
+
+    private GLRotator() {
     }
 
-    public GLRotator glBeginRot(double theta, double rx, double ry, double rz) {
-        rotReset = new double[] { theta + rotReset[0], -rx + rotReset[1],
-                -ry + rotReset[2], -rz + rotReset[3]};
+    static void glBeginRot(double theta, double rx, double ry, double rz) {
+        rots.add(new GLRotator());
+        GLRotator rot = rots.peek();
+        rot.irx = -rx;
+        rot.iry = -ry;
+        rot.irz = -rz;
+        rot.itheta = theta;
         glRotated(theta, rx, ry, rz);
-        return this;
     }
-    
-    public GLRotator glEndRot() {
-        glRotated(rotReset[0], rotReset[1], rotReset[2], rotReset[3]);
-        rotReset = EMPTY;
-        return this;
+
+    static void glEndRot() {
+        GLRotator rot = rots.pollLast();
+        glRotated(rot.itheta, rot.irx, rot.iry, rot.irz);
     }
 }
