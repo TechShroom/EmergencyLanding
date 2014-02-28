@@ -2,9 +2,6 @@ package emergencylanding.k.library.debug;
 
 import emergencylanding.k.library.internalstate.EntityCollide;
 import emergencylanding.k.library.internalstate.world.World;
-import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
-import emergencylanding.k.library.lwjgl.tex.ColorTexture;
-import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
