@@ -1,5 +1,9 @@
 package emergencylanding.k.library.util;
 
+import k.core.util.core.Helper.BetterArrays;
+
+import org.lwjgl.util.vector.Matrix4f;
+
 public final class Maths {
 
     private Maths() {
@@ -43,6 +47,104 @@ public final class Maths {
      */
     public static float lerp(float pos1, float pos2, float v) {
         return pos1 + (pos2 - pos1) * v;
+    }
+
+    public static enum Axis {
+        X, Y, Z
+    }
+
+    public static Matrix4f createRotMatrix(double theta, Axis axis) {
+        Matrix4f rmat = new Matrix4f(); // identity
+        float c = (float) qcos(theta);
+        float s = (float) qsin(theta);
+        switch (axis) {
+        case X:
+            rmat.m11 = c;
+            rmat.m22 = c;
+            rmat.m12 = -s;
+            rmat.m21 = s;
+            break;
+        case Y:
+            rmat.m00 = c;
+            rmat.m22 = c;
+            rmat.m20 = -s;
+            rmat.m02 = s;
+            break;
+        case Z:
+            rmat.m00 = c;
+            rmat.m11 = c;
+            rmat.m01 = -s;
+            rmat.m10 = s;
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid Axis");
+        }
+        return rmat;
+    }
+
+    /* "quick" trig: shortcuts default values for accuracy and speed */
+
+    private static double[] sin = (double[]) BetterArrays.createAndFill(
+            double.class, 361, -5);
+    private static double[] cos = (double[]) BetterArrays.createAndFill(
+            double.class, 361, -5);
+    private static double[] tan = (double[]) BetterArrays.createAndFill(
+            double.class, 361, -5);
+    private static int zero = 0, thirty = 30, fortyfive = 45, sixty = 60,
+            ninety = 90, oneeighty = 180, twoseventy = 270;
+    static {
+        Double negone = -1d, one = 1d, zerod = 0d;
+        double SQRT3 = Math.sqrt(3), SQRT2 = Math.sqrt(2);
+        // sin predetermined vals
+        sin[zero] = zerod;
+        sin[thirty] = 1d / 2;
+        sin[fortyfive] = 1d / SQRT2;
+        sin[sixty] = SQRT3 / 2;
+        sin[ninety] = one;
+        sin[oneeighty] = zerod;
+        sin[twoseventy] = negone;
+        // cos predetermined vals
+        cos[zero] = 1d;
+        cos[thirty] = SQRT3 / 2;
+        cos[fortyfive] = 1d / SQRT2;
+        cos[sixty] = 1d / 2;
+        cos[ninety] = zerod;
+        cos[oneeighty] = negone;
+        cos[twoseventy] = zerod;
+        // tan predetermined vals
+        tan[zero] = zerod;
+        tan[thirty] = 1 / SQRT3;
+        tan[fortyfive] = one;
+        tan[sixty] = SQRT3;
+        tan[oneeighty] = zerod;
+    }
+
+    public static double qcos(double theta) {
+        theta = normalizeDeg(theta);
+        return (((int) theta) == theta && cos[(int) theta] != -5) ? cos[(int) theta]
+                : Math.cos(Math.toRadians(theta));
+    }
+
+    public static double qsin(double theta) {
+        theta = normalizeDeg(theta);
+        return (((int) theta) == theta && sin[(int) theta] != -5) ? sin[(int) theta]
+                : Math.sin(Math.toRadians(theta));
+    }
+
+    public static double qtan(double theta) {
+        theta = normalizeDeg(theta);
+        return (((int) theta) == theta && tan[(int) theta] != -5) ? tan[(int) theta]
+                : Math.tan(Math.toRadians(theta));
+    }
+
+    public static double normalizeDeg(double theta) {
+        while (theta < 0) {
+            theta += 360;
+        }
+        while (theta >= 360) {
+            theta -= 360;
+        }
+        return theta;
     }
 
 }

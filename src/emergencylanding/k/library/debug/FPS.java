@@ -4,8 +4,12 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.LUtils;
 
 public class FPS {
+    static {
+        LUtils.init(); // init if not done already, other wise errors
+    }
     public static final long millis = 1000, micro = 1000 * FPS.millis;
     public static int maxFPSCounters = 100;
     private static int nextIndex = 1;
