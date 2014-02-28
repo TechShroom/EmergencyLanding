@@ -11,7 +11,8 @@ public class DefaultRender extends Render<ELEntity> {
     public void doRender(ELEntity entity, float posX, float posY, float posZ) {
         quad.setTexture(entity.getTex());
         // using the already created Victor is more efficient than making a new
-        // one from the vertexes
+        // one from the vertexes, as this is the default renderer and should not
+        // be used it is okay to break things :)
         quad.setXYZOff(entity.getInterpolated());
         quad.draw();
     }
