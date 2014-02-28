@@ -122,10 +122,14 @@ public class GLData {
         orthoMatrix.m30 = -(right + left) / (right - left);
         orthoMatrix.m31 = -(top + bottom) / (top - bottom);
         orthoMatrix.m32 = -(far + near) / (far - near);
+        storeData();
+        notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+    }
+
+    private static void storeData() {
         orthoMatrixData = BufferUtils.createFloatBuffer(16);
         orthoMatrix.store(orthoMatrixData);
         orthoMatrixData.flip();
-        notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
     public static void getLocations() {
@@ -204,5 +208,14 @@ public class GLData {
                     + GLU.gluErrorString(err) + " (id: " + err + ")");
             throw new OpenGLException(err);
         }
+    }
+
+    public static Matrix4f getMatrixToApply() {
+        return orthoMatrix;
+    }
+
+    public static void apply(Matrix4f m4f) {
+        orthoMatrix = m4f;
+        storeData();
     }
 }
