@@ -1,8 +1,11 @@
 package emergencylanding.k.library.lwjgl.render;
 
 import static org.lwjgl.opengl.GL11.*;
+
 import static org.lwjgl.opengl.GL15.*;
+
 import static org.lwjgl.opengl.GL20.*;
+
 import static org.lwjgl.opengl.GL30.*;
 
 import java.nio.ByteBuffer;
@@ -15,6 +18,7 @@ import org.lwjgl.BufferUtils;
 
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
 /**
@@ -136,6 +140,13 @@ public class VBAO implements Cloneable {
         return this;
     }
 
+    /**
+     * 
+     @deprecated Use
+     *             {@link DrawableUtils#glBeginTrans(double, double, double)}
+     *             instead.
+     */
+    @Deprecated
     public VBAO setXYZOff(Victor pos) {
         if (staticdata) {
             throw new IllegalStateException("static data");
