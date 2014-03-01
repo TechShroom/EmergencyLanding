@@ -225,7 +225,7 @@ public class DisplayLayer {
                 frm.setVisible(false);
                 frm.dispose();
                 System.err
-                        .println("CrashCourse has closed a JFrame called "
+                        .println("EmergencyLanding has closed a JFrame called "
                                 + frm.getTitle()
                                 + ", which would have stalled the application's closing state. Please fix this!");
             }
