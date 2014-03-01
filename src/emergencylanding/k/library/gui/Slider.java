@@ -7,6 +7,7 @@ import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.util.DrawableUtils;
 
 public class Slider extends GuiElement {
     private VBAO slide, base;
@@ -97,10 +98,12 @@ public class Slider extends GuiElement {
     @Override
     public void drawAt(float x, float y) {
         float slideX = calcSlideX(xPos);
-        base.setXYZOff(new Victor(xPos, yPos, 0));
+        DrawableUtils.glBeginTrans(xPos, yPos, 0);
         base.draw();
-        slide.setXYZOff(new Victor(slideX, yPos, 0));
+        DrawableUtils.glEndTrans();
+        DrawableUtils.glBeginTrans(slideX, yPos, 0);
         slide.draw();
+        DrawableUtils.glEndTrans();
         float percentInt = Math.round(percentage * 100);
         String append = "";
         append = appendables[(int) percentInt];

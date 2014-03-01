@@ -11,6 +11,7 @@ import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.render.VBAO;
 import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.util.DrawableUtils;
 
 public class Button extends GuiElement {
 
@@ -41,8 +42,9 @@ public class Button extends GuiElement {
         } else {
             drawing = unpressed;
         }
-        drawing.setXYZOff(new Victor(x, y, 0));
+        DrawableUtils.glBeginTrans(x, y, 0);
         drawing.draw();
+        DrawableUtils.glEndTrans();
     }
 
     @Override

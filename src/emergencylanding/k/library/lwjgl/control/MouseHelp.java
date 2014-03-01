@@ -9,7 +9,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Cursor;
 import org.lwjgl.input.Mouse;
 
-import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.render.VBAO;
 import emergencylanding.k.library.lwjgl.render.VertexData;
@@ -30,8 +29,9 @@ public class MouseHelp {
         }
 
         public void drawAt(int x, int y) {
-            display.setXYZOff(new Victor(x, y, 0));
+            DrawableUtils.glBeginTrans(x, y, 0);
             display.draw();
+            DrawableUtils.glEndTrans();
         }
 
     }

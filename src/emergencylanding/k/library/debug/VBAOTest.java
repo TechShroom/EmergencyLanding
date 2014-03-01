@@ -6,12 +6,12 @@ import org.lwjgl.opengl.Display;
 
 import emergencylanding.k.imported.Sync.RunningAvg;
 import emergencylanding.k.library.internalstate.ELEntity;
-import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.DrawableUtils;
 
 public class VBAOTest extends KMain {
     VBAO quad = null;
@@ -35,8 +35,9 @@ public class VBAOTest extends KMain {
 
     @Override
     public void onDisplayUpdate(int delta) {
-        quad.setXYZOff(new Victor(delta, delta, delta));
+        DrawableUtils.glBeginTrans(delta, delta, delta);
         quad.draw();
+        DrawableUtils.glEndTrans();
     }
 
     @Override

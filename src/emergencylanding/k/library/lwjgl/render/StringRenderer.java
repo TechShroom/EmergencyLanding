@@ -114,6 +114,7 @@ public class StringRenderer {
 
     private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
             ELTexture tex) {
+        // TODO: Optimize with DrawableUtils
         VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
                 new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
                 Shapes.XY);
