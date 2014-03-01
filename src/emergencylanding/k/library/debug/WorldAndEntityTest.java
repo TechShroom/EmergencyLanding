@@ -9,9 +9,10 @@ import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.internalstate.world.WorldManager;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
-import emergencylanding.k.library.lwjgl.render.Render;
-import emergencylanding.k.library.lwjgl.render.RenderManager;
+import emergencylanding.k.library.lwjgl.Shapes;
+import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
 public class WorldAndEntityTest extends KMain {
@@ -82,14 +83,22 @@ public class WorldAndEntityTest extends KMain {
         System.err.println("ISThreads running!");
     }
 
+    private World w;
+
+    private VBAO quad;
+
     @Override
     public void onDisplayUpdate(int delta) {
+        double yaw = w.getEntityList().get(0).getYaw();
+        DrawableUtils.glBeginRot(yaw, 0, 1, 0);
+        quad.draw();
+        DrawableUtils.glEndRot();
         RenderManager.render(delta);
     }
 
     @Override
     public void init(String[] args) {
-        World w = new World();
+        w = new World();
         WorldManager.addWorldToSystem(w);
         for (int i = 0; i < 500; i++) {
             ELEntity e = new TestEntity(w);
@@ -97,6 +106,9 @@ public class WorldAndEntityTest extends KMain {
             e.setXYZ(0, 0, 0);
             e.setXYZVel(1, 1, 0);
         }
+        quad = Shapes.getQuad(new VertexData().setRGB(255, 255, 255),
+                new VertexData().setXYZ(Display.getWidth(),
+                        Display.getHeight(), 0), Shapes.XY);
     }
 
     @Override
