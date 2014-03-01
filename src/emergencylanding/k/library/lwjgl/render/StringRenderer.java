@@ -270,9 +270,11 @@ public class StringRenderer {
     public void destroy() {
         ELTexture[] all = new ELTexture[charArray.length + customChars.size()];
         System.arraycopy(charArray, 0, all, 0, charArray.length);
-        ELTexture[] c = new ResizableArray<ELTexture[]>(ELTexture[].class,
-                customChars.values()).getArray();
-        System.arraycopy(c, 0, all, charArray.length, c.length);
+        if (customChars.size() != 0) {
+            ELTexture[] c = new ResizableArray<ELTexture[]>(ELTexture[].class,
+                    customChars.values()).getArray();
+            System.arraycopy(c, 0, all, charArray.length, c.length);
+        }
         for (ELTexture t : all) {
             t.kill();
         }
