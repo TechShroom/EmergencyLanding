@@ -12,6 +12,7 @@ import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.lwjgl.render.RenderManager;
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.LUtils;
 
 public class WorldAndEntityTest extends KMain {
     private static Thread is, ip;
@@ -23,8 +24,8 @@ public class WorldAndEntityTest extends KMain {
 
     public static void main(String[] args) {
         try {
-            DisplayLayer.initDisplay(false, 800, 500,
-                    "Testing EmergencyLanding", false, false, args);
+            DisplayLayer.initDisplay(false, 800, 500, "Testing "
+                    + LUtils.LIB_NAME, false, false, args);
             FPS.enable(WorldAndEntityTest.DISPLAY_FPS_INDEX);
             WorldAndEntityTest.startISThreads();
             while (WorldAndEntityTest.run) {

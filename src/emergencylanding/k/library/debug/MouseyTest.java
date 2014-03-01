@@ -16,6 +16,7 @@ import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.DrawableUtils;
+import emergencylanding.k.library.util.LUtils;
 
 public class MouseyTest extends KMain implements KeyListener {
 
@@ -24,8 +25,8 @@ public class MouseyTest extends KMain implements KeyListener {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        DisplayLayer.initDisplay(false, 1024, 640, "Testing EmergencyLanding",
-                true, args);
+        DisplayLayer.initDisplay(false, 1024, 640,
+                "Testing " + LUtils.LIB_NAME, true, args);
         Keys.registerListener(new MouseyTest());
         while (!Display.isCloseRequested()) {
             DisplayLayer.loop(120);

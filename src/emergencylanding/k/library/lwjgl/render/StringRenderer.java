@@ -22,7 +22,7 @@ import emergencylanding.k.library.util.LUtils;
  * @original author: Kevin Glass (kevglass)
  * @original author: Peter Korzuszek (genail)
  * 
- * @original author: new version edited by David Aaron Muhar (bobjob)
+ * @author: new version edited by David Aaron Muhar (bobjob)
  * 
  * @author Kenzie Togami (kenzierocks)
  */

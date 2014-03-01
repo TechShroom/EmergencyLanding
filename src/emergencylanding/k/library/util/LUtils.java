@@ -31,8 +31,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import emergencylanding.k.library.lwjgl.DisplayLayer;
-
 public class LUtils {
 
     /**
@@ -42,10 +40,16 @@ public class LUtils {
 
     }
 
+    public static final String LIB_NAME = "EmergencyLanding".intern(),
+            SHORT_LIB_NAME = "EL".intern();
+    private static final String LOWER_LIB_NAME = LIB_NAME.toLowerCase()
+            .intern(), LOWER_SHORT_LIB_NAME = SHORT_LIB_NAME.toLowerCase()
+            .intern();
+
     /**
      * What packages are accepted for EL
      */
-    private static final String[] ACCEPT = { "emergencylanding.k.*" };
+    private static final String[] ACCEPT = { LOWER_LIB_NAME + ".k.*" };
 
     /**
      * The default system streams, before overload.
@@ -69,15 +73,15 @@ public class LUtils {
         overrideStandardStreams();
     }
 
-    public static final String elPrintStr = String.format(
-            "[EmergencyLanding-%s]", DisplayLayer.VERSION);
+    public static final String elPrintStr = String.format("[" + LIB_NAME
+            + "-%s]", LUtils.VERSION);
 
     public static void print(String msg) {
         try {
             checkAccessor(ACCEPT, StackTraceInfo.getInvokingClassName());
         } catch (Exception e) {
-            throw new RuntimeException(new IllegalAccessException(
-                    "Not EL trusted class"));
+            throw new RuntimeException(new IllegalAccessException("Not "
+                    + SHORT_LIB_NAME + " trusted class"));
         }
         System.err.println(elPrintStr + " " + msg);
     }
@@ -168,7 +172,7 @@ public class LUtils {
     }
 
     public static final int debugLevel = Integer.parseInt(System.getProperty(
-            "el.debug.level", "0"));
+            LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
 
     // the range between which the "close enough" guesser in getDisplayMode uses
     private static final int WIDTH_RANGE = 300, HEIGHT_RANGE = 300;
@@ -708,9 +712,15 @@ public class LUtils {
         try {
             checkAccessor(ACCEPT, StackTraceInfo.getInvokingClassName());
         } catch (Exception e) {
-            throw new RuntimeException(new IllegalAccessException(
-                    "Not EL trusted class"));
+            throw new RuntimeException(new IllegalAccessException("Not "
+                    + SHORT_LIB_NAME + " trusted class"));
         }
         return EL_TOP;
     }
+
+    public static String[] getAccepts() {
+        return ACCEPT.clone();
+    }
+
+    public static String VERSION = "1.2";
 }

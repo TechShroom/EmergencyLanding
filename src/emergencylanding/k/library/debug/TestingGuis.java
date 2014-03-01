@@ -15,6 +15,7 @@ import emergencylanding.k.library.lwjgl.render.StringRenderer;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.DrawableUtils;
+import emergencylanding.k.library.util.LUtils;
 
 public class TestingGuis extends KMain {
     private static Thread is;
@@ -26,8 +27,8 @@ public class TestingGuis extends KMain {
 
     public static void main(String[] args) {
         try {
-            DisplayLayer.initDisplay(false, 800, 500,
-                    "Testing EmergencyLanding", true, args);
+            DisplayLayer.initDisplay(false, 800, 500, "Testing "
+                    + LUtils.LIB_NAME, true, args);
             FPS.enable(TestingGuis.DISPLAY_FPS_INDEX);
             TestingGuis.startISThreads();
             System.err.println("percent of 656/1000 = "

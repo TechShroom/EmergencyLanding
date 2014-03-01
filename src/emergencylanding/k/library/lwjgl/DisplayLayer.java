@@ -26,8 +26,6 @@ import emergencylanding.k.library.util.LUtils;
 
 public class DisplayLayer {
 
-    public static String VERSION = "1.2";
-
     static {
         LUtils.init();
     }
@@ -225,7 +223,8 @@ public class DisplayLayer {
                 frm.setVisible(false);
                 frm.dispose();
                 System.err
-                        .println("EmergencyLanding has closed a JFrame called "
+                        .println(LUtils.LIB_NAME
+                                + " has closed a JFrame called "
                                 + frm.getTitle()
                                 + ", which would have stalled the application's closing state. Please fix this!");
             }
