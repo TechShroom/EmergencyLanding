@@ -158,4 +158,12 @@ public class DrawableUtils {
     public static void glEndRot() {
         GLRotator.glEndRot();
     }
+
+    public static void glBeginTrans(double ix, double iy, double iz) {
+        GLTranslator.glBeginTrans(ix, iy, iz);
+    }
+
+    public static void glEndTrans() {
+        GLTranslator.glEndTrans();
+    }
 }

@@ -82,7 +82,19 @@ public final class Maths {
         return rmat;
     }
 
+    public static Matrix4f createTransMatrix(double ix, double iy, double iz) {
+        Matrix4f imat = new Matrix4f(); // identity
+        imat.m30 = (float) ix;
+        imat.m31 = (float) iy;
+        imat.m32 = (float) iz;
+        return imat;
+    }
+
     /* "quick" trig: shortcuts default values for accuracy and speed */
+    /*
+     * Worse under non-default values due to lookup taking time, but is small
+     * enough to be negligible
+     */
 
     private static double[] sin = (double[]) BetterArrays.createAndFill(
             double.class, 361, -5);
