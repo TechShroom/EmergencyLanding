@@ -2,7 +2,6 @@ package emergencylanding.k.library.gui;
 
 import java.awt.Rectangle;
 
-import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.render.*;

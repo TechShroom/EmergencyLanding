@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.Action;
 
-import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.render.VBAO;
