@@ -107,8 +107,11 @@ public abstract class ELTexture {
                     ELTexture lookAlike;
                     if ((lookAlike = ELTexture.similar(texObj)) != null) {
                         id = lookAlike.id;
-                        LUtils.print("Overrode id: " + id + " (obj=" + texObj
-                                + ", overridden=" + lookAlike + ")");
+                        if (LUtils.debugLevel > 1) {
+                            LUtils.print("Overrode id: " + id + " (obj="
+                                    + texObj + ", overridden=" + lookAlike
+                                    + ")");
+                        }
                         if (LUtils.debugLevel > 3) {
                             new Throwable().printStackTrace();
                         }
@@ -119,7 +122,9 @@ public abstract class ELTexture {
                         if (useID > -1) {
                             override = true;
                             id = useID;
-                            LUtils.print("Force-overrode id: " + id);
+                            if (LUtils.debugLevel > 1) {
+                                LUtils.print("Force-overrode id: " + id);
+                            }
                             if (ELTexture.texlist.get(id) != null) {
                                 ELTexture.currentSpace -= ELTexture.texlist
                                         .get(id).buf.capacity();
@@ -147,11 +152,13 @@ public abstract class ELTexture {
                         try {
                             glBindTexture(GL_TEXTURE_2D, id);
                         } catch (OpenGLException ogle) {
-                            System.err
-                                    .println("OpenGL encountered an error while binding id #"
-                                            + id
-                                            + ": "
-                                            + ogle.getLocalizedMessage());
+                            if (LUtils.debugLevel > 1) {
+                                System.err
+                                        .println("OpenGL encountered an error while binding id #"
+                                                + id
+                                                + ": "
+                                                + ogle.getLocalizedMessage());
+                            }
                         }
 
                         // All RGB bytes are aligned to each other and each
