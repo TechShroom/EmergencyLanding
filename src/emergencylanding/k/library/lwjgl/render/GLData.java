@@ -33,12 +33,9 @@ public class GLData {
     public static int uniformTexEnabler = 0;
 
     public static void clearAndLoad() {
-
-        glUseProgram(comboShaderProgram);
-        glUniformMatrix4(orthoMatrixLocation, false, orthoMatrixData);
-        glUseProgram(NONE);
         glClear(GL_COLOR_BUFFER_BIT);
         glUseProgram(comboShaderProgram);
+        apply(orthoMatrix);
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -217,5 +214,6 @@ public class GLData {
     public static void apply(Matrix4f m4f) {
         orthoMatrix = m4f;
         storeData();
+        glUniformMatrix4(orthoMatrixLocation, false, orthoMatrixData);
     }
 }
