@@ -21,6 +21,7 @@ System Requirements:
 
 This also relies on KCore, here are the parts required from the distributed libs:
 * Arrays
+* Classes
 * Core
 * Reflect
 * Strings
