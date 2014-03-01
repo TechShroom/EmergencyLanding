@@ -152,6 +152,18 @@ public abstract class ELEntity {
         return pos.z;
     }
 
+    public float getPitch() {
+        return pitch;
+    }
+
+    public float getYaw() {
+        return yaw;
+    }
+
+    public float getRoll() {
+        return roll;
+    }
+
     /**
      * Get entity x-vel
      * 
