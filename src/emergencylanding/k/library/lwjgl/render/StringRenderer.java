@@ -268,6 +268,7 @@ public class StringRenderer {
     }
 
     public void destroy() {
+        System.err.println("// Cleaning Textures \\\\");
         ELTexture[] all = new ELTexture[charArray.length + customChars.size()];
         System.arraycopy(charArray, 0, all, 0, charArray.length);
         if (customChars.size() != 0) {
@@ -278,5 +279,6 @@ public class StringRenderer {
         for (ELTexture t : all) {
             t.kill();
         }
+        System.err.println("\\\\      Complete     //");
     }
 }
