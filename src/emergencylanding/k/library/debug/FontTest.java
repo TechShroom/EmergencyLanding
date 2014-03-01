@@ -21,9 +21,10 @@ public class FontTest extends KMain {
     static VBAO image = null;
 
     public static void main(String[] args) throws Exception {
-        DisplayLayer.initDisplay(false, 800, 600, "Fonts!", false, args);
+        DisplayLayer.initDisplay(false, 800, 600, "Fonts!", false, false, args);
+        FPS.enable(0);
         while (!Display.isCloseRequested()) {
-            DisplayLayer.loop(120);
+            DisplayLayer.loop(12000);
         }
         strrend.destroy();
         DisplayLayer.destroy();
