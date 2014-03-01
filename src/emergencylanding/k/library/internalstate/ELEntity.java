@@ -7,6 +7,11 @@ import emergencylanding.k.library.lwjgl.tex.ELTexture;
 public abstract class ELEntity {
     protected Victor pos = new Victor(), posInter = new Victor(),
             vel = new Victor(), velInter = new Victor();
+    /**
+     * X Axis rotation: roll<br>
+     * Y Axis rotation: yaw<br>
+     * Z Axis rotation: pitch
+     */
     protected float pitch, yaw, roll;
     protected float deltaT;
     protected float elapsed;
