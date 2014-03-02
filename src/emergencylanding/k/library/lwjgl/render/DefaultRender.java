@@ -10,10 +10,10 @@ public class DefaultRender extends Render<ELEntity> {
 
     @Override
     public void doRender(ELEntity entity, float posX, float posY, float posZ) {
-        DrawableUtils.glBeginTrans(posX, posY, posZ);
+        DrawableUtils.beginStandardEntityRender(entity, posX, posY, posZ);
         quad.setTexture(entity.getTex());
         quad.draw();
-        DrawableUtils.glEndTrans();
+        DrawableUtils.endStandardEntityRender();
     }
 
 }

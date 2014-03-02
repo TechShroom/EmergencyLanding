@@ -17,6 +17,10 @@ final class GLRotator {
 
     static void glBeginRot(double theta, double rx, double ry, double rz) {
         GLRotator rot = new GLRotator();
+        if (theta == 0) {
+            rots.add(rot);
+            return;
+        }
         rot.irx = -rx;
         rot.iry = -ry;
         rot.irz = -rz;
@@ -55,6 +59,9 @@ final class GLRotator {
 
     static void glEndRot() {
         GLRotator rot = rots.pollLast();
+        if (rot.theta == 0) {
+            return;
+        }
         List<Matrix4f> mats = rot.mats(true);
         Matrix4f input = GLData.getMatrixToApply();
         for (Matrix4f m : mats) {

@@ -40,6 +40,8 @@ public class LUtils {
 
     }
 
+    public static String VERSION = "1.2";
+
     public static final String LIB_NAME = "EmergencyLanding".intern(),
             SHORT_LIB_NAME = "EL".intern();
     private static final String LOWER_LIB_NAME = LIB_NAME.toLowerCase()
@@ -721,6 +723,4 @@ public class LUtils {
     public static String[] getAccepts() {
         return ACCEPT.clone();
     }
-
-    public static String VERSION = "1.2";
 }

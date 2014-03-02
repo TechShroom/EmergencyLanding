@@ -39,6 +39,7 @@ public class TestEntity extends ELEntity {
         super.updateOnTick(delta);
         checkForClick();
         doRandomVelocityChange();
+        yaw++;
     }
 
     private void checkForClick() {
