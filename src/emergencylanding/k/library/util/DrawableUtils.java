@@ -1,10 +1,16 @@
 package emergencylanding.k.library.util;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.ByteBuffer;
 
+import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.lwjgl.tex.InputStreamTexture;
@@ -165,5 +171,20 @@ public class DrawableUtils {
 
     public static void glEndTrans() {
         GLTranslator.glEndTrans();
+    }
+
+    public static void beginStandardEntityRender(ELEntity entity, float posX,
+            float posY, float posZ) {
+        DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
+        DrawableUtils.glBeginRot(entity.getYaw(), 0, 1, 0);
+        DrawableUtils.glBeginRot(entity.getPitch(), 0, 0, 1);
+        DrawableUtils.glBeginTrans(posX, posY, posZ);
+    }
+
+    public static void endStandardEntityRender() {
+        DrawableUtils.glEndTrans();
+        DrawableUtils.glEndRot();
+        DrawableUtils.glEndRot();
+        DrawableUtils.glEndRot();
     }
 }

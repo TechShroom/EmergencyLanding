@@ -8,19 +8,13 @@ public class TextureRender extends Render<ELEntity> {
 
     @Override
     public void doRender(ELEntity entity, float posX, float posY, float posZ) {
-        DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
-        DrawableUtils.glBeginRot(entity.getYaw(), 0, 1, 0);
-        DrawableUtils.glBeginRot(entity.getPitch(), 0, 0, 1);
-        DrawableUtils.glBeginTrans(posX, posY, posZ);
+        DrawableUtils.beginStandardEntityRender(entity, posX, posY, posZ);
         VBAO quad = Shapes.getQuad(new VertexData(), new VertexData().setXYZ(
                 (float) entity.getTex().getWidth(), (float) entity.getTex()
                         .getHeight(), posZ), Shapes.XY);
         quad.setTexture(entity.getTex());
         quad.draw();
-        DrawableUtils.glEndTrans();
-        DrawableUtils.glEndRot();
-        DrawableUtils.glEndRot();
-        DrawableUtils.glEndRot();
+        DrawableUtils.endStandardEntityRender();
     }
 
 }
