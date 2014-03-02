@@ -90,6 +90,14 @@ public final class Maths {
         return imat;
     }
 
+    public static Matrix4f createScaleMatrix(double sx, double sy, double sz) {
+        Matrix4f imat = new Matrix4f(); // identity
+        imat.m00 = (float) sx;
+        imat.m11 = (float) sy;
+        imat.m22 = (float) sz;
+        return imat;
+    }
+
     /* "quick" trig: shortcuts default values for accuracy and speed */
     /*
      * Worse under non-default values due to lookup taking time, but is small

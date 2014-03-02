@@ -173,6 +173,30 @@ public class DrawableUtils {
         GLTranslator.glEndTrans();
     }
 
+    /**
+     * WARNING: Scaling may not be work in the opposite direction, as we use 1
+     * over the scale values which may not be the direct inverse.
+     * 
+     * @param sx
+     * @param sy
+     * @param sz
+     */
+    public static void glBeginScale(double sx, double sy, double sz) {
+        GLScaler.glBeginScale(sx, sy, sz);
+    }
+
+    /**
+     * WARNING: Scaling may not be work in the opposite direction, as we use 1
+     * over the scale values which may not be the direct inverse.
+     * 
+     * @param sx
+     * @param sy
+     * @param sz
+     */
+    public static void glEndScale() {
+        GLScaler.glEndScale();
+    }
+
     public static void beginStandardEntityRender(ELEntity entity, float posX,
             float posY, float posZ) {
         DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
