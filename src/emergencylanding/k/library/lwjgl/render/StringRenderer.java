@@ -28,11 +28,27 @@ import emergencylanding.k.library.util.LUtils;
  */
 public class StringRenderer {
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
-    /** Array that holds necessary information about the font characters */
-    private ELTexture[] charArray = new ELTexture[256];
 
-    /** Map of user defined font characters (Character <-> ELTexture) */
-    private Map<Character, ELTexture> customChars = new HashMap<Character, ELTexture>();
+    private static class VBAOChar {
+        private ELTexture tex = null;
+        private VBAO quad = null;
+
+        private VBAOChar(BufferedImage charImage) {
+            tex = new BufferedTexture(charImage);
+            quad = Shapes
+                    .getQuad(
+                            new VertexData(),
+                            new VertexData().setXYZ(tex.getWidth(),
+                                    tex.getHeight(), 0), Shapes.XY);
+            quad.setTexture(tex);
+        }
+    }
+
+    /** Array that holds necessary information about the font characters */
+    private VBAOChar[] charArray = new VBAOChar[256];
+
+    /** Map of user defined font characters (Character <-> VBAOChar) */
+    private Map<Character, VBAOChar> customChars = new HashMap<Character, VBAOChar>();
 
     /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean antiAlias;
