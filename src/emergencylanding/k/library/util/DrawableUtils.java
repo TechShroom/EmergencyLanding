@@ -15,7 +15,7 @@ import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.lwjgl.tex.InputStreamTexture;
 
-public class DrawableUtils {
+public final class DrawableUtils {
 
     public static BufferedImage scaledBufferedImage(BufferedImage image,
             int sw, int sh) {
