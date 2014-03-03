@@ -1,5 +1,7 @@
 package emergencylanding.k.library.lwjgl.render;
 
+import static emergencylanding.k.library.util.DrawableUtils.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -41,6 +43,11 @@ public class StringRenderer {
                             new VertexData().setXYZ(tex.getWidth(),
                                     tex.getHeight(), 0), Shapes.XY);
             quad.setTexture(tex);
+        }
+
+        private void destroy() {
+            tex.kill();
+            quad.destroy();
         }
     }
 
@@ -117,8 +124,7 @@ public class StringRenderer {
                     charArray[i] = new VBAOChar(fontImage);
                 } else {
                     // custom characters
-                    customChars.put(new Character(ch), new VBAOChar(
-                            fontImage));
+                    customChars.put(new Character(ch), new VBAOChar(fontImage));
                 }
             }
 
@@ -128,14 +134,18 @@ public class StringRenderer {
         }
     }
 
-    private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
-            VBAOChar tex) {
-        // TODO: Optimize with DrawableUtils
-        VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
-                new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
-                Shapes.XY);
-        //v.setTexture(tex);
-        v.draw();
+    private void drawQuad(float xPos, float yPos, float scaleX, float scaleY,
+            VBAOChar vchar) {
+        /*
+         * Old code, working on updating (totalwidth + vchar.dim.width) * scaleX
+         * + x, startY * scaleY + y, totalwidth * scaleX + x, (startY +
+         * vchar.dim.height) * scaleY + y
+         */
+        glBeginTrans(xPos, yPos, 0);
+        glBeginScale(scaleX, scaleY, 1);
+        vchar.quad.draw();
+        glEndScale();
+        glEndTrans();
     }
 
     public int getWidth(String whatchars) {
@@ -253,9 +263,7 @@ public class StringRenderer {
                     }
                     // if center get next lines total width/2;
                 } else {
-                    drawQuad((totalwidth + vchar.tex.dim.width) * scaleX + x, startY
-                            * scaleY + y, totalwidth * scaleX + x,
-                            (startY + vchar.tex.dim.height) * scaleY + y, vchar);
+                    drawQuad(totalwidth + x, startY + y, scaleX, scaleY, vchar);
                     if (d > 0)
                         totalwidth += (vchar.tex.dim.width - c) * d;
                 }
@@ -285,15 +293,15 @@ public class StringRenderer {
 
     public void destroy() {
         System.err.println("// Cleaning Textures \\\\");
-        ELTexture[] all = new ELTexture[charArray.length + customChars.size()];
+        VBAOChar[] all = new VBAOChar[charArray.length + customChars.size()];
         System.arraycopy(charArray, 0, all, 0, charArray.length);
         if (customChars.size() != 0) {
-            ELTexture[] c = new ResizableArray<ELTexture[]>(ELTexture[].class,
+            VBAOChar[] c = new ResizableArray<VBAOChar[]>(VBAOChar[].class,
                     customChars.values()).getArray();
             System.arraycopy(c, 0, all, charArray.length, c.length);
         }
-        for (ELTexture t : all) {
-            t.kill();
+        for (VBAOChar vchar : all) {
+            vchar.destroy();
         }
         System.err.println("\\\\      Complete     //");
     }
