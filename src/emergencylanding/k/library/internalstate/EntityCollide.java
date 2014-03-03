@@ -32,21 +32,21 @@ public abstract class EntityCollide extends ELEntity {
 
         double angleToOther = Math.atan2(gapY, gapX);
 
-        double x_newGap = Maths.projectLineAlongSurface(this.yaw, angleToOther,
+        double x_newGap = Maths.projectLineAlongSurface(this.pitch, angleToOther,
                 Math.sqrt(gapX * gapX + gapY * gapY), false);
-        double y_newGap = Maths.projectLineAlongSurface(this.yaw, angleToOther,
+        double y_newGap = Maths.projectLineAlongSurface(this.pitch, angleToOther,
                 Math.sqrt(gapX * gapX + gapY * gapY), true);
 
         double thisXLenOnNewGrid = this.getTex().getWidth();
         double thisYLenOnNewGrid = this.getTex().getHeight();
 
-        double otherXLenOnNewGrid = Maths.projectLineAlongSurface(this.yaw,
-                other.yaw, other.getTex().getWidth(), false)
-                + Maths.projectLineAlongSurface(this.yaw, other.yaw,
+        double otherXLenOnNewGrid = Maths.projectLineAlongSurface(this.pitch,
+                other.pitch, other.getTex().getWidth(), false)
+                + Maths.projectLineAlongSurface(this.pitch, other.pitch,
                         other.getTex().getHeight(), true);
-        double otherYLenOnNewGrid = Maths.projectLineAlongSurface(this.yaw,
-                other.yaw, other.getTex().getWidth(), true)
-                + Maths.projectLineAlongSurface(this.yaw, other.yaw,
+        double otherYLenOnNewGrid = Maths.projectLineAlongSurface(this.pitch,
+                other.pitch, other.getTex().getWidth(), true)
+                + Maths.projectLineAlongSurface(this.pitch, other.pitch,
                         other.getTex().getHeight(), false);
 
         System.err.println(y_newGap + " " + thisYLenOnNewGrid + " "
