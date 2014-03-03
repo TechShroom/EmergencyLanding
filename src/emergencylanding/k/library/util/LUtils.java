@@ -40,7 +40,7 @@ public class LUtils {
 
     }
 
-    public static String VERSION = "1.2";
+    public static String VERSION = "1.3";
 
     public static final String LIB_NAME = "EmergencyLanding".intern(),
             SHORT_LIB_NAME = "EL".intern();
