@@ -114,10 +114,11 @@ public class StringRenderer {
 
                 if (i < 256) {
                     // standard characters
-                    charArray[i] = new VBAOChar(fontImage);
+                    charArray[i] = new BufferedTexture(fontImage);
                 } else {
                     // custom characters
-                    customChars.put(new Character(ch), new VBAOChar(fontImage));
+                    customChars.put(new Character(ch), new BufferedTexture(
+                            fontImage));
                 }
             }
 
@@ -127,14 +128,9 @@ public class StringRenderer {
         }
     }
 
-    private void drawQuad(float xPos, float yPos, float scaleX, float scaleY,
+    private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
             ELTexture tex) {
-        /*
-         * Old code, working on updating (totalwidth + vchar.dim.width) * scaleX
-         * + x, startY * scaleY + y, totalwidth * scaleX + x, (startY +
-         * vchar.dim.height) * scaleY + y
-         */
-        
+        // TODO: Optimize with DrawableUtils
         VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
                 new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
                 Shapes.XY);
@@ -147,8 +143,8 @@ public class StringRenderer {
         int currentChar = 0;
         for (int i = 0; i < whatchars.length(); i++) {
             currentChar = whatchars.charAt(i);
-            ELTexture tex = ((currentChar < 256) ? charArray[currentChar]
-                    : customChars.get(new Character((char) currentChar))).tex;
+            ELTexture tex = (currentChar < 256) ? charArray[currentChar]
+                    : customChars.get(new Character((char) currentChar));
 
             if (tex != null)
                 totalwidth += tex.dim.width;
@@ -183,7 +179,7 @@ public class StringRenderer {
     public void drawString(float x, float y, String whatchars, int startIndex,
             int endIndex, float scaleX, float scaleY, int format) {
 
-        VBAOChar vchar = null;
+        ELTexture tex = null;
         int charCurrent;
 
         int totalwidth = 0;
@@ -208,11 +204,11 @@ public class StringRenderer {
                 if (charCurrent == '\n')
                     break;
                 if (charCurrent < 256) {
-                    vchar = charArray[charCurrent];
+                    tex = charArray[charCurrent];
                 } else {
-                    vchar = customChars.get(new Character((char) charCurrent));
+                    tex = customChars.get(new Character((char) charCurrent));
                 }
-                totalwidth += vchar.tex.dim.width - correctL;
+                totalwidth += tex.dim.width - correctL;
             }
             totalwidth /= -2;
         }
@@ -229,14 +225,14 @@ public class StringRenderer {
 
             charCurrent = whatchars.charAt(i);
             if (charCurrent < 256) {
-                vchar = charArray[charCurrent];
+                tex = charArray[charCurrent];
             } else {
-                vchar = customChars.get(new Character((char) charCurrent));
+                tex = customChars.get(new Character((char) charCurrent));
             }
 
-            if (vchar != null) {
+            if (tex != null) {
                 if (d < 0)
-                    totalwidth += (vchar.tex.dim.width - c) * d;
+                    totalwidth += (tex.dim.width - c) * d;
                 if (charCurrent == '\n') {
                     startY -= fontHeight * d;
                     totalwidth = 0;
@@ -246,20 +242,22 @@ public class StringRenderer {
                             if (charCurrent == '\n')
                                 break;
                             if (charCurrent < 256) {
-                                vchar = charArray[charCurrent];
+                                tex = charArray[charCurrent];
                             } else {
-                                vchar = customChars.get(new Character(
+                                tex = customChars.get(new Character(
                                         (char) charCurrent));
                             }
-                            totalwidth += vchar.tex.dim.width - correctL;
+                            totalwidth += tex.dim.width - correctL;
                         }
                         totalwidth /= -2;
                     }
                     // if center get next lines total width/2;
                 } else {
-                    drawQuad(, vchar);
+                    drawQuad((totalwidth + tex.dim.width) * scaleX + x, startY
+                            * scaleY + y, totalwidth * scaleX + x,
+                            (startY + tex.dim.height) * scaleY + y, tex);
                     if (d > 0)
-                        totalwidth += (vchar.dim.width - c) * d;
+                        totalwidth += (tex.dim.width - c) * d;
                 }
                 i += d;
 
