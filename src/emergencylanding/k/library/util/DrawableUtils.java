@@ -199,16 +199,16 @@ public class DrawableUtils {
 
     public static void beginStandardEntityRender(ELEntity entity, float posX,
             float posY, float posZ) {
+        DrawableUtils.glBeginTrans(posX, posY, posZ);
         DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
         DrawableUtils.glBeginRot(entity.getYaw(), 0, 1, 0);
         DrawableUtils.glBeginRot(entity.getPitch(), 0, 0, 1);
-        DrawableUtils.glBeginTrans(posX, posY, posZ);
     }
 
     public static void endStandardEntityRender() {
+        DrawableUtils.glEndRot();
+        DrawableUtils.glEndRot();
+        DrawableUtils.glEndRot();
         DrawableUtils.glEndTrans();
-        DrawableUtils.glEndRot();
-        DrawableUtils.glEndRot();
-        DrawableUtils.glEndRot();
     }
 }

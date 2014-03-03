@@ -117,7 +117,8 @@ public class StringRenderer {
                     charArray[i] = new VBAOChar(fontImage);
                 } else {
                     // custom characters
-                    customChars.put(new Character(ch), new VBAOChar(fontImage));
+                    customChars.put(new Character(ch), new VBAOChar(
+                            fontImage));
                 }
             }
 
@@ -127,18 +128,13 @@ public class StringRenderer {
         }
     }
 
-    private void drawQuad(float xPos, float yPos, float scaleX, float scaleY,
-            ELTexture tex) {
-        /*
-         * Old code, working on updating (totalwidth + vchar.dim.width) * scaleX
-         * + x, startY * scaleY + y, totalwidth * scaleX + x, (startY +
-         * vchar.dim.height) * scaleY + y
-         */
-        
+    private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
+            VBAOChar tex) {
+        // TODO: Optimize with DrawableUtils
         VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
                 new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
                 Shapes.XY);
-        v.setTexture(tex);
+        //v.setTexture(tex);
         v.draw();
     }
 
@@ -147,11 +143,11 @@ public class StringRenderer {
         int currentChar = 0;
         for (int i = 0; i < whatchars.length(); i++) {
             currentChar = whatchars.charAt(i);
-            ELTexture tex = ((currentChar < 256) ? charArray[currentChar]
-                    : customChars.get(new Character((char) currentChar))).tex;
+            VBAOChar vchar = (currentChar < 256) ? charArray[currentChar]
+                    : customChars.get(new Character((char) currentChar));
 
-            if (tex != null)
-                totalwidth += tex.dim.width;
+            if (vchar != null)
+                totalwidth += vchar.tex.dim.width;
         }
         return totalwidth;
     }
@@ -257,9 +253,11 @@ public class StringRenderer {
                     }
                     // if center get next lines total width/2;
                 } else {
-                    drawQuad(, vchar);
+                    drawQuad((totalwidth + vchar.tex.dim.width) * scaleX + x, startY
+                            * scaleY + y, totalwidth * scaleX + x,
+                            (startY + vchar.tex.dim.height) * scaleY + y, vchar);
                     if (d > 0)
-                        totalwidth += (vchar.dim.width - c) * d;
+                        totalwidth += (vchar.tex.dim.width - c) * d;
                 }
                 i += d;
 
