@@ -203,9 +203,12 @@ public class DrawableUtils {
         DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
         DrawableUtils.glBeginRot(entity.getYaw(), 0, 1, 0);
         DrawableUtils.glBeginRot(entity.getPitch(), 0, 0, 1);
+        DrawableUtils.glBeginTrans(-(entity.getTex().getWidth() / 2), -(entity
+                .getTex().getHeight() / 2), 0);
     }
 
     public static void endStandardEntityRender() {
+        DrawableUtils.glEndTrans();
         DrawableUtils.glEndRot();
         DrawableUtils.glEndRot();
         DrawableUtils.glEndRot();
