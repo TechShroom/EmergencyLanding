@@ -27,6 +27,7 @@ public class CollisionsTest extends KMain {
     private static World w;
     private static EntityCollide e;
     private static EntityCollide e2;
+    private static EntityCollide e3;
 
     public static void main(String[] args) {
         try {
@@ -54,7 +55,6 @@ public class CollisionsTest extends KMain {
             public void run() {
                 FPS.init(CollisionsTest.IS_INDEX);
                 while (CollisionsTest.run) {
-                    e.setRelativeXYZ(0, 1, 0);
                     if (e.testCollide(e2)) {
                         System.err.println("**BOOM**");
                         run = false;
@@ -103,9 +103,11 @@ public class CollisionsTest extends KMain {
         WorldManager.addWorldToSystem(w);
         e = new TestCollisionEntity(w, 50, 50, 50);
         e2 = new TestCollisionEntity(w, 50, 400, 50);
+        e3 = new TestCollisionEntity(w, 50, 50, 50);
         e.setPitch(45);
         w.addEntity(e);
         w.addEntity(e2);
+        w.addEntity(e3);
     }
 
     @Override
