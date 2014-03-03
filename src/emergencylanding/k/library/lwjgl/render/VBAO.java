@@ -82,11 +82,6 @@ public class VBAO implements Cloneable {
      */
     private boolean staticdata = false;
     /**
-     * Determines if the vertices should be a separate VBO from the color/tex
-     * data.
-     */
-    private boolean sepVert = false;
-    /**
      * The texture used by this VBAO, if any.
      */
     public ELTexture tex = null;
@@ -107,18 +102,8 @@ public class VBAO implements Cloneable {
         this(verts, indexControl, null, stat);
     }
 
-    public VBAO(VertexData[] verts, byte[] indexControl, boolean stat,
-            boolean seperateVerts) {
-        this(verts, indexControl, null, stat, seperateVerts);
-    }
-
     public VBAO(VertexData[] verts, byte[] indexControl, ELTexture t,
             boolean stat) {
-        this(verts, indexControl, t, stat, false);
-    }
-
-    public VBAO(VertexData[] verts, byte[] indexControl, ELTexture t,
-            boolean stat, boolean seperateVerts) {
         data = verts;
         icdata = indexControl;
         vertData = VertexData.toFB(verts);
@@ -127,7 +112,6 @@ public class VBAO implements Cloneable {
         indexData.flip();
         verticesCount = indexControl.length;
         staticdata = stat;
-        sepVert = seperateVerts;
         tex = t;
         init();
         if (LUtils.debugLevel >= 1) {
