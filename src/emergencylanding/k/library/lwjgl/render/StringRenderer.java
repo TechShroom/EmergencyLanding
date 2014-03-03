@@ -136,11 +136,6 @@ public class StringRenderer {
 
     private void drawQuad(float xPos, float yPos, float scaleX, float scaleY,
             VBAOChar vchar) {
-        /*
-         * Old code, working on updating (totalwidth + vchar.dim.width) * scaleX
-         * + x, startY * scaleY + y, totalwidth * scaleX + x, (startY +
-         * vchar.dim.height) * scaleY + y
-         */
         glBeginTrans(xPos, yPos, 0);
         glBeginScale(scaleX, scaleY, 1);
         vchar.quad.draw();
