@@ -1,5 +1,7 @@
 package emergencylanding.k.library.lwjgl.render;
 
+import static emergencylanding.k.library.util.DrawableUtils.*;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
@@ -28,11 +30,32 @@ import emergencylanding.k.library.util.LUtils;
  */
 public class StringRenderer {
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
-    /** Array that holds necessary information about the font characters */
-    private ELTexture[] charArray = new ELTexture[256];
 
-    /** Map of user defined font characters (Character <-> ELTexture) */
-    private Map<Character, ELTexture> customChars = new HashMap<Character, ELTexture>();
+    private static class VBAOChar {
+        private ELTexture tex = null;
+        private VBAO quad = null;
+
+        private VBAOChar(BufferedImage charImage) {
+            tex = new BufferedTexture(charImage);
+            quad = Shapes
+                    .getQuad(
+                            new VertexData(),
+                            new VertexData().setXYZ(tex.getWidth(),
+                                    tex.getHeight(), 0), Shapes.XY);
+            quad.setTexture(tex);
+        }
+
+        private void destroy() {
+            tex.kill();
+            quad.destroy();
+        }
+    }
+
+    /** Array that holds necessary information about the font characters */
+    private VBAOChar[] charArray = new VBAOChar[256];
+
+    /** Map of user defined font characters (Character <-> VBAOChar) */
+    private Map<Character, VBAOChar> customChars = new HashMap<Character, VBAOChar>();
 
     /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean antiAlias;
@@ -98,11 +121,10 @@ public class StringRenderer {
 
                 if (i < 256) {
                     // standard characters
-                    charArray[i] = new BufferedTexture(fontImage);
+                    charArray[i] = new VBAOChar(fontImage);
                 } else {
                     // custom characters
-                    customChars.put(new Character(ch), new BufferedTexture(
-                            fontImage));
+                    customChars.put(new Character(ch), new VBAOChar(fontImage));
                 }
             }
 
@@ -112,14 +134,18 @@ public class StringRenderer {
         }
     }
 
-    private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
-            ELTexture tex) {
-        // TODO: Optimize with DrawableUtils
-        VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
-                new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
-                Shapes.XY);
-        v.setTexture(tex);
-        v.draw();
+    private void drawQuad(float xPos, float yPos, float scaleX, float scaleY,
+            VBAOChar vchar) {
+        /*
+         * Old code, working on updating (totalwidth + vchar.dim.width) * scaleX
+         * + x, startY * scaleY + y, totalwidth * scaleX + x, (startY +
+         * vchar.dim.height) * scaleY + y
+         */
+        glBeginTrans(xPos, yPos, 0);
+        glBeginScale(scaleX, scaleY, 1);
+        vchar.quad.draw();
+        glEndScale();
+        glEndTrans();
     }
 
     public int getWidth(String whatchars) {
@@ -127,11 +153,11 @@ public class StringRenderer {
         int currentChar = 0;
         for (int i = 0; i < whatchars.length(); i++) {
             currentChar = whatchars.charAt(i);
-            ELTexture tex = (currentChar < 256) ? charArray[currentChar]
+            VBAOChar vchar = (currentChar < 256) ? charArray[currentChar]
                     : customChars.get(new Character((char) currentChar));
 
-            if (tex != null)
-                totalwidth += tex.dim.width;
+            if (vchar != null)
+                totalwidth += vchar.tex.dim.width;
         }
         return totalwidth;
     }
@@ -163,7 +189,7 @@ public class StringRenderer {
     public void drawString(float x, float y, String whatchars, int startIndex,
             int endIndex, float scaleX, float scaleY, int format) {
 
-        ELTexture tex = null;
+        VBAOChar vchar = null;
         int charCurrent;
 
         int totalwidth = 0;
@@ -188,11 +214,11 @@ public class StringRenderer {
                 if (charCurrent == '\n')
                     break;
                 if (charCurrent < 256) {
-                    tex = charArray[charCurrent];
+                    vchar = charArray[charCurrent];
                 } else {
-                    tex = customChars.get(new Character((char) charCurrent));
+                    vchar = customChars.get(new Character((char) charCurrent));
                 }
-                totalwidth += tex.dim.width - correctL;
+                totalwidth += vchar.tex.dim.width - correctL;
             }
             totalwidth /= -2;
         }
@@ -209,14 +235,14 @@ public class StringRenderer {
 
             charCurrent = whatchars.charAt(i);
             if (charCurrent < 256) {
-                tex = charArray[charCurrent];
+                vchar = charArray[charCurrent];
             } else {
-                tex = customChars.get(new Character((char) charCurrent));
+                vchar = customChars.get(new Character((char) charCurrent));
             }
 
-            if (tex != null) {
+            if (vchar != null) {
                 if (d < 0)
-                    totalwidth += (tex.dim.width - c) * d;
+                    totalwidth += (vchar.tex.dim.width - c) * d;
                 if (charCurrent == '\n') {
                     startY -= fontHeight * d;
                     totalwidth = 0;
@@ -226,22 +252,20 @@ public class StringRenderer {
                             if (charCurrent == '\n')
                                 break;
                             if (charCurrent < 256) {
-                                tex = charArray[charCurrent];
+                                vchar = charArray[charCurrent];
                             } else {
-                                tex = customChars.get(new Character(
+                                vchar = customChars.get(new Character(
                                         (char) charCurrent));
                             }
-                            totalwidth += tex.dim.width - correctL;
+                            totalwidth += vchar.tex.dim.width - correctL;
                         }
                         totalwidth /= -2;
                     }
                     // if center get next lines total width/2;
                 } else {
-                    drawQuad((totalwidth + tex.dim.width) * scaleX + x, startY
-                            * scaleY + y, totalwidth * scaleX + x,
-                            (startY + tex.dim.height) * scaleY + y, tex);
+                    drawQuad(totalwidth + x, startY + y, scaleX, scaleY, vchar);
                     if (d > 0)
-                        totalwidth += (tex.dim.width - c) * d;
+                        totalwidth += (vchar.tex.dim.width - c) * d;
                 }
                 i += d;
 
@@ -269,15 +293,15 @@ public class StringRenderer {
 
     public void destroy() {
         System.err.println("// Cleaning Textures \\\\");
-        ELTexture[] all = new ELTexture[charArray.length + customChars.size()];
+        VBAOChar[] all = new VBAOChar[charArray.length + customChars.size()];
         System.arraycopy(charArray, 0, all, 0, charArray.length);
         if (customChars.size() != 0) {
-            ELTexture[] c = new ResizableArray<ELTexture[]>(ELTexture[].class,
+            VBAOChar[] c = new ResizableArray<VBAOChar[]>(VBAOChar[].class,
                     customChars.values()).getArray();
             System.arraycopy(c, 0, all, charArray.length, c.length);
         }
-        for (ELTexture t : all) {
-            t.kill();
+        for (VBAOChar vchar : all) {
+            vchar.destroy();
         }
         System.err.println("\\\\      Complete     //");
     }

@@ -103,6 +103,7 @@ public class CollisionsTest extends KMain {
         WorldManager.addWorldToSystem(w);
         e = new TestCollisionEntity(w, 50, 50, 50);
         e2 = new TestCollisionEntity(w, 50, 400, 50);
+        e.setPitch(45);
         w.addEntity(e);
         w.addEntity(e2);
     }

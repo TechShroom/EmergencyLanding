@@ -165,6 +165,18 @@ public abstract class ELEntity {
         return yaw;
     }
 
+    public void setYaw(float newyaw) {
+        yaw = newyaw;
+    }
+
+    public void setRoll(float newroll) {
+        roll = newroll;
+    }
+
+    public void setPitch(float newpitch) {
+        pitch = newpitch;
+    }
+
     public float getRoll() {
         return roll;
     }
