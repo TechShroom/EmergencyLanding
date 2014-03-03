@@ -114,14 +114,10 @@ public class StringRenderer {
 
                 if (i < 256) {
                     // standard characters
-                    charArray[i] = new BufferedTexture(fontImage);
+                    charArray[i] = new VBAOChar(fontImage);
                 } else {
                     // custom characters
-<<<<<<< HEAD
                     customChars.put(new Character(ch), new VBAOChar(
-=======
-                    customChars.put(new Character(ch), new BufferedTexture(
->>>>>>> 685505d610e2df9e2c17aa96de2b78effd136674
                             fontImage));
                 }
             }
@@ -133,11 +129,7 @@ public class StringRenderer {
     }
 
     private void drawQuad(float drawX, float drawY2, float drawX2, float drawY,
-<<<<<<< HEAD
             VBAOChar tex) {
-=======
-            ELTexture tex) {
->>>>>>> 685505d610e2df9e2c17aa96de2b78effd136674
         // TODO: Optimize with DrawableUtils
         VBAO v = Shapes.getQuad(new VertexData().setXYZ(drawX2, drawY2, 0),
                 new VertexData().setXYZ(drawX - drawX2, drawY - drawY2, 0),
@@ -151,11 +143,7 @@ public class StringRenderer {
         int currentChar = 0;
         for (int i = 0; i < whatchars.length(); i++) {
             currentChar = whatchars.charAt(i);
-<<<<<<< HEAD
             VBAOChar vchar = (currentChar < 256) ? charArray[currentChar]
-=======
-            ELTexture tex = (currentChar < 256) ? charArray[currentChar]
->>>>>>> 685505d610e2df9e2c17aa96de2b78effd136674
                     : customChars.get(new Character((char) currentChar));
 
             if (vchar != null)
@@ -191,7 +179,7 @@ public class StringRenderer {
     public void drawString(float x, float y, String whatchars, int startIndex,
             int endIndex, float scaleX, float scaleY, int format) {
 
-        ELTexture tex = null;
+        VBAOChar vchar = null;
         int charCurrent;
 
         int totalwidth = 0;
@@ -216,11 +204,11 @@ public class StringRenderer {
                 if (charCurrent == '\n')
                     break;
                 if (charCurrent < 256) {
-                    tex = charArray[charCurrent];
+                    vchar = charArray[charCurrent];
                 } else {
-                    tex = customChars.get(new Character((char) charCurrent));
+                    vchar = customChars.get(new Character((char) charCurrent));
                 }
-                totalwidth += tex.dim.width - correctL;
+                totalwidth += vchar.tex.dim.width - correctL;
             }
             totalwidth /= -2;
         }
@@ -237,14 +225,14 @@ public class StringRenderer {
 
             charCurrent = whatchars.charAt(i);
             if (charCurrent < 256) {
-                tex = charArray[charCurrent];
+                vchar = charArray[charCurrent];
             } else {
-                tex = customChars.get(new Character((char) charCurrent));
+                vchar = customChars.get(new Character((char) charCurrent));
             }
 
-            if (tex != null) {
+            if (vchar != null) {
                 if (d < 0)
-                    totalwidth += (tex.dim.width - c) * d;
+                    totalwidth += (vchar.tex.dim.width - c) * d;
                 if (charCurrent == '\n') {
                     startY -= fontHeight * d;
                     totalwidth = 0;
@@ -254,30 +242,22 @@ public class StringRenderer {
                             if (charCurrent == '\n')
                                 break;
                             if (charCurrent < 256) {
-                                tex = charArray[charCurrent];
+                                vchar = charArray[charCurrent];
                             } else {
-                                tex = customChars.get(new Character(
+                                vchar = customChars.get(new Character(
                                         (char) charCurrent));
                             }
-                            totalwidth += tex.dim.width - correctL;
+                            totalwidth += vchar.tex.dim.width - correctL;
                         }
                         totalwidth /= -2;
                     }
                     // if center get next lines total width/2;
                 } else {
-<<<<<<< HEAD
                     drawQuad((totalwidth + vchar.tex.dim.width) * scaleX + x, startY
                             * scaleY + y, totalwidth * scaleX + x,
                             (startY + vchar.tex.dim.height) * scaleY + y, vchar);
                     if (d > 0)
                         totalwidth += (vchar.tex.dim.width - c) * d;
-=======
-                    drawQuad((totalwidth + tex.dim.width) * scaleX + x, startY
-                            * scaleY + y, totalwidth * scaleX + x,
-                            (startY + tex.dim.height) * scaleY + y, tex);
-                    if (d > 0)
-                        totalwidth += (tex.dim.width - c) * d;
->>>>>>> 685505d610e2df9e2c17aa96de2b78effd136674
                 }
                 i += d;
 
