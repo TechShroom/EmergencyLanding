@@ -34,19 +34,19 @@ public class TestEntity extends ELEntity {
             setYPos(!(pos.y > Display.getHeight()) ? Display.getHeight() : 0);
         }
         if (Math.sqrt(vel.y * vel.y + vel.x * vel.x) < 0.5) {
-            tex = Helper.BetterArrays.randomArray(TestEntity.texmix)[0];
+            setTex(Helper.BetterArrays.randomArray(TestEntity.texmix)[0]);
         }
         super.updateOnTick(delta);
         checkForClick();
         doRandomVelocityChange();
-        yaw++;
+        setYaw(getYaw() + 1);
     }
 
     private void checkForClick() {
         if (MouseHelp.clickedInRect(new Rectangle((int) pos.x, (int) pos.y, 10,
                 10), MouseHelp.LMB)) {
             System.out.println("My color is "
-                    + ((ColorTexture) tex).getRawColor().toString());
+                    + ((ColorTexture) getTex()).getRawColor().toString());
         }
     }
 

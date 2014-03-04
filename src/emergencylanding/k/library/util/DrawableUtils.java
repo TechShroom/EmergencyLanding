@@ -19,6 +19,9 @@ public final class DrawableUtils {
 
     public static BufferedImage scaledBufferedImage(BufferedImage image,
             int sw, int sh) {
+        if (image.getWidth() == sw && image.getHeight() == sh) {
+            return image;
+        }
         LUtils.print("Requested x and y of image is " + sw + " " + sh);
         LUtils.print("Actual x and y is " + image.getWidth() + " "
                 + image.getHeight());
@@ -98,6 +101,9 @@ public final class DrawableUtils {
     }
 
     public static ELTexture scaledTexture(ELTexture tex, int width, int height) {
+        if (tex.dim.width == width && tex.dim.height == height) {
+            return tex;
+        }
         return new BufferedTexture(scaledBufferedImage(tex.toBufferedImage(),
                 width, height));
     }

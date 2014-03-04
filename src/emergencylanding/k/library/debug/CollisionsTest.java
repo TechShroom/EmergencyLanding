@@ -6,13 +6,10 @@ import org.lwjgl.opengl.Display;
 
 import emergencylanding.k.imported.Sync;
 import emergencylanding.k.library.internalstate.ELEntity;
-import emergencylanding.k.library.internalstate.EntityCollide;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.internalstate.world.WorldManager;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
-import emergencylanding.k.library.lwjgl.render.Render;
-import emergencylanding.k.library.lwjgl.render.RenderManager;
-import emergencylanding.k.library.lwjgl.render.TextureRender;
+import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.main.KMain;
 
 public class CollisionsTest extends KMain {
@@ -25,9 +22,9 @@ public class CollisionsTest extends KMain {
             INTERPOLATE_INDEX = FPS.genIndex();
 
     private static World w;
-    private static EntityCollide e;
-    private static EntityCollide e2;
-    private static EntityCollide e3;
+    private static TestCollisionEntity e;
+    private static TestCollisionEntity e2;
+    private static TestCollisionEntity e3;
 
     public static void main(String[] args) {
         try {
@@ -55,7 +52,8 @@ public class CollisionsTest extends KMain {
             public void run() {
                 FPS.init(CollisionsTest.IS_INDEX);
                 while (CollisionsTest.run) {
-                    if (e.testCollide(e2)) {
+                    e.setRelativeXYZ(0, 1, 0);
+                    if (e.collidesWith(e2)) {
                         System.err.println("**BOOM**");
                         run = false;
                     }
@@ -101,10 +99,11 @@ public class CollisionsTest extends KMain {
     public void init(String[] args) {
         w = new World();
         WorldManager.addWorldToSystem(w);
-        e = new TestCollisionEntity(w, 50, 50, 50);
+        e = new TestCollisionEntity(w, 25, 300, 50);
         e2 = new TestCollisionEntity(w, 50, 400, 50);
         e3 = new TestCollisionEntity(w, 50, 50, 50);
-        e.setPitch(45);
+        e.setPitch(20);
+        e2.setPitch(20);
         w.addEntity(e);
         w.addEntity(e2);
         w.addEntity(e3);
@@ -113,6 +112,6 @@ public class CollisionsTest extends KMain {
     @Override
     public void registerRenders(
             HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
-            classToRender.put(EntityCollide.class, new TextureRender());
+        classToRender.put(TestCollisionEntity.class, new TextureRender());
     }
 }

@@ -3,19 +3,17 @@ package emergencylanding.k.library.internalstate;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.util.BoundingBox;
+import emergencylanding.k.library.util.Maths;
+import emergencylanding.k.library.util.interfaces.ICollidable;
 
-public abstract class ELEntity {
+public abstract class ELEntity implements ICollidable<ELEntity> {
     protected Victor pos = new Victor(), posInter = new Victor(),
             vel = new Victor(), velInter = new Victor();
-    /**
-     * X Axis rotation: roll<br>
-     * Y Axis rotation: yaw<br>
-     * Z Axis rotation: pitch
-     */
-    protected float pitch, yaw, roll;
+    protected BoundingBox box = new BoundingBox(0, 0, 0, 0, 0, 0, 0);
     protected float deltaT;
     protected float elapsed;
-    protected ELTexture tex;
+    private ELTexture tex;
     private boolean isDead;
     public World w = null;
 
@@ -51,9 +49,9 @@ public abstract class ELEntity {
             float rollRot, ELTexture texture) {
         setXYZ(posX, posY, posZ);
         setXYZVel(xVel, yVel, zVel);
-        pitch = pitchRot;
-        yaw = yawRot;
-        roll = rollRot;
+        box.setPitch(pitchRot);
+        box.setYaw(yawRot);
+        box.setRoll(rollRot);
         tex = texture;
         this.w = w;
     }
@@ -85,7 +83,13 @@ public abstract class ELEntity {
      *            - new posZ
      */
     public void setXYZ(float newX, float newY, float newZ) {
-        pos.init(newX, newY, newZ);
+        if (!pos.init) {
+            pos.init(newX, newY, newZ);
+        } else {
+            pos.update(newX, newY, newZ);
+        }
+        box.setX(newX);
+        box.setY(newY);
     }
 
     /**
@@ -157,28 +161,28 @@ public abstract class ELEntity {
         return pos.z;
     }
 
-    public float getPitch() {
-        return pitch;
+    public double getPitch() {
+        return box.getPitch();
     }
 
-    public float getYaw() {
-        return yaw;
+    public double getYaw() {
+        return box.getYaw();
     }
 
-    public void setYaw(float newyaw) {
-        yaw = newyaw;
+    public double getRoll() {
+        return box.getRoll();
     }
 
-    public void setRoll(float newroll) {
-        roll = newroll;
+    public void setYaw(double newyaw) {
+        box.setYaw(newyaw);
     }
 
-    public void setPitch(float newpitch) {
-        pitch = newpitch;
+    public void setRoll(double newroll) {
+        box.setRoll(newroll);
     }
 
-    public float getRoll() {
-        return roll;
+    public void setPitch(double newpitch) {
+        box.setPitch(newpitch);
     }
 
     /**
@@ -268,7 +272,7 @@ public abstract class ELEntity {
         setXYZVel(vel.x, newZVel, vel.z);
     }
 
-    public void setDead() {
+    public void markForDeath() {
         isDead = true;
     }
 
@@ -303,7 +307,71 @@ public abstract class ELEntity {
         }
     }
 
+    public void setTex(ELTexture tex) {
+        this.tex = tex;
+    }
+
     public ELTexture getTex() {
         return tex;
+    }
+
+    public double getWidth() {
+        return getTex().getWidth();
+    }
+
+    public double getHeight() {
+        return getTex().getHeight();
+    }
+
+    @Override
+    public BoundingBox getBB() {
+        return box;
+    }
+
+    @Override
+    public boolean collidesWith(ICollidable<? extends ICollidable<?>> other) {
+        if (other instanceof ELEntity) {
+            return collidesWith((ELEntity) other);
+        }
+        return getBB().collidesWith(other);
+    }
+
+    @Override
+    public boolean collidesWith(ELEntity other) {
+        double xCenterThis = this.getX() + this.getTex().getWidth();
+        double yCenterThis = this.getY() + this.getTex().getHeight();
+        double xCenterOther = other.getX() + other.getTex().getWidth();
+        double yCenterOther = other.getY() + other.getTex().getHeight();
+
+        double gapX = xCenterOther - xCenterThis;
+        double gapY = yCenterOther - yCenterThis;
+
+        double angleToOther = Math.atan2(gapY, gapX);
+
+        double x_newGap = Maths.projectLineAlongSurface(this.getPitch(),
+                angleToOther, Math.sqrt(gapX * gapX + gapY * gapY), false);
+        double y_newGap = Maths.projectLineAlongSurface(this.getPitch(),
+                angleToOther, Math.sqrt(gapX * gapX + gapY * gapY), true);
+
+        double thisXLenOnNewGrid = this.getTex().getWidth();
+        double thisYLenOnNewGrid = this.getTex().getHeight();
+
+        double otherXLenOnNewGrid = Maths.projectLineAlongSurface(
+                this.getPitch(), other.getPitch(), other.getTex().getWidth(),
+                false)
+                + Maths.projectLineAlongSurface(this.getPitch(),
+                        other.getPitch(), other.getTex().getHeight(), true);
+        double otherYLenOnNewGrid = Maths.projectLineAlongSurface(
+                this.getPitch(), other.getPitch(), other.getTex().getWidth(),
+                true)
+                + Maths.projectLineAlongSurface(this.getPitch(),
+                        other.getPitch(), other.getTex().getHeight(), false);
+
+        System.err.println(y_newGap + " x " + thisYLenOnNewGrid + " "
+                + otherYLenOnNewGrid);
+        System.err.println(x_newGap + " y " + thisXLenOnNewGrid + " "
+                + otherXLenOnNewGrid);
+        return (x_newGap < thisXLenOnNewGrid / 2 + otherXLenOnNewGrid / 2 && y_newGap < thisYLenOnNewGrid
+                / 2 + otherYLenOnNewGrid / 2);
     }
 }

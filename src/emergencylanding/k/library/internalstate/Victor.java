@@ -6,6 +6,7 @@ public class Victor {
     protected static int state = 0;
     public float x, y, z;
     public float lastX, lastY, lastZ;
+    public boolean init = false;
 
     public Victor() {
         this(0, 0, 0);
@@ -35,11 +36,16 @@ public class Victor {
         z = zVal;
     }
 
-    public void init(float xVal, float yVal, float zVal) {
+    public synchronized void init(float xVal, float yVal, float zVal) {
+        if (init) {
+            update(xVal, yVal, zVal);
+            return;
+        }
         x = xVal;
         y = yVal;
         z = zVal;
         update(xVal, yVal, zVal);
+        init = true;
     }
 
     @Override

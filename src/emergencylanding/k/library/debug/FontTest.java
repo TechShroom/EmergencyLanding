@@ -35,7 +35,7 @@ public class FontTest extends KMain {
     public void onDisplayUpdate(int delta) {
         image.draw();
         strrend.drawString(200, 200, "A", 1, 1);
-        strrend.drawString(100, 100, "Font is TNR Bold!!", 1, 1);
+        strrend.drawString(100, 100, "Font is TNR Bold!!\nlorem ipsum", 1, 1);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class FontTest extends KMain {
                 super.paint(g);
                 g.setFont(f);
                 g.drawImage(strrendimg1, 200, 200, null);
-                g.drawString("Font is TNR Bold!!", 100, 100);
+                g.drawString("This is a test and a test and a test test test\nThis is a test and a test and a test test test\nThis is a test and a test and a test test test\nThis is a test and a test and a test test test\n", 100, 100);
             }
         };
         j.setSize(800, 600);
