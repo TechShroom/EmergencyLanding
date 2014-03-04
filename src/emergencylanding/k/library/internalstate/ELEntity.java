@@ -338,6 +338,7 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
 
     @Override
     public boolean collidesWith(ELEntity other) {
+        // TODO: needs to handle rotation. Once done, move to BB so it handles right.
         double xCenterThis = this.getX() + this.getTex().getWidth();
         double yCenterThis = this.getY() + this.getTex().getHeight();
         double xCenterOther = other.getX() + other.getTex().getWidth();
