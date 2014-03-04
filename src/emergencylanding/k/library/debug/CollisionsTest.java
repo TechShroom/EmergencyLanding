@@ -99,11 +99,11 @@ public class CollisionsTest extends KMain {
     public void init(String[] args) {
         w = new World();
         WorldManager.addWorldToSystem(w);
-        e = new TestCollisionEntity(w, 25, 300, 50);
+        e = new TestCollisionEntity(w, 25, 250, 50);
         e2 = new TestCollisionEntity(w, 50, 400, 50);
         e3 = new TestCollisionEntity(w, 50, 50, 50);
-        e.setPitch(20);
-        e2.setPitch(20);
+        e.setPitch(45);
+        e2.setPitch(0);
         w.addEntity(e);
         w.addEntity(e2);
         w.addEntity(e3);
