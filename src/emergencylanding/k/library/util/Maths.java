@@ -31,7 +31,7 @@ public final class Maths {
         if (perpendicular) {
             theta += 90;
         }
-        return Math.cos(Math.toRadians(theta)) * magnitude;
+        return qcos(theta) * magnitude;
     }
 
     /**
