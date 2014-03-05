@@ -7,7 +7,7 @@ import emergencylanding.k.library.util.Maths.Geometry;
 import emergencylanding.k.library.util.interfaces.ICollidable;
 
 public class BoundingBox implements ICollidable<BoundingBox> {
-    protected Rectangle2D.Double box = new Rectangle2D.Double(0, 0, 1, 1);
+    protected Bounds2D box = new Bounds2D();
     /**
      * X Axis rotation: roll<br>
      * Y Axis rotation: yaw<br>
@@ -26,7 +26,7 @@ public class BoundingBox implements ICollidable<BoundingBox> {
 
     public void modBox(double x, double y, double width, double height,
             double roll, double yaw, double pitch) {
-        box.setRect(x, y, width, height);
+        box.setBounds(x, y, width + x, height + y);
         this.roll = roll;
         this.yaw = yaw;
         this.pitch = pitch;
@@ -57,7 +57,7 @@ public class BoundingBox implements ICollidable<BoundingBox> {
      */
     @Override
     public boolean collidesWith(BoundingBox bb) {
-        return collidesWith(bb, Axis.X);
+        return collidesWith(bb, Axis.Z);
     }
 
     /**
@@ -83,8 +83,9 @@ public class BoundingBox implements ICollidable<BoundingBox> {
             bbrot = bb.pitch;
         }
         if (rot == bbrot) {
-            Rectangle2D rbox = Geometry.rotateRect(box, rot), bbrbox = Geometry
-                    .rotateRect(bb.box, bbrot);
+            Rectangle2D rbox = Geometry.rotateRect(box.asRect(), rot), bbrbox = Geometry
+                    .rotateRect(bb.box.asRect(), bbrot);
+            System.err.println(rbox + " collide " + bbrbox);
             return rbox.intersects(bbrbox);
         }
         /*
@@ -126,6 +127,7 @@ public class BoundingBox implements ICollidable<BoundingBox> {
          * thisYLenOnNewGrid / 2 + otherYLenOnNewGrid / 2);
          */
 
+        System.err.println(box + " collide " + bb.box);
         // best guess for now
         return box.intersects(bb.box);
     }
@@ -155,35 +157,37 @@ public class BoundingBox implements ICollidable<BoundingBox> {
     }
 
     public double getX() {
-        return box.getX();
+        return box.getMinX();
     }
 
     public void setX(double x) {
-        box.x = x;
+        box.setMaxX(x + getWidth());
+        box.setMinX(x);
     }
 
     public double getY() {
-        return box.getY();
+        return box.getMinY();
     }
 
     public void setY(double y) {
-        box.y = y;
+        box.setMaxY(y + getHeight());
+        box.setMinY(y);
     }
 
     public double getWidth() {
-        return box.getWidth();
+        return box.getMaxX() - box.getMinX();
     }
 
     public void setWidth(double width) {
-        box.width = width;
+        box.setMaxX(box.getMinX() + width);
     }
 
     public double getHeight() {
-        return box.getHeight();
+        return box.getMaxY() - box.getMinY();
     }
 
     public void setHeight(double height) {
-        box.height = height;
+        box.setMaxY(box.getMinY() + height);
     }
 
     @Override

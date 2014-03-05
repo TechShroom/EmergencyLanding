@@ -50,6 +50,27 @@ public final class Maths {
                     - points[0].getX(), points[1].getY() - points[0].getY());
             return r;
         }
+
+        public static double[] pointsAsDoubles(Point2D[] points) {
+            double[] out = new double[points.length * 2];
+            for (int i = 0; i < out.length; i += 2) {
+                Point2D p = points[i / 2];
+                out[i] = p.getX();
+                out[i + 1] = p.getY();
+            }
+            return out;
+        }
+
+        public static Point2D[] doublesAsPoints(double[] points) {
+            if (points.length % 2 != 0) {
+                throw new IllegalArgumentException("need pairs of doubles");
+            }
+            Point2D[] temp = new Point2D[points.length / 2];
+            for (int i = 0; i < points.length; i += 2) {
+                temp[i / 2] = new Point2D.Double(points[i], points[i + 1]);
+            }
+            return temp;
+        }
     }
 
     private Maths() {
