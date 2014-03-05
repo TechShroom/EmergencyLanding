@@ -53,14 +53,14 @@ public class CollisionsTest extends KMain {
                 FPS.init(CollisionsTest.IS_INDEX);
                 while (CollisionsTest.run) {
                     e.setRelativeXYZ(0, 1, 0);
-                    if (e.collidesWith(e2)) {
-                        System.err.println("**BOOM**");
-                        run = false;
-                    }
                     s.sync(CollisionsTest.TICKS_PER_SECOND);
                     int delta = FPS.update(CollisionsTest.IS_INDEX);
                     DisplayLayer.readDevices();
                     WorldManager.update(delta);
+                    if (e.collidesWith(e2)) {
+                        System.err.println("**BOOM**");
+                        run = false;
+                    }
                 }
             }
         };
