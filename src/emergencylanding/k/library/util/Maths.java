@@ -38,15 +38,16 @@ public final class Maths {
             r.setRect(0, 0, 0, 0);
             // get points
             Point2D[] points = new Point2D[] { new Point2D.Double(x, y),
-                    new Point2D.Double(w, y), new Point2D.Double(x, h),
-                    new Point2D.Double(w, h) };
+                    new Point2D.Double(w + x, h + y) };
             // calc cos/sin
             double s = qsin(theta), c = qcos(theta);
             // expand rect to fit
             for (Point2D p : points) {
-                r.add((p.getX() * c) - (p.getY() * s),
-                        (p.getX() * s) + (p.getY() * c));
+                p.setLocation((p.getX() * c) - (p.getY() * s), (p.getX() * s)
+                        + (p.getY() * c));
             }
+            r.setRect(points[0].getX(), points[0].getY(), points[1].getX()
+                    - points[0].getX(), points[1].getY() - points[0].getY());
             return r;
         }
     }
