@@ -315,11 +315,11 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
     }
 
     public double getWidth() {
-        return getTex().getWidth();
+        return box.getWidth();
     }
 
     public double getHeight() {
-        return getTex().getHeight();
+        return box.getHeight();
     }
 
     @Override
