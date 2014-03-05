@@ -1,10 +1,56 @@
 package emergencylanding.k.library.util;
 
+import java.awt.Point;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+
 import k.core.util.core.Helper.BetterArrays;
 
 import org.lwjgl.util.vector.Matrix4f;
 
 public final class Maths {
+
+    /**
+     * Provides geometry manipulation, such as axis-normalization and rectangle
+     * rotations.
+     * 
+     * @author Kenzie Togami
+     */
+    public static final class Geometry {
+        private Geometry() {
+            throw new AssertionError("Don't create");
+        }
+
+        /**
+         * Rotates the given rectangle by <code>theta</code> degrees, treating
+         * it as if it were drawn at that angle and not axis-aligned.
+         * 
+         * @param r
+         *            - the original rectangle
+         * @param theta
+         *            - the rotation angle
+         * @return <code>r</code>, rotated by <code>theta</code>
+         */
+        public static Rectangle2D rotateRect(Rectangle2D r, double theta) {
+            // store data
+            double x = r.getX(), y = r.getY(), w = r.getWidth(), h = r
+                    .getHeight();
+            // clear rect
+            r.setRect(0, 0, 0, 0);
+            // get points
+            Point2D[] points = new Point2D[] { new Point2D.Double(x, y),
+                    new Point2D.Double(w, y), new Point2D.Double(x, h),
+                    new Point2D.Double(w, h) };
+            // calc cos/sin
+            double s = qsin(theta), c = qcos(theta);
+            // expand rect to fit
+            for (Point2D p : points) {
+                r.add((p.getX() * c) - (p.getY() * s),
+                        (p.getX() * s) + (p.getY() * c));
+            }
+            return r;
+        }
+    }
 
     private Maths() {
         throw new AssertionError("Don't create");
