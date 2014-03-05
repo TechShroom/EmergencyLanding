@@ -9,7 +9,7 @@ import emergencylanding.k.library.util.interfaces.ICollidable;
 public abstract class ELEntity implements ICollidable<ELEntity> {
     protected Victor pos = new Victor(), posInter = new Victor(),
             vel = new Victor(), velInter = new Victor();
-    protected BoundingBox box = new BoundingBox(0, 0, 0, 0, 0, 0, 0);
+    protected BoundingBox box = new BoundingBox();
     protected float deltaT;
     protected float elapsed;
     private ELTexture tex;
