@@ -7,7 +7,7 @@ import emergencylanding.k.library.util.Maths.Geometry;
 import emergencylanding.k.library.util.interfaces.ICollidable;
 
 public class BoundingBox implements ICollidable<BoundingBox> {
-    protected Rectangle2D.Double box = new Rectangle2D.Double();
+    protected Rectangle2D.Double box = new Rectangle2D.Double(0, 0, 1, 1);
     /**
      * X Axis rotation: roll<br>
      * Y Axis rotation: yaw<br>
