@@ -13,7 +13,11 @@ public class BoundingBox implements ICollidable<BoundingBox> {
      * Y Axis rotation: yaw<br>
      * Z Axis rotation: pitch
      */
-    protected double roll, yaw, pitch;
+    protected double roll = 0, yaw = 0, pitch = 0;
+
+    public BoundingBox() {
+        // does nothing, leaves at defaults
+    }
 
     public BoundingBox(double x, double y, double width, double height,
             double roll, double yaw, double pitch) {
