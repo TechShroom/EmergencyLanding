@@ -308,6 +308,8 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
 
     public void setTex(ELTexture tex) {
         this.tex = tex;
+        box.setWidth(tex.getWidth());
+        box.setHeight(tex.getHeight());
     }
 
     public ELTexture getTex() {
