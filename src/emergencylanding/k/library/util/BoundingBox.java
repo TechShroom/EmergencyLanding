@@ -121,7 +121,9 @@ public class BoundingBox implements ICollidable<BoundingBox> {
          * thisXLenOnNewGrid / 2 + otherXLenOnNewGrid / 2 && y_newGap <
          * thisYLenOnNewGrid / 2 + otherYLenOnNewGrid / 2);
          */
-        return false;
+
+        // best guess for now
+        return box.intersects(bb.box);
     }
 
     public double getRoll() {
