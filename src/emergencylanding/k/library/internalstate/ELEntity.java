@@ -18,20 +18,20 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
 
     public ELEntity(World w) {
         setXYZ(0, 0, 0);
-        tex = ColorTexture.RED;
+        setTex(ColorTexture.RED);
         this.w = w;
     }
 
     public ELEntity(World w, ELTexture texture) {
         setXYZ(0, 0, 0);
-        tex = texture;
+        setTex(texture);
         this.w = w;
     }
 
     public ELEntity(World w, float posX, float posY, float posZ,
             ELTexture texture) {
         setXYZ(posX, posY, posZ);
-        tex = texture;
+        setTex(texture);
         this.w = w;
     }
 
@@ -39,7 +39,7 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
             float yVel, float zVel, ELTexture texture) {
         setXYZ(posX, posY, posZ);
         setXYZVel(xVel, yVel, zVel);
-        tex = texture;
+        setTex(texture);
         this.w = w;
     }
 
@@ -51,7 +51,7 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
         box.setPitch(pitchRot);
         box.setYaw(yawRot);
         box.setRoll(rollRot);
-        tex = texture;
+        setTex(texture);
         this.w = w;
     }
 
