@@ -1,7 +1,10 @@
 package emergencylanding.k.library.util;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.util.*;
 
+import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.vector.Matrix4f;
 
 import emergencylanding.k.library.lwjgl.render.GLData;
@@ -58,6 +61,9 @@ final class GLRotator {
     }
 
     static void glEndRot() {
+        if (rots.isEmpty()) {
+            throw new OpenGLException(GL_INVALID_OPERATION);
+        }
         GLRotator rot = rots.pollLast();
         if (rot.theta == 0) {
             return;

@@ -1,7 +1,11 @@
 package emergencylanding.k.library.util;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import java.util.LinkedList;
 
+import org.lwjgl.LWJGLUtil;
+import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.vector.Matrix4f;
 
 import emergencylanding.k.library.lwjgl.render.GLData;
@@ -36,6 +40,9 @@ final class GLTranslator {
     }
 
     static void glEndTrans() {
+        if (transes.isEmpty()) {
+            throw new OpenGLException(GL_INVALID_OPERATION);
+        }
         GLTranslator trans = transes.pollLast();
         Matrix4f mats = trans.mats(true);
         Matrix4f input = GLData.getMatrixToApply();
