@@ -279,10 +279,6 @@ public abstract class ELTexture {
         glBindTexture(GL_TEXTURE_2D, GLData.NONE);
     }
 
-    public void glTextureVertex(float s, float t) {
-        glTexCoord2f(s, t);
-    }
-
     public int getWidth() {
         return dim.width;
     }
