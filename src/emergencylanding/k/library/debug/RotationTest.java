@@ -9,6 +9,7 @@ import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.render.*;
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.DrawableUtils;
 
 public class RotationTest extends KMain {
     private static boolean run = true;
@@ -18,6 +19,7 @@ public class RotationTest extends KMain {
         try {
             DisplayLayer.initDisplay(false, 800, 500, "Testing Rotations",
                     false, false, args);
+            System.err.println("loaded");
             while (run) {
                 run = !Display.isCloseRequested();
                 DisplayLayer.loop(120);
@@ -32,8 +34,10 @@ public class RotationTest extends KMain {
 
     @Override
     public void onDisplayUpdate(int delta) {
+        DrawableUtils.glBeginScale(.8, .8, 1);
         tce.interpolate(delta);
         RenderManager.doRender(tce, tce.getInterpolated());
+        DrawableUtils.glEndScale();
         tce2.interpolate(delta);
         RenderManager.doRender(tce2, tce2.getInterpolated());
     }
@@ -41,9 +45,9 @@ public class RotationTest extends KMain {
     @Override
     public void init(String[] args) {
         tce = new TestCollisionEntity(new World(), 200, 123, 0);
-        tce.setPitch(0);
         tce2 = new TestCollisionEntity(new World(), 123, 123, 0);
-        tce2.setPitch(45);
+        tce2.setPitch(0);
+        tce.setPitch(45);
     }
 
     @Override
