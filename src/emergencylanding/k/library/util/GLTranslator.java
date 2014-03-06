@@ -4,7 +4,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.LinkedList;
 
-import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.vector.Matrix4f;
 
