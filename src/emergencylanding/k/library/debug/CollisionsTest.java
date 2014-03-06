@@ -59,7 +59,7 @@ public class CollisionsTest extends KMain {
                     WorldManager.update(delta);
                     if (e.collidesWith(e2)) {
                         System.err.println("**BOOM**");
-                        //run = false;
+                        run = false;
                     }
                 }
             }
