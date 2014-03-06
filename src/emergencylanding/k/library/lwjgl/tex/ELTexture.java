@@ -150,6 +150,11 @@ public abstract class ELTexture {
                         // Create a new texture object in memory and bind it
                         glActiveTexture(GL_TEXTURE0);
                         try {
+                            glTexParameteri(GL_TEXTURE_2D,
+                                    GL_TEXTURE_MIN_FILTER,
+                                    GL_LINEAR_MIPMAP_LINEAR);
+                            glTexParameteri(GL_TEXTURE_2D,
+                                    GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             glBindTexture(GL_TEXTURE_2D, id);
                         } catch (OpenGLException ogle) {
                             if (LUtils.debugLevel > 1) {
