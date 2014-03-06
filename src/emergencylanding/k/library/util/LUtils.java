@@ -40,7 +40,7 @@ public final class LUtils {
 
     }
 
-    public static String VERSION = "1.3";
+    public static String VERSION = "1.3.1";
 
     public static final String LIB_NAME = "EmergencyLanding".intern(),
             SHORT_LIB_NAME = "EL".intern();
@@ -93,12 +93,12 @@ public final class LUtils {
                 + File.separator + "libs" + File.separator + "natives"
                 + File.separator + PLATFORM_NAME;
         System.setProperty("org.lwjgl.librarypath", natives);
-        System.err.println("Natives injected.");
         try {
             addLibraryPath(natives);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
+        System.err.println("Natives injected.");
     }
 
     /**
