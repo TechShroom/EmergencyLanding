@@ -128,20 +128,20 @@ public final class Maths {
         case X:
             rmat.m11 = c;
             rmat.m22 = c;
-            rmat.m12 = -s;
             rmat.m21 = s;
+            rmat.m12 = -s;
             break;
         case Y:
             rmat.m00 = c;
             rmat.m22 = c;
-            rmat.m20 = -s;
             rmat.m02 = s;
+            rmat.m20 = -s;
             break;
         case Z:
             rmat.m00 = c;
             rmat.m11 = c;
-            rmat.m01 = -s;
             rmat.m10 = s;
+            rmat.m01 = -s;
             break;
         default:
             throw new IllegalArgumentException("Invalid Axis");
@@ -151,10 +151,10 @@ public final class Maths {
 
     public static Matrix4f createTransMatrix(double ix, double iy, double iz) {
         Matrix4f imat = new Matrix4f(); // identity
-        imat.m30 = (float) ix;
-        imat.m31 = (float) iy;
-        imat.m32 = (float) iz;
-        return imat;
+        imat.m03 = (float) ix;
+        imat.m13 = (float) iy;
+        imat.m23 = (float) iz;
+        return imat.transpose(imat);
     }
 
     public static Matrix4f createScaleMatrix(double sx, double sy, double sz) {

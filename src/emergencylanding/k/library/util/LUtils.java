@@ -61,7 +61,7 @@ public final class LUtils {
 
     static {
         /*
-         * If you need to change LWJGsystem properties, do it before this
+         * If you need to change LWJGLsystem properties, do it before this
          * comment!
          */
         PLATFORM_NAME = LWJGLUtil.getPlatformName();
@@ -93,6 +93,7 @@ public final class LUtils {
                 + File.separator + "libs" + File.separator + "natives"
                 + File.separator + PLATFORM_NAME;
         System.setProperty("org.lwjgl.librarypath", natives);
+        System.err.println("Natives injected.");
         try {
             addLibraryPath(natives);
         } catch (Exception e1) {
@@ -167,7 +168,11 @@ public final class LUtils {
                     tempName.lastIndexOf(File.separatorChar));
         }
         EL_TOP = ((tempName.startsWith(File.separator) ? "" : File.separator) + tempName)
-                .replace("/C:/", "C:/").replace("\\C:\\", "C:\\");
+                .replace("/C:/", "C:/")
+                .replace("\\C:\\", "C:\\")
+                .replace(
+                        "\\ile:"/* I don't know what happens with jar files */,
+                        "").replaceFirst("!$", "");
         LUtils.print("Using EL_TOP " + EL_TOP);
 
         injectNatives();

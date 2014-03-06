@@ -1,5 +1,6 @@
 package emergencylanding.k.library.util;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 import emergencylanding.k.library.util.Maths.Axis;
@@ -88,48 +89,54 @@ public class BoundingBox implements ICollidable<BoundingBox> {
             System.err.println(rbox + " collide " + bbrbox);
             return rbox.intersects(bbrbox);
         }
-        /*
-         * Old entity rot code
-         * 
-         * // TODO: needs to handle rotation.
-         * 
-         * double xCenterThis = this.getX() + this.getTex().getWidth(); double
-         * yCenterThis = this.getY() + this.getTex().getHeight(); double
-         * xCenterOther = other.getX() + other.getTex().getWidth(); double
-         * yCenterOther = other.getY() + other.getTex().getHeight();
-         * 
-         * double gapX = xCenterOther - xCenterThis; double gapY = yCenterOther
-         * - yCenterThis;
-         * 
-         * double angleToOther = Math.atan2(gapY, gapX);
-         * 
-         * double x_newGap = Maths.projectLineAlongSurface(this.getPitch(),
-         * angleToOther, Math.sqrt(gapX * gapX + gapY * gapY), false); double
-         * y_newGap = Maths.projectLineAlongSurface(this.getPitch(),
-         * angleToOther, Math.sqrt(gapX * gapX + gapY * gapY), true);
-         * 
-         * double thisXLenOnNewGrid = this.getTex().getWidth(); double
-         * thisYLenOnNewGrid = this.getTex().getHeight();
-         * 
-         * double otherXLenOnNewGrid = Maths.projectLineAlongSurface(
-         * this.getPitch(), other.getPitch(), other.getTex().getWidth(), false)
-         * + Maths.projectLineAlongSurface(this.getPitch(), other.getPitch(),
-         * other.getTex().getHeight(), true); double otherYLenOnNewGrid =
-         * Maths.projectLineAlongSurface( this.getPitch(), other.getPitch(),
-         * other.getTex().getWidth(), true) +
-         * Maths.projectLineAlongSurface(this.getPitch(), other.getPitch(),
-         * other.getTex().getHeight(), false);
-         * 
-         * System.err.println(y_newGap + " x " + thisYLenOnNewGrid + " " +
-         * otherYLenOnNewGrid); System.err.println(x_newGap + " y " +
-         * thisXLenOnNewGrid + " " + otherXLenOnNewGrid); return (x_newGap <
-         * thisXLenOnNewGrid / 2 + otherXLenOnNewGrid / 2 && y_newGap <
-         * thisYLenOnNewGrid / 2 + otherYLenOnNewGrid / 2);
-         */
+        // bounds return array of size 2, so we need to reconstruct them
+        Point2D[] boxA = box.getBounds(), boxB = bb.box.getBounds();
+        Point2D[] tmpA = new Point2D[4], tmpB = new Point2D[4];
+        tmpA[0] = boxA[0]; // reuse
+        tmpA[3] = boxA[1]; // reuse
+        tmpA[1] = new Point2D.Double(boxA[0].getX(), boxA[1].getY());
+        tmpA[2] = new Point2D.Double(boxA[1].getX(), boxA[0].getY());
+        tmpB[0] = boxB[0]; // reuse
+        tmpB[3] = boxB[1]; // reuse
+        tmpB[1] = new Point2D.Double(boxB[0].getX(), boxB[1].getY());
+        tmpB[2] = new Point2D.Double(boxB[1].getX(), boxB[0].getY());
+        LineSeg lA = new LineSeg(tmpA[0], tmpA[1]), rA = new LineSeg(tmpA[2],
+                tmpA[3]), tA = new LineSeg(tmpA[1], tmpA[3]), bA = new LineSeg(
+                tmpA[0], tmpA[2]);
+        LineSeg lB = new LineSeg(tmpB[0], tmpB[1]), rB = new LineSeg(tmpB[2],
+                tmpB[3]), tB = new LineSeg(tmpB[1], tmpB[3]), bB = new LineSeg(
+                tmpB[0], tmpB[2]);
+        return lA.collidesWith(bB) || rA.collidesWith(tB)
+                || bA.collidesWith(lB) || tA.collidesWith(rB);
+    }
 
-        System.err.println(box + " collide " + bb.box);
-        // best guess for now
-        return box.intersects(bb.box);
+    private static class LineSeg implements ICollidable<LineSeg> {
+        Point2D s, e;
+
+        private LineSeg(Point2D start, Point2D end) {
+            s = start;
+            e = end;
+        }
+
+        @Override
+        public BoundingBox getBB() {
+            return null; // we don't have BBs for lines
+        }
+
+        @Override
+        public boolean collidesWith(ICollidable<? extends ICollidable<?>> other) {
+            return (other instanceof LineSeg) ? collidesWith((LineSeg) other)
+                    : false;
+        }
+
+        @Override
+        public boolean collidesWith(LineSeg other) {
+            // calculate the denom of a certain fraction, see
+            // http://devmag.org.za/2009/04/13/basic-collision-detection-in-2d-part-1/
+            // for more info
+            return ((other.e.getY() - other.s.getY()) * (e.getX() - s.getX()))
+                    - ((other.e.getX() - other.s.getX()) * (e.getY() - s.getY())) != 0;
+        }
     }
 
     public double getRoll() {

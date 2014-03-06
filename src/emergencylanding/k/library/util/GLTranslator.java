@@ -47,6 +47,5 @@ final class GLTranslator {
         Matrix4f input = GLData.getMatrixToApply();
         Matrix4f.mul(input, mats, input);
         GLData.apply(input);
-        GLData.apply(input);
     }
 }
