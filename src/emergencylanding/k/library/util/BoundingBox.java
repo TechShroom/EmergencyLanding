@@ -86,12 +86,12 @@ public class BoundingBox implements ICollidable<BoundingBox> {
         if (rot == bbrot) {
             Rectangle2D rbox = Geometry.rotateRect(box.asRect(), rot), bbrbox = Geometry
                     .rotateRect(bb.box.asRect(), bbrot);
-            System.err.println(rbox + " collide " + bbrbox);
             return rbox.intersects(bbrbox);
         }
         // bounds return array of size 2, so we need to reconstruct them
         Point2D[] boxA = box.getBounds(), boxB = bb.box.getBounds();
         Point2D[] tmpA = new Point2D[4], tmpB = new Point2D[4];
+        // 0: LL 1: UL 2: LR 3: UR
         tmpA[0] = boxA[0]; // reuse
         tmpA[3] = boxA[1]; // reuse
         tmpA[1] = new Point2D.Double(boxA[0].getX(), boxA[1].getY());
@@ -100,6 +100,7 @@ public class BoundingBox implements ICollidable<BoundingBox> {
         tmpB[3] = boxB[1]; // reuse
         tmpB[1] = new Point2D.Double(boxB[0].getX(), boxB[1].getY());
         tmpB[2] = new Point2D.Double(boxB[1].getX(), boxB[0].getY());
+        // left: LL to UL right: LR to UR top: UL to UR bottom: LL to LR
         LineSeg lA = new LineSeg(tmpA[0], tmpA[1]), rA = new LineSeg(tmpA[2],
                 tmpA[3]), tA = new LineSeg(tmpA[1], tmpA[3]), bA = new LineSeg(
                 tmpA[0], tmpA[2]);
@@ -129,13 +130,67 @@ public class BoundingBox implements ICollidable<BoundingBox> {
                     : false;
         }
 
+        private static final double ERROR = Maths.med,
+                ERROR_PLUS_ONE = ERROR + 1; // close enough, jeez
+
         @Override
         public boolean collidesWith(LineSeg other) {
             // calculate the denom of a certain fraction, see
             // http://devmag.org.za/2009/04/13/basic-collision-detection-in-2d-part-1/
             // for more info
-            return ((other.e.getY() - other.s.getY()) * (e.getX() - s.getX()))
-                    - ((other.e.getX() - other.s.getX()) * (e.getY() - s.getY())) != 0;
+            // then make sure between 0 and 1 for on segment
+            double denom = ((other.e.getY() - other.s.getY()) * (e.getX() - s
+                    .getX()))
+                    - ((other.e.getX() - other.s.getX()) * (e.getY() - s.getY()));
+            if (denom == 0) {
+                return false;
+            }
+            double ua = (((other.e.getX() - other.s.getX()) * (s.getY() - other.s
+                    .getY())) - ((other.e.getY() - other.s.getY()) * (s.getX() - other.s
+                    .getX())))
+                    / denom;
+            /*
+             * The following 3 lines are only necessary if we are checking line
+             * segments instead of infinite-length lines
+             */
+            double ub = (((e.getX() - s.getX()) * (s.getY() - other.s.getY())) - ((e
+                    .getY() - s.getY()) * (s.getX() - other.s.getX()))) / denom;
+            ua += 0.0;
+            ub += 0.0;
+            if (Maths.lessThan(ua, -ERROR)
+                    || Maths.greaterThan(ua, ERROR_PLUS_ONE)
+                    || Maths.lessThan(ub, -ERROR)
+                    || Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
+                System.err.println("[Begin]");
+                if (Maths.lessThan(ua, -ERROR)) {
+                    System.err.println("ua " + ua + " was less than "
+                            + (-ERROR));
+                }
+                if (Maths.greaterThan(ua, ERROR_PLUS_ONE)) {
+                    System.err.println("ua " + ua + " was greater than 1");
+                }
+                if (Maths.lessThan(ub, -ERROR)) {
+                    System.err.println("ub " + ub + " was less than "
+                            + (-ERROR));
+                }
+                if (Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
+                    System.err.println("ub " + ub + " was greater than 1");
+                }
+                System.err.println("[End]");
+                return false;
+            }
+            System.err.println("We got some collisions of lines here: " + ua
+                    + ":" + ub);
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "[" + pstr(s) + "->" + pstr(e) + "]";
+        }
+
+        private static String pstr(Point2D p) {
+            return "(" + p.getX() + ", " + p.getY() + ")";
         }
     }
 

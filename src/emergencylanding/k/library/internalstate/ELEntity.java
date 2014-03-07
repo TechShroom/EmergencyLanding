@@ -87,8 +87,8 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
         } else {
             pos.update(newX, newY, newZ);
         }
-        box.setX(newX);
-        box.setY(newY);
+        box.setX(newX - getWidth() / 2);
+        box.setY(newY - getHeight() / 2);
     }
 
     /**

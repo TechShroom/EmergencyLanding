@@ -52,7 +52,6 @@ public class CollisionsTest extends KMain {
             public void run() {
                 FPS.init(CollisionsTest.IS_INDEX);
                 while (CollisionsTest.run) {
-                    e.setRelativeXYZ(0, 1, 0);
                     s.sync(CollisionsTest.TICKS_PER_SECOND);
                     int delta = FPS.update(CollisionsTest.IS_INDEX);
                     DisplayLayer.readDevices();
@@ -61,6 +60,7 @@ public class CollisionsTest extends KMain {
                         System.err.println("**BOOM**");
                         run = false;
                     }
+                    e.setRelativeXYZ(0, 1, 0);
                 }
             }
         };

@@ -181,6 +181,11 @@ public final class LUtils {
     public static final int debugLevel = Integer.parseInt(System.getProperty(
             LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
 
+    static {
+        System.err.println(LOWER_SHORT_LIB_NAME + ".debug.level" + ": "
+                + debugLevel);
+    }
+
     // the range between which the "close enough" guesser in getDisplayMode uses
     private static final int WIDTH_RANGE = 300, HEIGHT_RANGE = 300;
 

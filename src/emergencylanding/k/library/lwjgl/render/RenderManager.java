@@ -7,7 +7,9 @@ import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.Victor;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.internalstate.world.WorldManager;
+import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.main.KMain;
+import emergencylanding.k.library.util.*;
 
 public class RenderManager {
     private static HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender = new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
@@ -36,6 +38,16 @@ public class RenderManager {
             throw new IllegalStateException("Missing default render!");
         }
         r.doRender(e, interpolated);
+        if (LUtils.debugLevel >= 1) {
+            BoundingBox bb = e.getBB();
+            DrawableUtils.beginStandardEntityRender(e, interpolated.x,
+                    interpolated.y, interpolated.z);
+            VBAO bbbox = Shapes.getQuad(new VertexData().setRGB(255, 0, 0),
+                    new VertexData().setXYZ((float) (bb.getWidth()),
+                            (float) (bb.getHeight()), 0), Shapes.XY);
+            bbbox.draw().destroy();
+            DrawableUtils.endStandardEntityRender();
+        }
     }
 
     @SuppressWarnings("unchecked")

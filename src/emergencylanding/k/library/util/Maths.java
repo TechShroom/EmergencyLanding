@@ -9,6 +9,22 @@ import org.lwjgl.util.vector.Matrix4f;
 
 public final class Maths {
 
+    public static final double med = calculateMachineEpsilonDouble();
+
+    static {
+        System.err.println("Got MED " + med);
+    }
+
+    private static double calculateMachineEpsilonDouble() {
+        double machEps = 1.0d;
+
+        do
+            machEps /= 2.0d;
+        while ((double) (1.0 + (machEps / 2.0)) != 1.0);
+
+        return machEps;
+    }
+
     /**
      * Provides geometry manipulation, such as axis-normalization and rectangle
      * rotations.
@@ -114,6 +130,26 @@ public final class Maths {
      */
     public static float lerp(float pos1, float pos2, float v) {
         return pos1 + (pos2 - pos1) * v;
+    }
+
+    public static boolean lessThanOrEqualTo(double a, double b) {
+        int c = Double.compare(a, b);
+        return c <= 0;
+    }
+
+    public static boolean lessThan(double a, double b) {
+        int c = Double.compare(a, b);
+        return c < 0;
+    }
+
+    public static boolean greaterThanOrEqualTo(double a, double b) {
+        int c = Double.compare(a, b);
+        return c >= 0;
+    }
+
+    public static boolean greaterThan(double a, double b) {
+        int c = Double.compare(a, b);
+        return c > 0;
     }
 
     public static enum Axis {
