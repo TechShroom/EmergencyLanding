@@ -161,26 +161,30 @@ public class BoundingBox implements ICollidable<BoundingBox> {
                     || Maths.greaterThan(ua, ERROR_PLUS_ONE)
                     || Maths.lessThan(ub, -ERROR)
                     || Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
-                System.err.println("[Begin]");
-                if (Maths.lessThan(ua, -ERROR)) {
-                    System.err.println("ua " + ua + " was less than "
-                            + (-ERROR));
+                if (LUtils.debugLevel > 1) {
+                    System.err.println("[Begin]");
+                    if (Maths.lessThan(ua, -ERROR)) {
+                        System.err.println("ua " + ua + " was less than "
+                                + (-ERROR));
+                    }
+                    if (Maths.greaterThan(ua, ERROR_PLUS_ONE)) {
+                        System.err.println("ua " + ua + " was greater than 1");
+                    }
+                    if (Maths.lessThan(ub, -ERROR)) {
+                        System.err.println("ub " + ub + " was less than "
+                                + (-ERROR));
+                    }
+                    if (Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
+                        System.err.println("ub " + ub + " was greater than 1");
+                    }
+                    System.err.println("[End]");
                 }
-                if (Maths.greaterThan(ua, ERROR_PLUS_ONE)) {
-                    System.err.println("ua " + ua + " was greater than 1");
-                }
-                if (Maths.lessThan(ub, -ERROR)) {
-                    System.err.println("ub " + ub + " was less than "
-                            + (-ERROR));
-                }
-                if (Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
-                    System.err.println("ub " + ub + " was greater than 1");
-                }
-                System.err.println("[End]");
                 return false;
             }
-            System.err.println("We got some collisions of lines here: " + ua
-                    + ":" + ub);
+            if (LUtils.debugLevel > 1) {
+                System.err.println("We got some collisions of lines here: "
+                        + ua + ":" + ub);
+            }
             return true;
         }
 
