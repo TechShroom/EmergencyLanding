@@ -1,5 +1,6 @@
 package emergencylanding.k.exst.modules;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import emergencylanding.k.exst.mods.IMod;
@@ -33,27 +34,19 @@ public final class ModuleSystem {
      *         either returns the same class represented by the full binary name
      *         or a class that extends that class.
      */
-    public static IModule[] getRegisteredModules(String fullBinaryName) {
-        Class<?> fbnClass = null;
-        try {
-            fbnClass = Class.forName(fullBinaryName);
-        } catch (ClassNotFoundException e1) {
-            System.err.println("Module class " + fullBinaryName
-                    + " does not exist, returning empty.");
-        }
-        if (!IMODULE_CLASS.isAssignableFrom(fbnClass)) {
-            throw new ClassCastException(fullBinaryName + " does not extend "
-                    + IMODULE_CLASS);
-        }
-        if (fbnClass == null) {
-            return new IModule[0];
+    public static <T extends IModule> T[] getRegisteredModules(
+            Class<T> moduleClass) {
+        @SuppressWarnings("unchecked")
+        T[] array = (T[]) Array.newInstance(moduleClass, 0);
+        if (moduleClass == null) {
+            return array;
         }
         ArrayList<IModule> matched = new ArrayList<IModule>();
         for (IModule m : modules) {
-            if (fbnClass.isInstance(m)) {
+            if (moduleClass.isInstance(m)) {
                 matched.add(m);
             }
         }
-        return matched.toArray(new IModule[0]);
+        return matched.toArray(array);
     }
 }
