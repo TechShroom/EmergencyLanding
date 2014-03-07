@@ -102,7 +102,7 @@ public class CollisionsTest extends KMain {
         e = new TestCollisionEntity(w, 50, 250, 50);
         e2 = new TestCollisionEntity(w, 50, 400, 50);
         e3 = new TestCollisionEntity(w, 50, 50, 50);
-        e.setPitch(45);
+        e.setPitch(2);
         e2.setPitch(0);
         w.addEntity(e);
         w.addEntity(e2);
