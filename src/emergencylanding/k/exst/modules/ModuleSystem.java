@@ -7,7 +7,6 @@ import emergencylanding.k.exst.mods.IMod;
 import emergencylanding.k.exst.mods.Mods;
 
 public final class ModuleSystem {
-    private static final Class<IModule> IMODULE_CLASS = IModule.class;
 
     private static ArrayList<IModule> modules = new ArrayList<IModule>();
 
