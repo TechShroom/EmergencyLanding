@@ -31,7 +31,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-public final class LUtils {
+public class LUtils {
 
     /**
      * A dummy method to load this class. Does nothing.
