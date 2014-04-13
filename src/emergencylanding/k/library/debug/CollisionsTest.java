@@ -56,7 +56,7 @@ public class CollisionsTest extends KMain {
                     int delta = FPS.update(CollisionsTest.IS_INDEX);
                     DisplayLayer.readDevices();
                     WorldManager.update(delta);
-                    if (e.collidesWith(e2)) {
+                    if (e.testCollide(e2)) {
                         System.err.println("**BOOM**");
                         run = false;
                     }
@@ -99,14 +99,12 @@ public class CollisionsTest extends KMain {
     public void init(String[] args) {
         w = new World();
         WorldManager.addWorldToSystem(w);
-        e = new TestCollisionEntity(w, 50, 250, 50);
+        e = new TestCollisionEntity(w, 20, 250, 50);
         e2 = new TestCollisionEntity(w, 50, 400, 50);
-        e3 = new TestCollisionEntity(w, 50, 50, 50);
-        e.setPitch(45);
-        e2.setPitch(0);
+        e.setPitch(30);
+        e2.setPitch(45);
         w.addEntity(e);
         w.addEntity(e2);
-        w.addEntity(e3);
     }
 
     @Override

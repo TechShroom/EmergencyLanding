@@ -104,19 +104,67 @@ public final class Maths {
      *            - The angle the line makes with the horizontal
      * @param magnitude
      *            - The length of the line.
-     * @param perpendicular
+     * @param getY
      *            - Gets the length of the line when projected along the line
      *            perpendicular to the thetaSurface given (eg, find the y).
      */
     public static double projectLineAlongSurface(double thetaSurface,
-            double thetaLineToProject, double magnitude, boolean perpendicular) {
-        double theta = thetaLineToProject - thetaSurface;
-        if (perpendicular) {
-            theta += 90;
+            double thetaLineToProject, double magnitude, boolean getY) {
+        double dp = dotProductAngles(magnitude, thetaLineToProject, 1, thetaSurface);
+        if(!getY)
+        {
+            System.out.println(dp);
+            return dp*Math.cos(Math.toRadians(thetaSurface));
+        }else
+        {
+            System.out.println(dp);
+            return dp*Math.sin(Math.toRadians(thetaSurface));
         }
-        return qcos(theta) * magnitude;
+        
+    }
+    
+    public static double projectLineAlongSurfaceXY(double xSurface,
+            double ySurface, double xLine, double yLine, boolean DoY) {
+        double dp = dotProduct(xLine, yLine, Maths.normalizeX(xSurface, ySurface), Maths.normalizeY(xSurface, ySurface));
+        if(!DoY)
+        {
+            System.out.println(dp);
+            return dp*xSurface;
+        }else
+        {
+            System.out.println(dp);
+            return dp*ySurface;
+        }
+        
     }
 
+    public static double normalizeX(double x, double y)
+    {
+        double len_v = Math.sqrt(x*x + y*y);
+        return x / len_v;
+    }
+    
+    public static double normalizeY(double x, double y)
+    {
+        double len_v = Math.sqrt(x*x + y*y);
+        return y / len_v;
+    }
+    
+    public static double dotProduct(double ax, double ay, double bx, double by)
+    {
+        return ax*ay + bx*by;
+    }
+    
+    public static double dotProductAngles(double amag, double atheta, double bmag, double btheta)
+    {
+        double ax = Math.cos(Math.toRadians(atheta))*amag;
+        double bx = Math.cos(Math.toRadians(btheta))*bmag;
+        double ay = Math.sin(Math.toRadians(atheta))*amag;
+        double by = Math.sin(Math.toRadians(btheta))*bmag;
+        return ax*bx + ay*by;
+    }
+    
+    
     /**
      * Perform linear interpolation on positions
      * 
