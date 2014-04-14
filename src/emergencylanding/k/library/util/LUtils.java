@@ -167,12 +167,20 @@ public final class LUtils {
             tempName = tempName.substring(0,
                     tempName.lastIndexOf(File.separatorChar));
         }
-        EL_TOP = ((tempName.startsWith(File.separator) ? "" : File.separator) + tempName)
-                .replace("/C:/", "C:/")
-                .replace("\\C:\\", "C:\\")
-                .replace(
-                        "\\ile:"/* I don't know what happens with jar files */,
-                        "").replaceFirst("!$", "");
+        if (tempName.startsWith("!")) {
+            // jar files: natives are in TOP_LEVEL
+            LUtils.print("Assumed JAR launch.");
+            EL_TOP = TOP_LEVEL;
+        } else {
+            EL_TOP = ((tempName.startsWith(File.separator) ? ""
+                    : File.separator) + tempName).replace("/C:/", "C:/")
+                    .replace("\\C:\\", "C:\\").replace("\\ile:"/*
+                                                                * I don't know
+                                                                * what happens
+                                                                * with jar files
+                                                                */, "")
+                    .replaceFirst("!$", "");
+        }
         LUtils.print("Using EL_TOP " + EL_TOP);
 
         injectNatives();
