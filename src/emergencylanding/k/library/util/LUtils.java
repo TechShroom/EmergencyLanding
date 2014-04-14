@@ -161,25 +161,21 @@ public final class LUtils {
         String tempName = LUtils.class.getPackage().getName();
         int levels = Strings.count(tempName, '.') + 2;
         tempName = LUtils.class.getResource("LUtils.class").getFile()
-                .replace('/', File.separatorChar).substring(1)
+                .replace('/', File.separatorChar)// .substring(1)
                 .replace("%20", " ");
         for (int i = 0; i < levels; i++) {
             tempName = tempName.substring(0,
                     tempName.lastIndexOf(File.separatorChar));
         }
-        if (tempName.startsWith("!")) {
+        LUtils.print(tempName);
+        if (tempName.endsWith("!")) {
             // jar files: natives are in TOP_LEVEL
             LUtils.print("Assumed JAR launch.");
             EL_TOP = TOP_LEVEL;
         } else {
             EL_TOP = ((tempName.startsWith(File.separator) ? ""
                     : File.separator) + tempName).replace("/C:/", "C:/")
-                    .replace("\\C:\\", "C:\\").replace("\\ile:"/*
-                                                                * I don't know
-                                                                * what happens
-                                                                * with jar files
-                                                                */, "")
-                    .replaceFirst("!$", "");
+                    .replace("\\C:\\", "C:\\");
         }
         LUtils.print("Using EL_TOP " + EL_TOP);
 
