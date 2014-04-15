@@ -1,36 +1,25 @@
 package emergencylanding.k.library.util;
 
-import static org.lwjgl.opengl.GL11.*;
-
-import java.util.LinkedList;
-
-import org.lwjgl.opengl.OpenGLException;
 import org.lwjgl.util.vector.Matrix4f;
 
-import emergencylanding.k.library.lwjgl.render.GLData;
-
 final class GLScaler {
-    private static LinkedList<GLScaler> scalers = new LinkedList<GLScaler>();
-    private double isx, isy, isz; // inverse values
+    private double isx, isy, isz;
 
     private GLScaler() {
     }
 
     static void glBeginScale(double sx, double sy, double sz) {
         GLScaler scaler = new GLScaler();
-        scaler.isx = 1 / sx;
-        scaler.isy = 1 / sy;
-        scaler.isz = 1 / sz;
+        scaler.isx = sx;
+        scaler.isy = sy;
+        scaler.isz = sz;
         Matrix4f mats = scaler.mats(false);
-        Matrix4f input = GLData.getMatrixToApply();
-        Matrix4f.mul(input, mats, input);
-        GLData.apply(input);
-        scalers.add(scaler);
+        PreShaderOps.add(mats);
     }
 
     private Matrix4f mats(boolean inv) {
         double sx = isx, sy = isy, sz = isz;
-        if (!inv) {
+        if (inv) {
             sx = 1 / sx;
             sy = 1 / sy;
             sz = 1 / sz;
@@ -39,13 +28,6 @@ final class GLScaler {
     }
 
     static void glEndScale() {
-        if (scalers.isEmpty()) {
-            throw new OpenGLException(GL_INVALID_OPERATION);
-        }
-        GLScaler scaler = scalers.pollLast();
-        Matrix4f mats = scaler.mats(true);
-        Matrix4f input = GLData.getMatrixToApply();
-        Matrix4f.mul(input, mats, input);
-        GLData.apply(input);
+        PreShaderOps.remove(1);
     }
 }

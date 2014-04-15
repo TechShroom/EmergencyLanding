@@ -261,6 +261,10 @@ public class VBAO implements Cloneable {
             return null;
         }
 
+        // apply preshaderops if not static
+        if (!staticdata)
+            updateData(data, icdata);
+
         if (tex != null) {
             tex.bind();
         }

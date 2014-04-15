@@ -11,13 +11,13 @@ public final class PreShaderOps {
     private PreShaderOps() {
         throw new AssertionError("Nope.");
     }
-    
-    public static void add(Matrix4f...in) {
+
+    public static void add(Matrix4f... in) {
         for (Matrix4f m : in) {
             applies.add(m);
         }
     }
-    
+
     public static void remove(int count) {
         for (; count > 0; count--) {
             applies.removeLast();
@@ -26,17 +26,22 @@ public final class PreShaderOps {
 
     public static void apply(Vector3f... in) {
         LinkedList<Matrix4f> c = new LinkedList<Matrix4f>(applies);
+        Matrix4f m = new Matrix4f();
+        for (Matrix4f mf : c) {
+            Matrix4f.mul(m, mf, m);
+        }
         for (Vector3f v : in) {
-            for (Matrix4f m : c) {
-                apply(v, m);
-            }
+            apply(v, m);
         }
     }
 
     /**
      * Applies the matrix to the vector in place.
-     * @param vec - vector
-     * @param m - matrix to multiply vector by
+     * 
+     * @param vec
+     *            - vector
+     * @param m
+     *            - matrix to multiply vector by
      */
     private static void apply(Vector3f vec, Matrix4f m) {
         float vx = vec.x, vy = vec.y, vz = vec.z;

@@ -3,6 +3,9 @@ package emergencylanding.k.library.lwjgl.render;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Vector3f;
+
+import emergencylanding.k.library.util.PreShaderOps;
 
 public class VertexData {
     public static final int FLOAT_SIZE = 4;
@@ -326,7 +329,7 @@ public class VertexData {
 
     @Override
     public String toString() {
-        return String.format("VD: {%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", verts[0],
+        return String.format("{%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", verts[0],
                 verts[1], verts[2], verts[3], colors[0], colors[1], colors[2],
                 colors[3], texCoords[0], texCoords[1]);
     }
@@ -355,7 +358,13 @@ public class VertexData {
         FloatBuffer ret = BufferUtils.createFloatBuffer(VERTEX_SIZE
                 * vds.length);
         for (VertexData vd : vds) {
-            ret.put(vd.verts);
+            float[] f = vd.verts;
+            Vector3f v = new Vector3f(f[0], f[1], f[2]);
+            PreShaderOps.apply(v);
+            f[0] = v.x;
+            f[1] = v.y;
+            f[2] = v.z;
+            ret.put(f);
             ret.put(vd.colors);
             ret.put(vd.texCoords);
         }
