@@ -1,9 +1,7 @@
 package emergencylanding.k.library.lwjgl.tex;
 
 import static org.lwjgl.opengl.GL11.*;
-
 import static org.lwjgl.opengl.GL13.*;
-
 import static org.lwjgl.opengl.GL30.*;
 
 import java.awt.Color;
@@ -69,6 +67,11 @@ public abstract class ELTexture {
     public Dimension dim = null;
     private static ArrayList<Runnable> glThreadQueue = new ArrayList<Runnable>();
     private static ArrayList<Runnable> queueLater = new ArrayList<Runnable>();
+    /**
+     * Maximum added runnables while runnables are being processed, to avoid
+     * freezing threads.
+     */
+    private static final int MAX_ADDED_BINDINGS = 2048;
     private static volatile AtomicBoolean binding = new AtomicBoolean(false);
     static {
         System.gc();
@@ -211,6 +214,7 @@ public abstract class ELTexture {
     }
 
     public static void doBindings() {
+        int added = 0;
         while (true) {
             // keep processing and reloading until no more are here. This could
             // potentially cause infinite loops, so be careful!
@@ -227,7 +231,13 @@ public abstract class ELTexture {
                     return;
                 }
                 synchronized (glThreadQueue) {
+                    added += queueLater.size();
+                    if (added > MAX_ADDED_BINDINGS) {
+                        throw new RuntimeException("Too many bindings! ("
+                                + added + " > " + MAX_ADDED_BINDINGS + ")");
+                    }
                     glThreadQueue.addAll(queueLater);
+                    queueLater.clear();
                 }
             }
         }
