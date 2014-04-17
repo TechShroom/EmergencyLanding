@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,10 @@ import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+
+import emergencylanding.k.imported.chrismolini.IconLoader;
+import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import emergencylanding.k.library.main.KMain;
 
 public final class LUtils {
 
@@ -161,11 +166,10 @@ public final class LUtils {
         String tempName = LUtils.class.getPackage().getName();
         int levels = Strings.count(tempName, '.') + 2;
         tempName = LUtils.class.getResource("LUtils.class").getFile()
-                .replace('/', File.separatorChar)// .substring(1)
+        // .replace('/', File.separatorChar)// .substring(1)
                 .replace("%20", " ");
         for (int i = 0; i < levels; i++) {
-            tempName = tempName.substring(0,
-                    tempName.lastIndexOf(File.separatorChar));
+            tempName = tempName.substring(0, tempName.lastIndexOf("/"));
         }
         LUtils.print(tempName);
         if (tempName.endsWith("!")) {
@@ -173,9 +177,8 @@ public final class LUtils {
             LUtils.print("Assumed JAR launch.");
             EL_TOP = TOP_LEVEL;
         } else {
-            EL_TOP = ((tempName.startsWith(File.separator) ? ""
-                    : File.separator) + tempName).replace("/C:/", "C:/")
-                    .replace("\\C:\\", "C:\\");
+            EL_TOP = ((tempName.startsWith("/") ? "" : "/") + tempName)
+                    .replace("/C:/", "C:/").replace("\\C:\\", "C:\\");
         }
         LUtils.print("Using EL_TOP " + EL_TOP);
 
@@ -736,5 +739,24 @@ public final class LUtils {
 
     public static String[] getAccepts() {
         return ACCEPT.clone();
+    }
+
+    public static void setIcon(final InputStream is) {
+        Runnable r = new Runnable() {
+
+            @Override
+            public void run() {
+                ByteBuffer[] icondata = IconLoader.load(is);
+                Display.setIcon(icondata);
+            }
+        };
+        System.err.println(Thread.currentThread());
+        System.err.println(KMain.getDisplayThread());
+        if (Thread.currentThread() == KMain.getDisplayThread()) {
+            System.err.println("Early icon load");
+            r.run();
+        } else {
+            ELTexture.addRunnableToQueue(r);
+        }
     }
 }
