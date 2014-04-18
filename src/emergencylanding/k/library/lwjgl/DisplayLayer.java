@@ -1,10 +1,15 @@
 package emergencylanding.k.library.lwjgl;
 
+import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.awt.Window;
 import java.lang.instrument.IllegalClassFormatException;
+import java.util.ArrayList;
+import java.util.List;
 
 import k.core.util.classes.StackTraceInfo;
+import k.core.util.reflect.Reflect;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
@@ -213,20 +218,46 @@ public class DisplayLayer {
         Display.setFullscreen(false);
     }
 
+    @SuppressWarnings("unchecked")
     public static void destroy() {
+        LUtils.print(LUtils.LIB_NAME + " is shutting down...");
         if (init) {
             Display.destroy();
         }
-        Frame[] frms = Frame.getFrames();
-        for (Frame frm : frms) {
-            if (frm.isVisible()) {
+        Window[] ds = Dialog.getWindows();
+        List<Window> list = new ArrayList<Window>();
+        try {
+            list = Reflect.getFieldStatic(List.class, Window.class,
+                    "allWindows");
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        for (Window frm : ds) {
+            String name = frm.getName();
+            if (frm instanceof Dialog) {
+                name = ((Dialog) frm).getTitle();
+            }
+            if (frm instanceof Frame) {
+                name = ((Frame) frm).getTitle();
+            }
+            if (frm.isDisplayable() || list.contains(frm)) {
                 frm.setVisible(false);
                 frm.dispose();
-                System.err
-                        .println(LUtils.LIB_NAME
-                                + " has closed a JFrame called "
-                                + frm.getTitle()
-                                + ", which would have stalled the application's closing state. Please fix this!");
+                LUtils.print("$!!!$ Closed a Window called '"
+                        + name
+                        + "', which would have stalled the application's closing state."
+                        + " Please fix this! $!!!$");
+            } else {
+                if (LUtils.debugLevel > 0) {
+                    LUtils.print("Not closing '" + name
+                            + "', is not displayable. (" + frm.toString() + ")");
+                }
             }
         }
     }
