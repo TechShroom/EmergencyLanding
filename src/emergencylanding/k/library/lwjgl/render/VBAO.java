@@ -189,6 +189,13 @@ public class VBAO implements Cloneable {
         return this;
     }
 
+    public void setStatic(boolean stat) {
+        staticdata = stat;
+        if (!staticdata) {
+            updateData(data, icdata);
+        }
+    }
+
     private void init() {
         Runnable r = new Runnable() {
             @Override

@@ -26,6 +26,7 @@ public class MouseHelp {
                     new VertexData().setXYZ(image.getWidth(),
                             image.getHeight(), 0), Shapes.XY);
             display.setTexture(image);
+            display.setStatic(false);
         }
 
         public void drawAt(int x, int y) {
