@@ -1,15 +1,35 @@
 package emergencylanding.k.library.lwjgl.tex;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL11.GL_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_LINEAR_MIPMAP_LINEAR;
+import static org.lwjgl.opengl.GL11.GL_RGBA;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
+import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
+import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+import static org.lwjgl.opengl.GL11.glGenTextures;
+import static org.lwjgl.opengl.GL11.glPixelStorei;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
+import static org.lwjgl.opengl.GL11.glTexSubImage2D;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
+import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.Raster;
+import java.awt.image.SinglePixelPackedSampleModel;
+import java.awt.image.WritableRaster;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.opengl.OpenGLException;
@@ -233,6 +253,10 @@ public abstract class ELTexture {
                 synchronized (glThreadQueue) {
                     added += queueLater.size();
                     if (added > MAX_ADDED_BINDINGS) {
+                        for (int i = 0; i < 100 && i < reported.size(); i++) {
+                            reported.get(i).printStackTrace();
+                        }
+                        reported.clear();
                         throw new RuntimeException("Too many bindings! ("
                                 + added + " > " + MAX_ADDED_BINDINGS + ")");
                     }
@@ -243,12 +267,15 @@ public abstract class ELTexture {
         }
     }
 
+    private static List<Throwable> reported = new ArrayList<Throwable>();
+
     public static void addRunnableToQueue(Runnable r) {
         if (Thread.currentThread() == KMain.getDisplayThread()) {
             r.run();
             return;
         }
         if (binding.get()) {
+            reported.add(new Throwable("tracert"));
             synchronized (queueLater) {
                 queueLater.add(r);
             }
