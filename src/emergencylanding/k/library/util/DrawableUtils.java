@@ -22,9 +22,11 @@ public final class DrawableUtils {
         if (image.getWidth() == sw && image.getHeight() == sh) {
             return image;
         }
-        LUtils.print("Requested x and y of image is " + sw + " " + sh);
-        LUtils.print("Actual x and y is " + image.getWidth() + " "
-                + image.getHeight());
+        if (LUtils.debugLevel > 0) {
+            LUtils.print("Requested x and y of image is " + sw + " " + sh);
+            LUtils.print("Actual x and y is " + image.getWidth() + " "
+                    + image.getHeight());
+        }
         int type = 0;
         type = image.getType() == BufferedImage.TYPE_CUSTOM ? BufferedImage.TYPE_INT_ARGB
                 : image.getType();
@@ -37,8 +39,10 @@ public final class DrawableUtils {
                     "Scaling not complete, and callback not implemented");
         }
         g.dispose();
-        LUtils.print("Resultant x and y of image is " + resizedImage.getWidth()
-                + " " + resizedImage.getHeight());
+        if (LUtils.debugLevel > 0) {
+            LUtils.print("Resultant x and y of image is "
+                    + resizedImage.getWidth() + " " + resizedImage.getHeight());
+        }
         return resizedImage;
     }
 

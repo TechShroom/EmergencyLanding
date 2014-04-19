@@ -1,6 +1,6 @@
 package emergencylanding.k.library.util;
 
-import java.util.LinkedList;
+import java.util.*;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -27,8 +27,17 @@ public final class PreShaderOps {
     public static void apply(Vector3f... in) {
         LinkedList<Matrix4f> c = new LinkedList<Matrix4f>(applies);
         Matrix4f m = new Matrix4f();
-        for (Matrix4f mf : c) {
-            Matrix4f.mul(m, mf, m);
+        int index = 0;
+        if (c.size() >= 1) {
+            for (Matrix4f mf : c) {
+                if (mf == null) {
+                    System.err.println("Null matrix");
+                    applies.remove(index);
+                    continue;
+                }
+                Matrix4f.mul(m, mf, m);
+                index++;
+            }
         }
         for (Vector3f v : in) {
             apply(v, m);
