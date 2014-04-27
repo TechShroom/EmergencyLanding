@@ -381,7 +381,7 @@ public final class LUtils {
     /**
      * Check to see if access is allowed from the given class
      * 
-     * Accepts stars in the package name, such as java.lang.*
+     * Accepts stars in the package name, such as java.lang.&#42;
      * 
      * @param accept
      *            - the package to allow access from
@@ -409,9 +409,17 @@ public final class LUtils {
             if (className.startsWith(sub)) {
                 return;
             }
-            throw new IllegalAccessException("Access denied to " + className
-                    + " because it wasn't in " + accept);
+        } else {
+            // Only this package
+            if (className.startsWith(accept)
+                    && !className.replace(accept + ".", "").contains(".")) {
+                // replacing the package name and a dot leaves no dot means
+                // no other packages
+                return;
+            }
         }
+        throw new IllegalAccessException("Access denied to " + className
+                + " because it wasn't in " + accept);
     }
 
     /**
