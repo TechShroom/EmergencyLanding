@@ -12,6 +12,7 @@ import k.core.util.classes.StackTraceInfo;
 import k.core.util.reflect.Reflect;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.LWJGLUtil;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.ContextAttribs;
 import org.lwjgl.opengl.Display;
@@ -163,6 +164,10 @@ public class DisplayLayer {
         }
         PixelFormat pixelFormat = new PixelFormat();
         ContextAttribs contextAtrributes = new ContextAttribs(3, 0);
+        if (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_MACOSX) {
+            // lol.
+            contextAtrributes = new ContextAttribs(3, 2).withProfileCore(true);
+        }
         System.err.println("Using contexAttributes " + contextAtrributes);
         Display.create(pixelFormat, contextAtrributes);
         Display.setFullscreen(fullscreen);
