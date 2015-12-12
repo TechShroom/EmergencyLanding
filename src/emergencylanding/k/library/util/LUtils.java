@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.imageio.ImageIO;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JFrame;
@@ -31,6 +32,8 @@ import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+
+import com.apple.eawt.Application;
 
 import emergencylanding.k.imported.chrismolini.IconLoader;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
@@ -750,12 +753,23 @@ public final class LUtils {
     }
 
     public static void setIcon(final InputStream is) {
+        if (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_MACOSX) {
+            // Set in the dock
+            try {
+                Application.getApplication().setDockIconImage(ImageIO.read(is));
+                System.err.println("Using 1 icon");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
         Runnable r = new Runnable() {
 
             @Override
             public void run() {
                 ByteBuffer[] icondata = IconLoader.load(is);
-                Display.setIcon(icondata);
+                int used = Display.setIcon(icondata);
+                System.err.println("Using " + used + " icon(s)");
             }
         };
         System.err.println(Thread.currentThread());
