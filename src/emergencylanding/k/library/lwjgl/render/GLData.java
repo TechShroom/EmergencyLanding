@@ -40,7 +40,7 @@ public class GLData {
     }
 
     public static void unload() {
-        glUseProgram(NONE);
+        // glUseProgram(NONE); // generates INVALID OPERATION, may be needed however?
         try {
             notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         } catch (OpenGLException ogle) {
