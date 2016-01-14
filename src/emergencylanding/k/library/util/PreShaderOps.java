@@ -54,8 +54,8 @@ public final class PreShaderOps {
      */
     private static void apply(Vector3f vec, Matrix4f m) {
         float vx = vec.x, vy = vec.y, vz = vec.z;
-        vec.x = m.m00 * vx + m.m01 * vy + m.m02 * vz + m.m03;
-        vec.y = m.m10 * vx + m.m11 * vy + m.m12 * vz + m.m13;
-        vec.z = m.m20 * vx + m.m21 * vy + m.m22 * vz + m.m23;
+        vec.x = m.m00 * vx + m.m10 * vy + m.m20 * vz + m.m30;
+        vec.y = m.m01 * vx + m.m11 * vy + m.m21 * vz + m.m31;
+        vec.z = m.m02 * vx + m.m12 * vy + m.m22 * vz + m.m32;
     }
 }

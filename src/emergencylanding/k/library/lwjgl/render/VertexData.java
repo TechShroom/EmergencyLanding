@@ -7,7 +7,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 import emergencylanding.k.library.util.PreShaderOps;
 
-public class VertexData {
+public class VertexData implements Cloneable {
+
     public static final int FLOAT_SIZE = 4;
     public static final int FLOATS_PER_POSTITON = 4;
     public static final int FLOATS_PER_COLOR = 4;
@@ -15,8 +16,8 @@ public class VertexData {
     public static final int POSITION_SIZE = FLOATS_PER_POSTITON * FLOAT_SIZE;
     public static final int COLOR_SIZE = FLOATS_PER_COLOR * FLOAT_SIZE;
     public static final int TEXTURE_SIZE = FLOATS_PER_TEXTURE * FLOAT_SIZE;
-    public static final int VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE
-            + TEXTURE_SIZE;
+    public static final int VERTEX_SIZE =
+            POSITION_SIZE + COLOR_SIZE + TEXTURE_SIZE;
 
     public static final int NO_DATA = -1, COLOR_FIRST = 0, COORDS_FIRST = 1,
             TEX_FIRST = 2;
@@ -115,75 +116,110 @@ public class VertexData {
      *            - the floats to use
      */
     public VertexData(int order, float... floats) {
-        float x = 0f, y = 0f, z = 0f, w = 1f, r = 1f, g = 1f, b = 1f, a = 1f, u = -1f, v = 0f;
+        float x = 0f, y = 0f, z = 0f, w = 1f, r = 1f, g = 1f, b = 1f, a = 1f,
+                u = -1f, v = 0f;
         switch (floats.length) {
-        case 0:
-            break;
-        case 3:
-            x = floats[0];
-            y = floats[1];
-            z = floats[2];
-            break;
-        case 4:
-            x = floats[0];
-            y = floats[1];
-            z = floats[2];
-            w = floats[3];
-            break;
-        case 5:
-            x = floats[0];
-            y = floats[1];
-            z = floats[2];
-            u = floats[3];
-            v = floats[4];
-            break;
-        case 6:
-            if (order == 2) {
+            case 0:
+                break;
+            case 3:
+                x = floats[0];
+                y = floats[1];
+                z = floats[2];
+                break;
+            case 4:
                 x = floats[0];
                 y = floats[1];
                 z = floats[2];
                 w = floats[3];
-                u = floats[4];
-                v = floats[5];
-            } else {
+                break;
+            case 5:
                 x = floats[0];
                 y = floats[1];
                 z = floats[2];
-                r = floats[3];
-                g = floats[4];
-                b = floats[5];
-            }
-            break;
-        case 7:
-            if (order == 0) {
-                x = floats[0];
-                y = floats[1];
-                z = floats[2];
-                r = floats[3];
-                g = floats[4];
-                b = floats[5];
-                a = floats[6];
-            } else {
-                x = floats[0];
-                y = floats[1];
-                z = floats[2];
-                w = floats[3];
-                r = floats[4];
-                g = floats[5];
-                b = floats[6];
-            }
-            break;
-        case 8:
-            if (order == 2) {
-                x = floats[0];
-                y = floats[1];
-                z = floats[2];
-                r = floats[3];
-                g = floats[4];
-                b = floats[5];
-                u = floats[6];
-                v = floats[7];
-            } else {
+                u = floats[3];
+                v = floats[4];
+                break;
+            case 6:
+                if (order == 2) {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    w = floats[3];
+                    u = floats[4];
+                    v = floats[5];
+                } else {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    r = floats[3];
+                    g = floats[4];
+                    b = floats[5];
+                }
+                break;
+            case 7:
+                if (order == 0) {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    r = floats[3];
+                    g = floats[4];
+                    b = floats[5];
+                    a = floats[6];
+                } else {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    w = floats[3];
+                    r = floats[4];
+                    g = floats[5];
+                    b = floats[6];
+                }
+                break;
+            case 8:
+                if (order == 2) {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    r = floats[3];
+                    g = floats[4];
+                    b = floats[5];
+                    u = floats[6];
+                    v = floats[7];
+                } else {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    w = floats[3];
+                    r = floats[4];
+                    g = floats[5];
+                    b = floats[6];
+                    a = floats[7];
+                }
+                break;
+            case 9:
+                if (order == 0) {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    r = floats[3];
+                    g = floats[4];
+                    b = floats[5];
+                    a = floats[6];
+                    u = floats[7];
+                    v = floats[8];
+                } else {
+                    x = floats[0];
+                    y = floats[1];
+                    z = floats[2];
+                    w = floats[3];
+                    r = floats[4];
+                    g = floats[5];
+                    b = floats[6];
+                    u = floats[7];
+                    v = floats[8];
+                }
+                break;
+            case 10:
                 x = floats[0];
                 y = floats[1];
                 z = floats[2];
@@ -192,43 +228,9 @@ public class VertexData {
                 g = floats[5];
                 b = floats[6];
                 a = floats[7];
-            }
-            break;
-        case 9:
-            if (order == 0) {
-                x = floats[0];
-                y = floats[1];
-                z = floats[2];
-                r = floats[3];
-                g = floats[4];
-                b = floats[5];
-                a = floats[6];
-                u = floats[7];
-                v = floats[8];
-            } else {
-                x = floats[0];
-                y = floats[1];
-                z = floats[2];
-                w = floats[3];
-                r = floats[4];
-                g = floats[5];
-                b = floats[6];
-                u = floats[7];
-                v = floats[8];
-            }
-            break;
-        case 10:
-            x = floats[0];
-            y = floats[1];
-            z = floats[2];
-            w = floats[3];
-            r = floats[4];
-            g = floats[5];
-            b = floats[6];
-            a = floats[7];
-            u = floats[8];
-            v = floats[9];
-            break;
+                u = floats[8];
+                v = floats[9];
+                break;
         }
         setXYZW(x, y, z, w);
         setRGBA(r, g, b, a);
@@ -328,6 +330,16 @@ public class VertexData {
     }
 
     @Override
+    protected VertexData clone() throws CloneNotSupportedException {
+        VertexData vd =  (VertexData) super.clone();
+        vd.order = order;
+        vd.colors = colors.clone();
+        vd.texCoords = texCoords.clone();
+        vd.verts = verts.clone();
+        return vd;
+    }
+
+    @Override
     public String toString() {
         return String.format("{%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", verts[0],
                 verts[1], verts[2], verts[3], colors[0], colors[1], colors[2],
@@ -355,10 +367,10 @@ public class VertexData {
      * @return a FloatBuffer with the data
      */
     public static FloatBuffer toFB(VertexData[] vds, boolean tex) {
-        FloatBuffer ret = BufferUtils.createFloatBuffer(VERTEX_SIZE
-                * vds.length);
+        FloatBuffer ret =
+                BufferUtils.createFloatBuffer(VERTEX_SIZE * vds.length);
         for (VertexData vd : vds) {
-            float[] f = vd.verts;
+            float[] f = vd.verts.clone();
             Vector3f v = new Vector3f(f[0], f[1], f[2]);
             PreShaderOps.apply(v);
             f[0] = v.x;
