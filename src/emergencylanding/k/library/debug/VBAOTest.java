@@ -52,6 +52,7 @@ public class VBAOTest extends KMain {
                 new VertexData(order, v4) };
         quad = Shapes.getQuad(verts);
         quad.setTexture(ColorTexture.BLUE);
+        quad.setStatic(false);
     }
 
     @Override

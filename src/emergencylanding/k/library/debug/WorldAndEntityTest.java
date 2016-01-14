@@ -109,6 +109,7 @@ public class WorldAndEntityTest extends KMain {
         quad = Shapes.getQuad(new VertexData().setRGB(255, 255, 255),
                 new VertexData().setXYZ(Display.getWidth(),
                         Display.getHeight(), 0), Shapes.XY);
+        quad.setStatic(false);
     }
 
     @Override
