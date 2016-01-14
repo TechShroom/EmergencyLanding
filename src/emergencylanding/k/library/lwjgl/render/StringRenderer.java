@@ -43,6 +43,7 @@ public class StringRenderer {
                             new VertexData().setXYZ(tex.getWidth(),
                                     tex.getHeight(), 0), Shapes.XY);
             quad.setTexture(tex);
+            quad.setStatic(false);
         }
 
         private void destroy() {
