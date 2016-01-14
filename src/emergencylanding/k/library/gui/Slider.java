@@ -42,10 +42,12 @@ public class Slider extends GuiElement {
                 new VertexData().setXYZ(slideTex.getWidth(),
                         slideTex.getHeight(), 0), Shapes.XY);
         slide.setTexture(slideTex);
+        slide.setStatic(false);
         base = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
                 new VertexData().setXYZ(baseTex.getWidth(),
                         baseTex.getHeight(), 0), Shapes.XY);
         base.setTexture(baseTex);
+        base.setStatic(false);
     }
 
     private void fillDefaults(String[] stringsToAppend) {
@@ -116,7 +118,6 @@ public class Slider extends GuiElement {
         if (percentage == 0) {
             xres = x;
         }
-        System.err.println(xres);
         return xres;
     }
 
