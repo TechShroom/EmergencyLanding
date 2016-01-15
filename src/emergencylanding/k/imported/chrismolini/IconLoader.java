@@ -22,7 +22,9 @@ import emergencylanding.k.library.util.LUtils;
  * linear scale (i.e., x2, x3, x4, etc). In both cases, the image's width/height
  * ratio is kept the same as the source image.
  * 
- * <a href="http://lwjgl.org/forum/index.php/topic,4083.0.html">Source.</a>
+ * <a href=
+ * "https://web.archive.org/web/20160115232747/http://forum.lwjgl.org/index.php?topic=4083.0">
+ * Source.</a>
  * <p>
  * This code has been modified to remove a dependency on Chris Molini's custom
  * library and to re-use LWJGL OS detection.
