@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Screen extends GuiElement {
+
     protected ArrayList<GuiElement> elements = new ArrayList<GuiElement>();
     private ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
     private ReentrantReadWriteLock.ReadLock read = rwLock.readLock();

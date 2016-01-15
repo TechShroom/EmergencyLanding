@@ -8,9 +8,6 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.util.ArrayList;
 import java.util.List;
 
-import k.core.util.classes.StackTraceInfo;
-import k.core.util.reflect.Reflect;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.Sys;
@@ -29,6 +26,8 @@ import emergencylanding.k.library.lwjgl.render.GLData;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
+import k.core.util.classes.StackTraceInfo;
+import k.core.util.reflect.Reflect;
 
 public class DisplayLayer {
 
@@ -89,19 +88,13 @@ public class DisplayLayer {
      */
     public static void initDisplay(boolean fullscreen, int width, int height,
             String title, boolean resizable, boolean vsync, String[] args)
-            throws Exception {
+                    throws Exception {
         try {
-            DisplayLayer.initDisplay(
-                    fullscreen,
-                    width,
-                    height,
-                    title,
-                    resizable,
-                    vsync,
-                    args,
-                    Class.forName(
-                            LUtils.getFirstEntryNotThis(DisplayLayer.class
-                                    .getName())).asSubclass(KMain.class));
+            DisplayLayer.initDisplay(fullscreen, width, height, title,
+                    resizable, vsync, args,
+                    Class.forName(LUtils
+                            .getFirstEntryNotThis(DisplayLayer.class.getName()))
+                            .asSubclass(KMain.class));
         } catch (ClassCastException cce) {
             if (cce.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX]
                     .getClassName().equals(DisplayLayer.class.getName())) {
@@ -254,14 +247,14 @@ public class DisplayLayer {
             if (frm.isDisplayable() || list.contains(frm)) {
                 frm.setVisible(false);
                 frm.dispose();
-                LUtils.print("$!!!$ Closed a Window called '"
-                        + name
+                LUtils.print("$!!!$ Closed a Window called '" + name
                         + "', which would have stalled the application's closing state."
                         + " Please fix this! $!!!$");
             } else {
                 if (LUtils.debugLevel > 0) {
-                    LUtils.print("Not closing '" + name
-                            + "', is not displayable. (" + frm.toString() + ")");
+                    LUtils.print(
+                            "Not closing '" + name + "', is not displayable. ("
+                                    + frm.toString() + ")");
                 }
             }
         }

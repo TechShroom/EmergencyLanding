@@ -9,6 +9,7 @@ import java.awt.geom.Rectangle2D;
  * @author Kenzie Togami
  */
 public class Bounds2D extends Bounds {
+
     private double minx, miny, maxx, maxy;
 
     // little cache that stores values until bounds change
@@ -36,7 +37,8 @@ public class Bounds2D extends Bounds {
             dest = new Rectangle2D.Double();
         }
         if (cache == null) {
-            cache = new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
+            cache = new Rectangle2D.Double(minx, miny, maxx - minx,
+                    maxy - miny);
         }
         dest.setRect(cache);
         return dest;

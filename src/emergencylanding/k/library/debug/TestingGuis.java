@@ -18,6 +18,7 @@ import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
 public class TestingGuis extends KMain {
+
     private static Thread is;
     private static boolean run = true;
     private static final int TICKS_PER_SECOND = 120;
@@ -27,8 +28,8 @@ public class TestingGuis extends KMain {
 
     public static void main(String[] args) {
         try {
-            DisplayLayer.initDisplay(false, 800, 500, "Testing "
-                    + LUtils.LIB_NAME, true, args);
+            DisplayLayer.initDisplay(false, 800, 500,
+                    "Testing " + LUtils.LIB_NAME, true, args);
             FPS.enable(TestingGuis.DISPLAY_FPS_INDEX);
             TestingGuis.startISThreads();
             System.err.println("percent of 656/1000 = "
@@ -46,6 +47,7 @@ public class TestingGuis extends KMain {
 
     private static void startISThreads() {
         Runnable isr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override
@@ -79,11 +81,15 @@ public class TestingGuis extends KMain {
     @Override
     public void init(String[] args) {
         TestingGuis.g = new TestGui();
-        TestingGuis.slider = new Slider(50, 50, 0, 1000,
-                DrawableUtils.scaledTexture(ColorTexture.RED, 10, 50),
-                DrawableUtils.scaledTexture(ColorTexture.GREEN, 100, 50),
-                "Test: ", strvalues, new StringRenderer(new Font(
-                        "times new roman", Font.PLAIN, 16), false));
+        TestingGuis.slider =
+                new Slider(50, 50, 0, 1000,
+                        DrawableUtils.scaledTexture(ColorTexture.RED, 10, 50),
+                        DrawableUtils.scaledTexture(ColorTexture.GREEN, 100,
+                                50),
+                        "Test: ", strvalues,
+                        new StringRenderer(
+                                new Font("times new roman", Font.PLAIN, 16),
+                                false));
         g.addElement(slider);
     }
 

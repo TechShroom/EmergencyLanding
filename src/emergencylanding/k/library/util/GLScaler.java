@@ -3,6 +3,7 @@ package emergencylanding.k.library.util;
 import org.lwjgl.util.vector.Matrix4f;
 
 final class GLScaler {
+
     private double isx, isy, isz;
 
     private GLScaler() {

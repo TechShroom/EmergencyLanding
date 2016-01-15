@@ -8,12 +8,15 @@ import emergencylanding.k.imported.Sync.RunningAvg;
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
-import emergencylanding.k.library.lwjgl.render.*;
+import emergencylanding.k.library.lwjgl.render.Render;
+import emergencylanding.k.library.lwjgl.render.VBAO;
+import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.DrawableUtils;
 
 public class VBAOTest extends KMain {
+
     VBAO quad = null;
     RunningAvg davg = new RunningAvg(10);
 
@@ -47,9 +50,9 @@ public class VBAOTest extends KMain {
         float[] v3 = { 200, 50, 0, 1f, 1f, 1f };
         float[] v4 = { 200, 200, 0, 1f, 1f, 1f };
         int order = VertexData.COLOR_FIRST;
-        VertexData[] verts = { new VertexData(order, v1),
-                new VertexData(order, v2), new VertexData(order, v3),
-                new VertexData(order, v4) };
+        VertexData[] verts =
+                { new VertexData(order, v1), new VertexData(order, v2),
+                        new VertexData(order, v3), new VertexData(order, v4) };
         quad = Shapes.getQuad(verts);
         quad.setTexture(ColorTexture.BLUE);
         quad.setStatic(false);

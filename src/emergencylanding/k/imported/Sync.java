@@ -54,7 +54,9 @@ public class Sync {
     /** whether the initialisation code has run */
     private boolean initialised = false;
 
-    /** for calculating the averages the previous sleep/yield times are stored */
+    /**
+     * for calculating the averages the previous sleep/yield times are stored
+     */
     private RunningAvg sleepDurations = new RunningAvg(10);
     private RunningAvg yieldDurations = new RunningAvg(10);
 
@@ -83,6 +85,7 @@ public class Sync {
             // be a bit more accurate by running a separate sleeping daemon
             // thread.
             Thread timerAccuracyThread = new Thread(new Runnable() {
+
                 @Override
                 public void run() {
                     try {
@@ -116,7 +119,8 @@ public class Sync {
         try {
             // sleep until the average sleep time is greater than the time
             // remaining till nextFrame
-            for (long t0 = getTime(), t1; nextFrame - t0 > sleepDurations.avg(); t0 = t1) {
+            for (long t0 = getTime(), t1; nextFrame - t0 > sleepDurations
+                    .avg(); t0 = t1) {
                 Thread.sleep(1);
                 sleepDurations.add((t1 = getTime()) - t0); // update average
                 // sleep time
@@ -128,7 +132,8 @@ public class Sync {
 
             // yield until the average yield time is greater than the time
             // remaining till nextFrame
-            for (long t0 = getTime(), t1; nextFrame - t0 > yieldDurations.avg(); t0 = t1) {
+            for (long t0 = getTime(), t1; nextFrame - t0 > yieldDurations
+                    .avg(); t0 = t1) {
                 Thread.yield();
                 yieldDurations.add((t1 = getTime()) - t0); // update average
                 // yield time
@@ -166,6 +171,7 @@ public class Sync {
     }
 
     public static class RunningAvg {
+
         private final long[] slots;
         private int offset;
 

@@ -1,12 +1,14 @@
 package emergencylanding.k.library.util;
 
-import java.util.*;
+import java.util.LinkedList;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 public final class PreShaderOps {
-    private static final LinkedList<Matrix4f> applies = new LinkedList<Matrix4f>();
+
+    private static final LinkedList<Matrix4f> applies =
+            new LinkedList<Matrix4f>();
 
     private PreShaderOps() {
         throw new AssertionError("Nope.");

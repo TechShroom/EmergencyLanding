@@ -4,6 +4,7 @@ import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.Victor;
 
 public abstract class Render<T extends ELEntity> {
+
     /**
      * Renders the given entity at it's location, yaw, and pitch.
      * 

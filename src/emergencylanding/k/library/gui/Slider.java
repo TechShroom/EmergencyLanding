@@ -4,11 +4,14 @@ import java.awt.Rectangle;
 
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
-import emergencylanding.k.library.lwjgl.render.*;
+import emergencylanding.k.library.lwjgl.render.StringRenderer;
+import emergencylanding.k.library.lwjgl.render.VBAO;
+import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.util.DrawableUtils;
 
 public class Slider extends GuiElement {
+
     private VBAO slide, base;
     private float minimum, maximum, minXAdd, maxXAdd, percentage, middleXAdd,
             middleYAdd;
@@ -18,8 +21,8 @@ public class Slider extends GuiElement {
     private String displayText = "";
     private String[] appendables;
 
-    public Slider(float x, float y, float min, float max,
-            ELTexture slideImgTex, ELTexture baseImgTex, String textForDisplay,
+    public Slider(float x, float y, float min, float max, ELTexture slideImgTex,
+            ELTexture baseImgTex, String textForDisplay,
             String[] stringsToAppend, StringRenderer renderer) {
         super(x, y);
         ELTexture slideTex = slideImgTex;
@@ -38,14 +41,13 @@ public class Slider extends GuiElement {
             fillDefaults(stringsToAppend);
         }
         slide = Shapes.getQuad(
-                new VertexData().setXYZ(0, 0, 0),
-                new VertexData().setXYZ(slideTex.getWidth(),
-                        slideTex.getHeight(), 0), Shapes.XY);
+                new VertexData().setXYZ(0, 0, 0), new VertexData()
+                        .setXYZ(slideTex.getWidth(), slideTex.getHeight(), 0),
+                Shapes.XY);
         slide.setTexture(slideTex);
         slide.setStatic(false);
-        base = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
-                new VertexData().setXYZ(baseTex.getWidth(),
-                        baseTex.getHeight(), 0), Shapes.XY);
+        base = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0), new VertexData()
+                .setXYZ(baseTex.getWidth(), baseTex.getHeight(), 0), Shapes.XY);
         base.setTexture(baseTex);
         base.setStatic(false);
     }
@@ -56,8 +58,8 @@ public class Slider extends GuiElement {
         for (float i = 0; i < 101; i++) {
             int ii = (int) i;
             if (i > cap - 1 || stringsToAppend[ii] == null) {
-                appendables[ii] = ((i * (maximum - minimum) / 100) + minimum)
-                        + "";
+                appendables[ii] =
+                        ((i * (maximum - minimum) / 100) + minimum) + "";
             } else {
                 appendables[ii] = stringsToAppend[ii];
             }
@@ -109,8 +111,8 @@ public class Slider extends GuiElement {
         String append = "";
         append = appendables[(int) percentInt];
         String dext = displayText + append;
-        render.drawString(xPos + middleXAdd - render.getWidth(dext) / 4, yPos
-                + middleYAdd, dext, 1, 1);
+        render.drawString(xPos + middleXAdd - render.getWidth(dext) / 4,
+                yPos + middleYAdd, dext, 1, 1);
     }
 
     private float calcSlideX(float x) {

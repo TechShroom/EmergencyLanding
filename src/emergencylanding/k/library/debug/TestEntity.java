@@ -3,8 +3,6 @@ package emergencylanding.k.library.debug;
 import java.awt.Rectangle;
 import java.util.Random;
 
-import k.core.util.core.Helper;
-
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 
@@ -13,10 +11,12 @@ import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.lwjgl.control.MouseHelp;
 import emergencylanding.k.library.lwjgl.tex.ColorTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
+import k.core.util.core.Helper;
 
 public class TestEntity extends ELEntity {
-    private Random rnd = new Random(
-            (long) (Sys.getTime() / new Random().nextDouble()));
+
+    private Random rnd =
+            new Random((long) (Sys.getTime() / new Random().nextDouble()));
     boolean onScreenX = true, onScreenY = true;
     private static ELTexture[] texmix = { ColorTexture.BLUE, ColorTexture.RED,
             ColorTexture.GREEN, ColorTexture.PURPLE };
@@ -43,8 +43,9 @@ public class TestEntity extends ELEntity {
     }
 
     private void checkForClick() {
-        if (MouseHelp.clickedInRect(new Rectangle((int) pos.x, (int) pos.y, 10,
-                10), MouseHelp.LMB)) {
+        if (MouseHelp.clickedInRect(
+                new Rectangle((int) pos.x, (int) pos.y, 10, 10),
+                MouseHelp.LMB)) {
             System.out.println("My color is "
                     + ((ColorTexture) getTex()).getRawColor().toString());
         }

@@ -17,8 +17,8 @@ import emergencylanding.k.library.lwjgl.tex.InputStreamTexture;
 
 public final class DrawableUtils {
 
-    public static BufferedImage scaledBufferedImage(BufferedImage image,
-            int sw, int sh) {
+    public static BufferedImage scaledBufferedImage(BufferedImage image, int sw,
+            int sh) {
         if (image.getWidth() == sw && image.getHeight() == sh) {
             return image;
         }
@@ -28,8 +28,8 @@ public final class DrawableUtils {
                     + image.getHeight());
         }
         int type = 0;
-        type = image.getType() == BufferedImage.TYPE_CUSTOM ? BufferedImage.TYPE_INT_ARGB
-                : image.getType();
+        type = image.getType() == BufferedImage.TYPE_CUSTOM
+                ? BufferedImage.TYPE_INT_ARGB : image.getType();
         BufferedImage resizedImage = new BufferedImage(sw, sh, type);
         Graphics2D g = resizedImage.createGraphics();
         boolean isDone = g.drawImage(image, 0, 0, sw, sh, null);
@@ -78,9 +78,10 @@ public final class DrawableUtils {
         if (buf.capacity() > buf.remaining()) {
             buf.rewind();
         }
-        ByteBuffer newBuf = ByteBuffer.allocateDirect(choppedWidth
-                * choppedHeight * extraDimensions);
-        byte[][][] arrayOfStuff = new byte[choppedWidth][choppedHeight][extraDimensions];
+        ByteBuffer newBuf = ByteBuffer
+                .allocateDirect(choppedWidth * choppedHeight * extraDimensions);
+        byte[][][] arrayOfStuff =
+                new byte[choppedWidth][choppedHeight][extraDimensions];
         for (int i = 0; i < oldWidthHeight.width * oldWidthHeight.height
                 * extraDimensions; i += extraDimensions) {
             int x = i / extraDimensions / oldWidthHeight.width;
@@ -104,12 +105,13 @@ public final class DrawableUtils {
         return newBuf;
     }
 
-    public static ELTexture scaledTexture(ELTexture tex, int width, int height) {
+    public static ELTexture scaledTexture(ELTexture tex, int width,
+            int height) {
         if (tex.dim.width == width && tex.dim.height == height) {
             return tex;
         }
-        return new BufferedTexture(scaledBufferedImage(tex.toBufferedImage(),
-                width, height));
+        return new BufferedTexture(
+                scaledBufferedImage(tex.toBufferedImage(), width, height));
     }
 
     public static BufferedImage getFontImage(char ch, boolean antiAlias,
@@ -122,8 +124,8 @@ public final class DrawableUtils {
     public static BufferedImage getFontImage(char ch, boolean antiAlias,
             Font font, int fontSize, Color c) {
         // Create a temporary image to extract the character's size
-        BufferedImage tempfontImage = new BufferedImage(1, 1,
-                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage tempfontImage =
+                new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) tempfontImage.getGraphics();
         if (antiAlias == true) {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -161,13 +163,14 @@ public final class DrawableUtils {
     }
 
     public static ELTexture getTextureFromFile(String file) {
-        ELTexture t = new InputStreamTexture("/", file.replace('/',
-                File.separatorChar));
+        ELTexture t = new InputStreamTexture("/",
+                file.replace('/', File.separatorChar));
         System.err.println("Loaded " + file);
         return t;
     }
 
-    public static void glBeginRot(double theta, double rx, double ry, double rz) {
+    public static void glBeginRot(double theta, double rx, double ry,
+            double rz) {
         GLRotator.glBeginRot(theta, rx, ry, rz);
     }
 
@@ -213,8 +216,8 @@ public final class DrawableUtils {
         DrawableUtils.glBeginRot(entity.getYaw(), 0, 1, 0);
         DrawableUtils.glBeginRot(entity.getPitch(), 0, 0, 1);
         DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
-        DrawableUtils.glBeginTrans(-(entity.getTex().getWidth() / 2), -(entity
-                .getTex().getHeight() / 2), 0);
+        DrawableUtils.glBeginTrans(-(entity.getTex().getWidth() / 2),
+                -(entity.getTex().getHeight() / 2), 0);
     }
 
     public static void endStandardEntityRender() {

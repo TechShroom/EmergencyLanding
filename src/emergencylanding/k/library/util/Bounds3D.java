@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 
 //TODO: Flesh out
 public class Bounds3D extends Bounds {
+
     private double minx, miny, minz, maxx, maxy, maxz;
 
     /**
@@ -51,6 +52,7 @@ public class Bounds3D extends Bounds {
     @Override
     public Point2D[] getBounds() {
         return new Point2D[] { new Point2D.Double(minx, miny),
-                new Point2D.Double(maxx, maxy), new Point2D.Double(minz, maxz) };
+                new Point2D.Double(maxx, maxy),
+                new Point2D.Double(minz, maxz) };
     }
 }

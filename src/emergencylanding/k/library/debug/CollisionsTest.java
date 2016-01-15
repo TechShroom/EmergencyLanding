@@ -9,10 +9,13 @@ import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.internalstate.world.WorldManager;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
-import emergencylanding.k.library.lwjgl.render.*;
+import emergencylanding.k.library.lwjgl.render.Render;
+import emergencylanding.k.library.lwjgl.render.RenderManager;
+import emergencylanding.k.library.lwjgl.render.TextureRender;
 import emergencylanding.k.library.main.KMain;
 
 public class CollisionsTest extends KMain {
+
     private static Thread is;
     private static boolean run = true;
     private static Thread ip;
@@ -46,6 +49,7 @@ public class CollisionsTest extends KMain {
 
     private static void startISThreads() {
         Runnable isr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override
@@ -70,6 +74,7 @@ public class CollisionsTest extends KMain {
         CollisionsTest.is.start();
 
         Runnable ipr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override

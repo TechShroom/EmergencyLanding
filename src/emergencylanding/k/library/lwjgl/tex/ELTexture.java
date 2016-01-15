@@ -41,9 +41,11 @@ import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
 public abstract class ELTexture {
+
     public static class DestTexture extends ELTexture {
 
-        public static HashMap<Integer, Integer> removed = new HashMap<Integer, Integer>();
+        public static HashMap<Integer, Integer> removed =
+                new HashMap<Integer, Integer>();
 
         public DestTexture(ELTexture texture) {
             buf = ByteBuffer.allocateDirect(1);
@@ -78,14 +80,16 @@ public abstract class ELTexture {
     static {
         System.gc();
     }
-    public static final long TOTAL_TEXTURE_SPACE = Runtime.getRuntime()
-            .maxMemory() * 2 / 3;
+    public static final long TOTAL_TEXTURE_SPACE =
+            Runtime.getRuntime().maxMemory() * 2 / 3;
     // private static IntBuffer ids = BufferUtils.createIntBuffer(1);
-    private static HashMap<Integer, ELTexture> texlist = new HashMap<Integer, ELTexture>();
+    private static HashMap<Integer, ELTexture> texlist =
+            new HashMap<Integer, ELTexture>();
     public static long currentSpace = 0;
     public ByteBuffer buf = null;
     public Dimension dim = null;
-    private static ArrayList<Runnable> glThreadQueue = new ArrayList<Runnable>();
+    private static ArrayList<Runnable> glThreadQueue =
+            new ArrayList<Runnable>();
     private static ArrayList<Runnable> queueLater = new ArrayList<Runnable>();
     /**
      * Maximum added runnables while runnables are being processed, to avoid
@@ -100,8 +104,8 @@ public abstract class ELTexture {
 
     // Define static Textures AFTER this comment
 
-    public static final ELTexture invisible = new ColorTexture(new Color(0, 0,
-            0, 0), new Dimension(1, 1));
+    public static final ELTexture invisible =
+            new ColorTexture(new Color(0, 0, 0, 0), new Dimension(1, 1));
 
     public ELTexture() {
     }
@@ -114,14 +118,15 @@ public abstract class ELTexture {
         Runnable runnable = null;
         synchronized (glThreadQueue) {
             glThreadQueue.add(runnable = new Runnable() {
+
                 @Override
                 public void run() {
                     if (buf == null || dim == null) {
                         throw new TextureBindException0(
                                 "A required variable is null when creating textures!");
                     } else if (buf.capacity() < dim.height * dim.width * 4) {
-                        ByteBuffer tmp = ByteBuffer.allocateDirect(dim.height
-                                * dim.width * 4);
+                        ByteBuffer tmp = ByteBuffer
+                                .allocateDirect(dim.height * dim.width * 4);
                         tmp.put(buf);
                         buf = tmp;
                         buf.rewind();
@@ -149,8 +154,9 @@ public abstract class ELTexture {
                                 LUtils.print("Force-overrode id: " + id);
                             }
                             if (ELTexture.texlist.get(id) != null) {
-                                ELTexture.currentSpace -= ELTexture.texlist
-                                        .get(id).buf.capacity();
+                                ELTexture.currentSpace -=
+                                        ELTexture.texlist.get(id).buf
+                                                .capacity();
                             } else {
                                 LUtils.print("Interesting, it appears that id "
                                         + id
@@ -163,8 +169,8 @@ public abstract class ELTexture {
                         } else if (id == -1 && useID == -1) {
                             LUtils.print("WARNING! Texture limit reached, "
                                     + "not adding new textures! ("
-                                    + TOTAL_TEXTURE_SPACE + " < "
-                                    + currentSpace + ")");
+                                    + TOTAL_TEXTURE_SPACE + " < " + currentSpace
+                                    + ")");
                             return;
                         }
                         if (DestTexture.removed.containsKey(id)) {
@@ -181,10 +187,9 @@ public abstract class ELTexture {
                             glBindTexture(GL_TEXTURE_2D, id);
                         } catch (OpenGLException ogle) {
                             if (LUtils.debugLevel > 1) {
-                                System.err
-                                        .println("OpenGL encountered an error while binding id #"
-                                                + id
-                                                + ": "
+                                System.err.println(
+                                        "OpenGL encountered an error while binding id #"
+                                                + id + ": "
                                                 + ogle.getLocalizedMessage());
                             }
                         }
@@ -339,7 +344,7 @@ public abstract class ELTexture {
         } catch (Exception e) {
             new IllegalStateException(
                     "Didn't expect an error, running on backup", e)
-                    .printStackTrace();
+                            .printStackTrace();
             return toBufferedImageBackup();
         }
     }
@@ -366,11 +371,12 @@ public abstract class ELTexture {
                 packedPixels[index] = B + (G << 8) + (R << 16) + (A << 24);
             }
         }
-        BufferedImage img = new BufferedImage(width, height,
-                BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img =
+                new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         int bitMask[] = new int[] { 0xff0000, 0xff00, 0xff, 0xff000000 };
-        SinglePixelPackedSampleModel sampleModel = new SinglePixelPackedSampleModel(
-                DataBuffer.TYPE_INT, width, height, bitMask);
+        SinglePixelPackedSampleModel sampleModel =
+                new SinglePixelPackedSampleModel(DataBuffer.TYPE_INT, width,
+                        height, bitMask);
         WritableRaster wr = Raster.createWritableRaster(sampleModel, null);
         wr.setPixels(0, 0, width, height, packedPixels);
         img.setData(wr);

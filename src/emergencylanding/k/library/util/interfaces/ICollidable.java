@@ -10,6 +10,7 @@ import emergencylanding.k.library.util.BoundingBox;
  *
  */
 public interface ICollidable<T> {
+
     /**
      * Gets the {@link BoundingBox} that can be used for collisions.
      * 

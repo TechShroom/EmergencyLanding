@@ -48,16 +48,18 @@ public class Button extends GuiElement {
 
     @Override
     public void updateAt(float x, float y) {
-        if (MouseHelp.clickingInRect(new Rectangle((int) x, (int) y,
-                (int) xLen, (int) yLen), MouseHelp.ANY)) {
+        if (MouseHelp.clickingInRect(
+                new Rectangle((int) x, (int) y, (int) xLen, (int) yLen),
+                MouseHelp.ANY)) {
             pressed = true;
         } else {
             pressed = false;
         }
-        if (MouseHelp.clickedInRect(new Rectangle((int) x, (int) y, (int) xLen,
-                (int) yLen), MouseHelp.ANY)) {
-            onC.actionPerformed(new ActionEvent(this, this.hashCode(),
-                    "ButtonClick"));
+        if (MouseHelp.clickedInRect(
+                new Rectangle((int) x, (int) y, (int) xLen, (int) yLen),
+                MouseHelp.ANY)) {
+            onC.actionPerformed(
+                    new ActionEvent(this, this.hashCode(), "ButtonClick"));
         }
     }
 

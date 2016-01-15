@@ -8,7 +8,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import emergencylanding.k.library.util.Maths.Axis;
 
 final class GLRotator {
-    
+
     private GLRotator() {
     }
 

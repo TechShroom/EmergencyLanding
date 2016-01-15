@@ -7,6 +7,7 @@ import emergencylanding.k.library.util.BoundingBox;
 import emergencylanding.k.library.util.interfaces.ICollidable;
 
 public abstract class ELEntity implements ICollidable<ELEntity> {
+
     protected Victor pos = new Victor(), posInter = new Victor(),
             vel = new Victor(), velInter = new Victor();
     protected BoundingBox box = new BoundingBox();
@@ -44,8 +45,8 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
     }
 
     public ELEntity(World w, float posX, float posY, float posZ, float xVel,
-            float yVel, float zVel, float pitchRot, float yawRot,
-            float rollRot, ELTexture texture) {
+            float yVel, float zVel, float pitchRot, float yawRot, float rollRot,
+            ELTexture texture) {
         setXYZ(posX, posY, posZ);
         setXYZVel(xVel, yVel, zVel);
         box.setPitch(pitchRot);
@@ -65,8 +66,8 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
     public void updateOnTick(float delta) {
         elapsed = 0;
 
-        setXYZ(pos.x + vel.x * delta, pos.y + vel.y * delta, pos.z + vel.z
-                * delta);
+        setXYZ(pos.x + vel.x * delta, pos.y + vel.y * delta,
+                pos.z + vel.z * delta);
 
         deltaT = delta;
     }
@@ -293,8 +294,8 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
     public Victor getInterpolated() {
         synchronized (posInter) {
             synchronized (velInter) {
-                posInter.update(posInter.x + velInter.x, posInter.y
-                        + velInter.y, posInter.z + velInter.z);
+                posInter.update(posInter.x + velInter.x,
+                        posInter.y + velInter.y, posInter.z + velInter.z);
                 return posInter;
             }
         }

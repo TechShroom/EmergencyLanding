@@ -2,7 +2,9 @@ package emergencylanding.k.library.lwjgl.tex;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
@@ -14,20 +16,21 @@ import org.newdawn.slick.opengl.PNGDecoder.Format;
 import emergencylanding.k.library.util.LUtils;
 
 public class InputStreamTexture extends ELTexture {
+
     private InputStream tex = null;
 
-    private static final String regexdsep = File.separator
-            .replace("\\", "\\\\");
+    private static final String regexdsep =
+            File.separator.replace("\\", "\\\\");
     private static final String endswith = "^(.+)" + regexdsep + "$",
             startswith = "^" + regexdsep + "(.+)$";
 
     public InputStreamTexture(String parentDir, String name) {
         if (parentDir == null) {
-            parentDir = System
-                    .getProperty(
-                            "user.home",
-                            (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS ? "C:"
-                                    : "")
+            parentDir =
+                    System.getProperty("user.home",
+                            (LWJGLUtil
+                                    .getPlatform() == LWJGLUtil.PLATFORM_WINDOWS
+                                            ? "C:" : "")
                                     + File.separator);
         }
         if (name == null) {
@@ -35,11 +38,10 @@ public class InputStreamTexture extends ELTexture {
             return;
         }
         try {
-            tex = LUtils
-                    .getInputStream(parentDir
-                            + ((parentDir.matches(endswith) || name
-                                    .matches(startswith)) ? "" : File.separator)
-                            + name);
+            tex = LUtils.getInputStream(parentDir
+                    + ((parentDir.matches(endswith) || name.matches(startswith))
+                            ? "" : File.separator)
+                    + name);
         } catch (IOException e) {
             throw new RuntimeException("Error retriving stream", e);
         }
@@ -58,8 +60,8 @@ public class InputStreamTexture extends ELTexture {
             dim = new Dimension(decoder.getWidth(), decoder.getHeight());
 
             // Decode the PNG file in a ByteBuffer
-            buf = ByteBuffer.allocateDirect(4 * decoder.getWidth()
-                    * decoder.getHeight());
+            buf = ByteBuffer.allocateDirect(
+                    4 * decoder.getWidth() * decoder.getHeight());
             decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
             buf.flip();
         } catch (IOException e) {

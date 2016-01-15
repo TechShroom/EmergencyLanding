@@ -8,6 +8,7 @@ import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.util.LUtils;
 
 public class Shapes {
+
     /**
      * Tells {@link Shapes#getQuad(VertexData)} how to use the two data points
      */
@@ -15,12 +16,13 @@ public class Shapes {
 
     private static final byte[] TRI_IC = { 0, 1, 2 };
     private static final byte[] QUAD_IC = { 0, 1, 2, 2, 3, 0 };
-    private static final byte[] CUBE_IC = { 0, 1, 2, 3, 0, 4, 5, 0, 6, 3, 6, 0,
-            0, 2, 4, 5, 1, 0, 2, 1, 5, 7, 6, 3, 6, 7, 5, 7, 3, 4, 7, 4, 2, 7,
-            2, 5 };
+    private static final byte[] CUBE_IC =
+            { 0, 1, 2, 3, 0, 4, 5, 0, 6, 3, 6, 0, 0, 2, 4, 5, 1, 0, 2, 1, 5, 7,
+                    6, 3, 6, 7, 5, 7, 3, 4, 7, 4, 2, 7, 2, 5 };
     private static final byte[] SPHERE_IC = { 0, 1, 2, 2, 3, 0 };
 
-    private static HashMap<String, Integer> shapes = new HashMap<String, Integer>();
+    private static HashMap<String, Integer> shapes =
+            new HashMap<String, Integer>();
     {
         Shapes.shapes.put("cube", 0);
         Shapes.shapes.put("quad", 1);

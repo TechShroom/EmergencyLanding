@@ -2,29 +2,33 @@ package emergencylanding.k.exst.mods;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
-import k.core.util.classes.ClassPathHack;
 import emergencylanding.k.exst.modules.ModuleSystem;
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.render.Render;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
+import k.core.util.classes.ClassPathHack;
 
 public class Mods {
+
     private static ArrayList<IMod> loaded = new ArrayList<IMod>();
     private static boolean loaded_mods = false;
 
     public static void findAndLoad() {
         if (loaded_mods) {
-            System.err
-                    .println("Already loaded mod system, trying to load again?");
+            System.err.println(
+                    "Already loaded mod system, trying to load again?");
             return;
         }
         System.err.println("EL Mod System starting...");
         if (!injectModsFolder()) {
-            System.err
-                    .println("[WARNING] Mods folder does not exist or is a file, "
+            System.err.println(
+                    "[WARNING] Mods folder does not exist or is a file, "
                             + "add it if you want mods to be loaded from there.");
         }
         ArrayList<IMod> injected = ModInjector.findAndInject();
@@ -39,8 +43,8 @@ public class Mods {
             try {
                 m.init(inst);
             } catch (Exception e) {
-                System.err.println("Error registering mod " + m.getClass()
-                        + ":");
+                System.err
+                        .println("Error registering mod " + m.getClass() + ":");
                 e.printStackTrace();
                 injected.remove(m);
             }
@@ -90,7 +94,8 @@ public class Mods {
                     "Registering renderers before loading mods!");
         }
         for (IMod m : loaded) {
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> tmp = new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
+            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> tmp =
+                    new HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>>();
             m.registerRenders(tmp);
             classToRender.putAll(tmp);
         }

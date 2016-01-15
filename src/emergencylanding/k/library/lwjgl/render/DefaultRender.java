@@ -5,6 +5,7 @@ import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.util.DrawableUtils;
 
 public class DefaultRender extends Render<ELEntity> {
+
     VBAO quad = Shapes.getQuad(new VertexData(),
             new VertexData().setXYZ(10, 10, 10), Shapes.XY);
     {

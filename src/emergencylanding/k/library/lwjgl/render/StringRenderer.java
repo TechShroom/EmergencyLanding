@@ -1,19 +1,24 @@
 package emergencylanding.k.library.lwjgl.render;
 
-import static emergencylanding.k.library.util.DrawableUtils.*;
+import static emergencylanding.k.library.util.DrawableUtils.glBeginScale;
+import static emergencylanding.k.library.util.DrawableUtils.glBeginTrans;
+import static emergencylanding.k.library.util.DrawableUtils.glEndScale;
+import static emergencylanding.k.library.util.DrawableUtils.glEndTrans;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import k.core.util.arrays.ResizableArray;
-import k.core.util.strings.Strings;
 import emergencylanding.k.library.lwjgl.Shapes;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
+import k.core.util.arrays.ResizableArray;
+import k.core.util.strings.Strings;
 
 /**
  * A TrueType font implementation originally for Slick, edited for Bobjob's
@@ -29,19 +34,19 @@ import emergencylanding.k.library.util.LUtils;
  * @author Kenzie Togami (kenzierocks)
  */
 public class StringRenderer {
+
     public final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
 
     private static class VBAOChar {
+
         private ELTexture tex = null;
         private VBAO quad = null;
 
         private VBAOChar(BufferedImage charImage) {
             tex = new BufferedTexture(charImage);
-            quad = Shapes
-                    .getQuad(
-                            new VertexData(),
-                            new VertexData().setXYZ(tex.getWidth(),
-                                    tex.getHeight(), 0), Shapes.XY);
+            quad = Shapes.getQuad(new VertexData(),
+                    new VertexData().setXYZ(tex.getWidth(), tex.getHeight(), 0),
+                    Shapes.XY);
             quad.setTexture(tex);
             quad.setStatic(false);
         }
@@ -56,7 +61,8 @@ public class StringRenderer {
     private VBAOChar[] charArray = new VBAOChar[256];
 
     /** Map of user defined font characters (Character <-> VBAOChar) */
-    private Map<Character, VBAOChar> customChars = new HashMap<Character, VBAOChar>();
+    private Map<Character, VBAOChar> customChars =
+            new HashMap<Character, VBAOChar>();
 
     /** Boolean flag on whether AntiAliasing is enabled or not */
     private boolean antiAlias;
@@ -71,7 +77,8 @@ public class StringRenderer {
 
     private int correctL = 9, correctR = 8;
 
-    public StringRenderer(Font font, boolean antiAlias, char[] additionalChars) {
+    public StringRenderer(Font font, boolean antiAlias,
+            char[] additionalChars) {
         this(font, antiAlias, additionalChars, Color.WHITE);
     }
 
@@ -105,8 +112,8 @@ public class StringRenderer {
     private void createSet(char[] customCharsArray, Color c) {
         try {
 
-            int customCharsLength = (customCharsArray != null) ? customCharsArray.length
-                    : 0;
+            int customCharsLength =
+                    (customCharsArray != null) ? customCharsArray.length : 0;
 
             for (int i = 0; i < 256 + customCharsLength; i++) {
 
@@ -193,37 +200,38 @@ public class StringRenderer {
         float startY = 0;
 
         switch (format) {
-        case ALIGN_RIGHT: {
-            d = -1;
-            c = correctR;
+            case ALIGN_RIGHT: {
+                d = -1;
+                c = correctR;
 
-            while (i < endIndex) {
-                if (whatchars.charAt(i) == '\n')
-                    startY -= fontHeight;
-                i++;
-            }
-            break;
-        }
-        case ALIGN_CENTER: {
-            for (int l = startIndex; l <= endIndex; l++) {
-                charCurrent = whatchars.charAt(l);
-                if (charCurrent == '\n')
-                    break;
-                if (charCurrent < 256) {
-                    vchar = charArray[charCurrent];
-                } else {
-                    vchar = customChars.get(new Character((char) charCurrent));
+                while (i < endIndex) {
+                    if (whatchars.charAt(i) == '\n')
+                        startY -= fontHeight;
+                    i++;
                 }
-                totalwidth += vchar.tex.dim.width - correctL;
+                break;
             }
-            totalwidth /= -2;
-        }
-        case ALIGN_LEFT:
-        default: {
-            d = 1;
-            c = correctL;
-            break;
-        }
+            case ALIGN_CENTER: {
+                for (int l = startIndex; l <= endIndex; l++) {
+                    charCurrent = whatchars.charAt(l);
+                    if (charCurrent == '\n')
+                        break;
+                    if (charCurrent < 256) {
+                        vchar = charArray[charCurrent];
+                    } else {
+                        vchar = customChars
+                                .get(new Character((char) charCurrent));
+                    }
+                    totalwidth += vchar.tex.dim.width - correctL;
+                }
+                totalwidth /= -2;
+            }
+            case ALIGN_LEFT:
+            default: {
+                d = 1;
+                c = correctL;
+                break;
+            }
 
         }
 
@@ -250,8 +258,8 @@ public class StringRenderer {
                             if (charCurrent < 256) {
                                 vchar = charArray[charCurrent];
                             } else {
-                                vchar = customChars.get(new Character(
-                                        (char) charCurrent));
+                                vchar = customChars
+                                        .get(new Character((char) charCurrent));
                             }
                             totalwidth += vchar.tex.dim.width - correctL;
                         }

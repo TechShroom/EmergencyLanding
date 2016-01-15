@@ -1,6 +1,8 @@
 package emergencylanding.k.library.debug;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -11,12 +13,16 @@ import org.lwjgl.opengl.Display;
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
 import emergencylanding.k.library.lwjgl.Shapes;
-import emergencylanding.k.library.lwjgl.render.*;
+import emergencylanding.k.library.lwjgl.render.Render;
+import emergencylanding.k.library.lwjgl.render.StringRenderer;
+import emergencylanding.k.library.lwjgl.render.VBAO;
+import emergencylanding.k.library.lwjgl.render.VertexData;
 import emergencylanding.k.library.lwjgl.tex.BufferedTexture;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.DrawableUtils;
 
 public class FontTest extends KMain {
+
     static StringRenderer strrend;
     static VBAO image = null;
 
@@ -43,19 +49,21 @@ public class FontTest extends KMain {
         final Font f = new Font("times new roman", Font.PLAIN, 16);
         strrend = new StringRenderer(f, true, Color.RED);
 
-        final BufferedImage strrendimg1 = DrawableUtils.getFontImage('A', true,
-                f, 19, Color.BLUE);
+        final BufferedImage strrendimg1 =
+                DrawableUtils.getFontImage('A', true, f, 19, Color.BLUE);
 
-        image = Shapes.getQuad(
-                new VertexData().setXYZ(300, 300, 0),
-                new VertexData().setXYZ(strrendimg1.getWidth(),
-                        strrendimg1.getHeight(), 0), Shapes.XY).setTexture(
-                new BufferedTexture(strrendimg1));
+        image = Shapes
+                .getQuad(new VertexData().setXYZ(300, 300, 0),
+                        new VertexData().setXYZ(strrendimg1.getWidth(),
+                                strrendimg1.getHeight(), 0),
+                        Shapes.XY)
+                .setTexture(new BufferedTexture(strrendimg1));
 
         System.err.println(image);
 
         // draw the matching data using a JFrame's graphics
         JFrame j = new JFrame("Fonts!") {
+
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -63,7 +71,9 @@ public class FontTest extends KMain {
                 super.paint(g);
                 g.setFont(f);
                 g.drawImage(strrendimg1, 200, 200, null);
-                g.drawString("This is a test and a test and a test test test\nThis is a test and a test and a test test test\nThis is a test and a test and a test test test\nThis is a test and a test and a test test test\n", 100, 100);
+                g.drawString(
+                        "This is a test and a test and a test test test\nThis is a test and a test and a test test test\nThis is a test and a test and a test test test\nThis is a test and a test and a test test test\n",
+                        100, 100);
             }
         };
         j.setSize(800, 600);

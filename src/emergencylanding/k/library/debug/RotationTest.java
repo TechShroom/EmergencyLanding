@@ -7,11 +7,14 @@ import org.lwjgl.opengl.Display;
 import emergencylanding.k.library.internalstate.ELEntity;
 import emergencylanding.k.library.internalstate.world.World;
 import emergencylanding.k.library.lwjgl.DisplayLayer;
-import emergencylanding.k.library.lwjgl.render.*;
+import emergencylanding.k.library.lwjgl.render.Render;
+import emergencylanding.k.library.lwjgl.render.RenderManager;
+import emergencylanding.k.library.lwjgl.render.TextureRender;
 import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.DrawableUtils;
 
 public class RotationTest extends KMain {
+
     private static boolean run = true;
     TestCollisionEntity tce, tce2;
 

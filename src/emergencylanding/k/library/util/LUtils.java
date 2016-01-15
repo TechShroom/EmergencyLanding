@@ -23,10 +23,6 @@ import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import k.core.util.classes.StackTraceInfo;
-import k.core.util.core.Helper;
-import k.core.util.strings.Strings;
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
@@ -38,6 +34,9 @@ import com.apple.eawt.Application;
 import emergencylanding.k.imported.chrismolini.IconLoader;
 import emergencylanding.k.library.lwjgl.tex.ELTexture;
 import emergencylanding.k.library.main.KMain;
+import k.core.util.classes.StackTraceInfo;
+import k.core.util.core.Helper;
+import k.core.util.strings.Strings;
 
 public final class LUtils {
 
@@ -52,9 +51,9 @@ public final class LUtils {
 
     public static final String LIB_NAME = "EmergencyLanding".intern(),
             SHORT_LIB_NAME = "EL".intern();
-    private static final String LOWER_LIB_NAME = LIB_NAME.toLowerCase()
-            .intern(), LOWER_SHORT_LIB_NAME = SHORT_LIB_NAME.toLowerCase()
-            .intern();
+    private static final String LOWER_LIB_NAME =
+            LIB_NAME.toLowerCase().intern(),
+            LOWER_SHORT_LIB_NAME = SHORT_LIB_NAME.toLowerCase().intern();
 
     /**
      * What packages are accepted for EL
@@ -83,15 +82,15 @@ public final class LUtils {
         overrideStandardStreams();
     }
 
-    public static final String elPrintStr = String.format("[" + LIB_NAME
-            + "-%s]", LUtils.VERSION);
+    public static final String elPrintStr =
+            String.format("[" + LIB_NAME + "-%s]", LUtils.VERSION);
 
     public static void print(String msg) {
         try {
             checkAccessor(ACCEPT, StackTraceInfo.getInvokingClassName());
         } catch (Exception e) {
-            throw new RuntimeException(new IllegalAccessException("Not "
-                    + SHORT_LIB_NAME + " trusted class"));
+            throw new RuntimeException(new IllegalAccessException(
+                    "Not " + SHORT_LIB_NAME + " trusted class"));
         }
         System.err.println(elPrintStr + " " + msg);
     }
@@ -117,8 +116,8 @@ public final class LUtils {
      * @throws Exception
      */
     public static void addLibraryPath(String pathToAdd) throws Exception {
-        final Field usrPathsField = ClassLoader.class
-                .getDeclaredField("usr_paths");
+        final Field usrPathsField =
+                ClassLoader.class.getDeclaredField("usr_paths");
         usrPathsField.setAccessible(true);
 
         // get array of paths
@@ -169,7 +168,7 @@ public final class LUtils {
         String tempName = LUtils.class.getPackage().getName();
         int levels = Strings.count(tempName, '.') + 2;
         tempName = LUtils.class.getResource("LUtils.class").getFile()
-        // .replace('/', File.separatorChar)// .substring(1)
+                // .replace('/', File.separatorChar)// .substring(1)
                 .replace("%20", " ");
         for (int i = 0; i < levels; i++) {
             tempName = tempName.substring(0, tempName.lastIndexOf("/"));
@@ -188,12 +187,12 @@ public final class LUtils {
         injectNatives();
     }
 
-    public static final int debugLevel = Integer.parseInt(System.getProperty(
-            LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
+    public static final int debugLevel = Integer.parseInt(
+            System.getProperty(LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
 
     static {
-        System.err.println(LOWER_SHORT_LIB_NAME + ".debug.level" + ": "
-                + debugLevel);
+        System.err.println(
+                LOWER_SHORT_LIB_NAME + ".debug.level" + ": " + debugLevel);
     }
 
     // the range between which the "close enough" guesser in getDisplayMode uses
@@ -211,8 +210,8 @@ public final class LUtils {
      * @return the wanted boolean argument value, or the default value
      */
     public static boolean getArgB(String[] args, int index, boolean def) {
-        return Boolean.valueOf(LUtils.getArgS(args, index, Boolean.valueOf(def)
-                .toString()));
+        return Boolean.valueOf(
+                LUtils.getArgS(args, index, Boolean.valueOf(def).toString()));
     }
 
     /**
@@ -227,8 +226,8 @@ public final class LUtils {
      * @return the wanted integer argument value, or the default value
      */
     public static int getArgI(String[] args, int index, int def) {
-        return Integer.valueOf(LUtils.getArgS(args, index, Integer.valueOf(def)
-                .toString()));
+        return Integer.valueOf(
+                LUtils.getArgS(args, index, Integer.valueOf(def).toString()));
     }
 
     /**
@@ -243,8 +242,8 @@ public final class LUtils {
      * @return the wanted float argument value, or the default value
      */
     public static float getArgF(String[] args, int index, float def) {
-        return Float.valueOf(LUtils.getArgS(args, index, Float.valueOf(def)
-                .toString()));
+        return Float.valueOf(
+                LUtils.getArgS(args, index, Float.valueOf(def).toString()));
     }
 
     /**
@@ -259,8 +258,8 @@ public final class LUtils {
      * @return the wanted double argument value, or the default value
      */
     public static double getArgD(String[] args, int index, double def) {
-        return Double.valueOf(LUtils.getArgS(args, index, Double.valueOf(def)
-                .toString()));
+        return Double.valueOf(
+                LUtils.getArgS(args, index, Double.valueOf(def).toString()));
     }
 
     /**
@@ -278,8 +277,8 @@ public final class LUtils {
         if (args == null) {
             return def;
         }
-        return args.length <= index ? def : args[index] == null ? def
-                : args[index];
+        return args.length <= index ? def
+                : args[index] == null ? def : args[index];
     }
 
     /**
@@ -297,8 +296,8 @@ public final class LUtils {
         if (src == null) {
             return def;
         }
-        return src.length <= index ? def : src[index] == null ? def
-                : src[index];
+        return src.length <= index ? def
+                : src[index] == null ? def : src[index];
     }
 
     /**
@@ -449,8 +448,10 @@ public final class LUtils {
                     }
                 }
                 if (m.isFullscreenCapable()
-                        && ((w < (width + WIDTH_RANGE)) && (w > (width - WIDTH_RANGE)))
-                        && ((h < (height + HEIGHT_RANGE)) && (h > (height - HEIGHT_RANGE)))) {
+                        && ((w < (width + WIDTH_RANGE))
+                                && (w > (width - WIDTH_RANGE)))
+                        && ((h < (height + HEIGHT_RANGE))
+                                && (h > (height - HEIGHT_RANGE)))) {
                     possibleExtras.add(m);
                 }
             }
@@ -509,8 +510,8 @@ public final class LUtils {
      * @return a user friendly version of the fullscreen compatible dimensions
      */
     public static String[] getFullscreenCompatDimensionsSimple() {
-        return LUtils.getDimensionsSimple(LUtils
-                .getFullscreenCompatDimensions());
+        return LUtils
+                .getDimensionsSimple(LUtils.getFullscreenCompatDimensions());
     }
 
     /**
@@ -537,8 +538,8 @@ public final class LUtils {
      * @return a fullscreen compatible dimension
      */
     public static Dimension getDimensionFromUser() {
-        return LUtils.getDimensionFromUser(LUtils
-                .getFullscreenCompatDimensions());
+        return LUtils
+                .getDimensionFromUser(LUtils.getFullscreenCompatDimensions());
     }
 
     /**
@@ -548,14 +549,16 @@ public final class LUtils {
      *            - the dimensions to choose from
      * @return
      */
-    public static Dimension getDimensionFromUser(Dimension[] availabeDimensions) {
+    public static Dimension
+            getDimensionFromUser(Dimension[] availabeDimensions) {
         Dimension[] compat = availabeDimensions;
         String[] compat_s = LUtils.getDimensionsSimple(compat);
         JFrame toClose = null;
-        String ret_s = (String) JOptionPane.showInputDialog(
-                toClose = new JFrame(), "Avaliable sizes:",
-                "Choose a window size", JOptionPane.DEFAULT_OPTION, null,
-                compat_s, compat_s[0]);
+        String ret_s =
+                (String) JOptionPane.showInputDialog(toClose = new JFrame(),
+                        "Avaliable sizes:", "Choose a window size",
+                        JOptionPane.DEFAULT_OPTION, null, compat_s,
+                        compat_s[0]);
         toClose.dispose();
         toClose = null;
         if (ret_s == null) {
@@ -710,8 +713,8 @@ public final class LUtils {
             for (int i = 0; i < pathparts.size(); i++) {
                 if (pathparts.get(i).endsWith(".zip")
                         || pathparts.get(i).endsWith(".jar")) {
-                    LUtils.print("Adding zip/jar " + pathparts.get(i) + " at "
-                            + i);
+                    LUtils.print(
+                            "Adding zip/jar " + pathparts.get(i) + " at " + i);
                     indexes.add(i);
                 }
             }
@@ -722,8 +725,8 @@ public final class LUtils {
                         pathToCurrFile));
                 pathToCurrFile += temp_ + "/";
             }
-            String file = pathToCurrFile.substring(0,
-                    pathToCurrFile.length() - 1);
+            String file =
+                    pathToCurrFile.substring(0, pathToCurrFile.length() - 1);
             String extra = path.replace(pathToCurrFile, "");
             LUtils.print("Attempting to load from " + file);
             ZipFile zf = new ZipFile(file);
@@ -742,8 +745,8 @@ public final class LUtils {
         try {
             checkAccessor(ACCEPT, StackTraceInfo.getInvokingClassName());
         } catch (Exception e) {
-            throw new RuntimeException(new IllegalAccessException("Not "
-                    + SHORT_LIB_NAME + " trusted class"));
+            throw new RuntimeException(new IllegalAccessException(
+                    "Not " + SHORT_LIB_NAME + " trusted class"));
         }
         return EL_TOP;
     }

@@ -7,10 +7,11 @@ import emergencylanding.k.library.main.KMain;
 import emergencylanding.k.library.util.LUtils;
 
 public class FPS {
+
     static {
         LUtils.init(); // init if not done already, otherwise errors
     }
-    
+
     public static final long millis = 1000, micro = 1000 * FPS.millis;
     public static final int MAX_FPS_COUNTERS = 100;
     private static int nextIndex = 0;

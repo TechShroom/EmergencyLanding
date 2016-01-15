@@ -3,6 +3,7 @@ package emergencylanding.k.library.internalstate;
 import emergencylanding.k.library.util.Maths;
 
 public class Victor {
+
     protected static int state = 0;
     public float x, y, z;
     public float lastX, lastY, lastZ;

@@ -5,22 +5,23 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
-import k.core.util.reflect.Reflect;
-
 import org.lwjgl.util.Color;
 
+import k.core.util.reflect.Reflect;
+
 public class ColorTexture extends ELTexture {
+
     public static final ColorTexture RED = new ColorTexture(java.awt.Color.RED);
-    public static final ColorTexture BLUE = new ColorTexture(
-            java.awt.Color.BLUE);
-    public static final ColorTexture GREEN = new ColorTexture(
-            java.awt.Color.GREEN);
-    public static final ColorTexture YELLOW = new ColorTexture(
-            java.awt.Color.YELLOW);
-    public static final ColorTexture WHITE = new ColorTexture(
-            java.awt.Color.WHITE);
-    public static final ColorTexture PURPLE = new ColorTexture(
-            java.awt.Color.MAGENTA);
+    public static final ColorTexture BLUE =
+            new ColorTexture(java.awt.Color.BLUE);
+    public static final ColorTexture GREEN =
+            new ColorTexture(java.awt.Color.GREEN);
+    public static final ColorTexture YELLOW =
+            new ColorTexture(java.awt.Color.YELLOW);
+    public static final ColorTexture WHITE =
+            new ColorTexture(java.awt.Color.WHITE);
+    public static final ColorTexture PURPLE =
+            new ColorTexture(java.awt.Color.MAGENTA);
     private Color c = null;
 
     public ColorTexture(java.awt.Color from, Dimension size) {
@@ -75,8 +76,8 @@ public class ColorTexture extends ELTexture {
     public static ColorTexture getColor(String color) {
         String allCaps = color.toUpperCase();
         try {
-            return new ColorTexture(Reflect.getFieldStatic(
-                    java.awt.Color.class, java.awt.Color.class, allCaps));
+            return new ColorTexture(Reflect.getFieldStatic(java.awt.Color.class,
+                    java.awt.Color.class, allCaps));
         } catch (SecurityException e) {
             e.printStackTrace();
         } catch (IllegalArgumentException e) {

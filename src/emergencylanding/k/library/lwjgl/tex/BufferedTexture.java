@@ -1,13 +1,16 @@
 package emergencylanding.k.library.lwjgl.tex;
 
 import java.awt.Dimension;
-import java.awt.image.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferInt;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 import k.core.util.core.Helper;
 
 public class BufferedTexture extends ELTexture {
+
     BufferedImage img = null;
 
     public BufferedTexture(BufferedImage image) {
@@ -24,8 +27,8 @@ public class BufferedTexture extends ELTexture {
         int width = dim.width;
         int height = dim.height;
         if (img.getType() == BufferedImage.TYPE_INT_ARGB) {
-            int intI[] = ((DataBufferInt) (img.getData().getDataBuffer()))
-                    .getData();
+            int intI[] =
+                    ((DataBufferInt) (img.getData().getDataBuffer())).getData();
             byte newI[] = new byte[intI.length * 4];
             for (int i = 0; i < intI.length; i++) {
                 byte b[] = Helper.BetterArrays.intToByteArray(intI[i]);
@@ -40,9 +43,10 @@ public class BufferedTexture extends ELTexture {
             byteBuffer = ByteBuffer.allocateDirect(width * height * (bpp / 8))
                     .order(ByteOrder.nativeOrder()).put(newI);
         } else {
-            byteBuffer = ByteBuffer
-                    .allocateDirect(width * height * (bpp / 8))
-                    .order(ByteOrder.nativeOrder())
+            byteBuffer =
+                    ByteBuffer.allocateDirect(width * height * (bpp / 8))
+                            .order(ByteOrder
+                                    .nativeOrder())
                     .put(((DataBufferByte) (img.getData().getDataBuffer()))
                             .getData());
         }

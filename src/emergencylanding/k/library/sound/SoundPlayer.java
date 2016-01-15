@@ -1,15 +1,21 @@
 package emergencylanding.k.library.sound;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.lwjgl.openal.AL;
-import org.newdawn.slick.openal.*;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.AudioLoader;
+import org.newdawn.slick.openal.SoundStore;
 
 import emergencylanding.k.library.util.LUtils;
 
 public class SoundPlayer {
+
     static {
         Runtime.getRuntime().addShutdownHook(new Thread() {
+
             @Override
             public void run() {
                 AL.destroy();

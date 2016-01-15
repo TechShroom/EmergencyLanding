@@ -3,8 +3,8 @@ package emergencylanding.k.library.exceptions.lwjgl;
 public class TextureBindException0 extends RuntimeException {
 
     /**
-	 * 
-	 */
+     * 
+     */
     private static final long serialVersionUID = 5910806479992812731L;
 
     public TextureBindException0() {

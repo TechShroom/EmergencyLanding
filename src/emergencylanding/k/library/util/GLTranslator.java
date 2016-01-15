@@ -12,7 +12,7 @@ final class GLTranslator {
         PreShaderOps.add(mats);
     }
 
-    private static Matrix4f mats(double ix, double iy, double iz ) {
+    private static Matrix4f mats(double ix, double iy, double iz) {
         return Maths.createTransMatrix(ix, iy, iz);
     }
 

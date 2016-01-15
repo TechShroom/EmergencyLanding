@@ -1,22 +1,25 @@
 package emergencylanding.k.library.debug.preformance;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import emergencylanding.k.library.debug.FPS;
 import emergencylanding.k.library.util.Maths;
 
 public class TrigCompare {
+
     static double[] angles = new double[100000];
     static {
         Random r = new Random(System.nanoTime());
-        List<Integer> special = Arrays.asList(new Integer[] { 0, 30, 45, 60,
-                90, 180, 270 });
+        List<Integer> special =
+                Arrays.asList(new Integer[] { 0, 30, 45, 60, 90, 180, 270 });
         for (int i = 0; i < angles.length / 2; i++) {
             angles[i] = Math.round(r.nextDouble() * 360);
         }
         for (int i = 0; i < angles.length / 2; i++) {
-            angles[angles.length - i - 1] = special.get(r.nextInt(special
-                    .size()));
+            angles[angles.length - i - 1] =
+                    special.get(r.nextInt(special.size()));
         }
         Maths.qtan(100); // init before calculations
         Math.tan(100);

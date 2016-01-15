@@ -9,9 +9,10 @@ public class TextureRender extends Render<ELEntity> {
     @Override
     public void doRender(ELEntity entity, float posX, float posY, float posZ) {
         DrawableUtils.beginStandardEntityRender(entity, posX, posY, posZ);
-        VBAO quad = Shapes.getQuad(new VertexData(), new VertexData().setXYZ(
-                (float) entity.getTex().getWidth(), (float) entity.getTex()
-                        .getHeight(), posZ), Shapes.XY);
+        VBAO quad = Shapes.getQuad(new VertexData(),
+                new VertexData().setXYZ((float) entity.getTex().getWidth(),
+                        (float) entity.getTex().getHeight(), posZ),
+                Shapes.XY);
         quad.setTexture(entity.getTex());
         quad.draw();
         DrawableUtils.endStandardEntityRender();

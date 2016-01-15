@@ -1,13 +1,42 @@
 package emergencylanding.k.library.lwjgl.render;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glGetError;
+import static org.lwjgl.opengl.GL11.glViewport;
+import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
+import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
+import static org.lwjgl.opengl.GL20.GL_INFO_LOG_LENGTH;
+import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
+import static org.lwjgl.opengl.GL20.glAttachShader;
+import static org.lwjgl.opengl.GL20.glBindAttribLocation;
+import static org.lwjgl.opengl.GL20.glCompileShader;
+import static org.lwjgl.opengl.GL20.glCreateProgram;
+import static org.lwjgl.opengl.GL20.glCreateShader;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL20.glDeleteShader;
+import static org.lwjgl.opengl.GL20.glDetachShader;
+import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
+import static org.lwjgl.opengl.GL20.glGetShaderi;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glLinkProgram;
+import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.glValidateProgram;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-
-import k.core.util.classes.StackTraceInfo;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.Display;
@@ -16,15 +45,17 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
 
 import emergencylanding.k.library.util.LUtils;
+import k.core.util.classes.StackTraceInfo;
 
 /** All OpenGL will be handled here */
 public class GLData {
+
     /**
      * Indexes for BindAttribLocation
      */
     public static int POSITION_INDEX = 0, COLOR_INDEX = 1, TEX_INDEX = 2;
-    private static final Matrix4f identity_matrix = Matrix4f
-            .setIdentity(new Matrix4f());
+    private static final Matrix4f identity_matrix =
+            Matrix4f.setIdentity(new Matrix4f());
     private static Matrix4f orthoMatrix = null;
     private static FloatBuffer orthoMatrixData = null;
     private static int comboShaderProgram = 0;
@@ -40,7 +71,8 @@ public class GLData {
     }
 
     public static void unload() {
-        // glUseProgram(NONE); // generates INVALID OPERATION, may be needed however?
+        // glUseProgram(NONE); // generates INVALID OPERATION, may be needed
+        // however?
         try {
             notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         } catch (OpenGLException ogle) {
@@ -91,14 +123,16 @@ public class GLData {
     }
 
     private static void addVertexAndFragmentShaders() {
-        shaders.add(loadShader(
-                LUtils.getELTop()
-                        + "/res/shaders/vertex.glsl".replace('/',
-                                File.separatorChar), GL_VERTEX_SHADER));
-        shaders.add(loadShader(
-                LUtils.getELTop()
-                        + "/res/shaders/texture.glsl".replace('/',
-                                File.separatorChar), GL_FRAGMENT_SHADER));
+        shaders.add(
+                loadShader(
+                        LUtils.getELTop() + "/res/shaders/vertex.glsl"
+                                .replace('/', File.separatorChar),
+                GL_VERTEX_SHADER));
+        shaders.add(
+                loadShader(
+                        LUtils.getELTop() + "/res/shaders/texture.glsl"
+                                .replace('/', File.separatorChar),
+                GL_FRAGMENT_SHADER));
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -130,10 +164,10 @@ public class GLData {
     }
 
     public static void getLocations() {
-        orthoMatrixLocation = glGetUniformLocation(comboShaderProgram,
-                "orthoMatrix");
-        uniformTexEnabler = glGetUniformLocation(comboShaderProgram,
-                "utexenabled");
+        orthoMatrixLocation =
+                glGetUniformLocation(comboShaderProgram, "orthoMatrix");
+        uniformTexEnabler =
+                glGetUniformLocation(comboShaderProgram, "utexenabled");
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -142,7 +176,8 @@ public class GLData {
         int shaderID = 0;
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            BufferedReader reader =
+                    new BufferedReader(new FileReader(filename));
             String line;
             while ((line = reader.readLine()) != null) {
                 shaderSource.append(line).append("\n");

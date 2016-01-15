@@ -15,6 +15,7 @@ import emergencylanding.k.library.lwjgl.render.RenderManager;
 import emergencylanding.k.library.main.KMain;
 
 public class SideTest_GraviteeeeeeeTest extends KMain {
+
     private static Thread is, ip;
     private static boolean run = true;
     private static final int TICKS_PER_SECOND = 60;
@@ -41,6 +42,7 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
 
     private static void startISThreads() {
         Runnable isr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override
@@ -60,6 +62,7 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
         SideTest_GraviteeeeeeeTest.is.start();
 
         Runnable ipr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override
@@ -67,8 +70,8 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
                 FPS.init(SideTest_GraviteeeeeeeTest.INTERPOLATE_INDEX);
                 while (SideTest_GraviteeeeeeeTest.run) {
                     s.sync(SideTest_GraviteeeeeeeTest.FRAMES_PER_SECOND);
-                    int delta = FPS
-                            .update(SideTest_GraviteeeeeeeTest.INTERPOLATE_INDEX);
+                    int delta = FPS.update(
+                            SideTest_GraviteeeeeeeTest.INTERPOLATE_INDEX);
                     WorldManager.interpolate(delta);
                 }
             }

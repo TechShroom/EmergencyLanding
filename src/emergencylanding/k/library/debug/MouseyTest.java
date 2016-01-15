@@ -25,8 +25,8 @@ public class MouseyTest extends KMain implements KeyListener {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        DisplayLayer.initDisplay(false, 1024, 640,
-                "Testing " + LUtils.LIB_NAME, true, args);
+        DisplayLayer.initDisplay(false, 1024, 640, "Testing " + LUtils.LIB_NAME,
+                true, args);
         Keys.registerListener(new MouseyTest());
         while (!Display.isCloseRequested()) {
             DisplayLayer.loop(120);

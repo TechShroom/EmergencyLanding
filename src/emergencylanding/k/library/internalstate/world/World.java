@@ -1,11 +1,14 @@
 package emergencylanding.k.library.internalstate.world;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import emergencylanding.k.library.internalstate.ELEntity;
 
 public class World {
+
     private static int DEF_WORLD_SIZE = 800;
 
     protected ArrayList<ELEntity> loadedEntities = new ArrayList<ELEntity>();

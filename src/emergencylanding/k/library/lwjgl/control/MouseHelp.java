@@ -18,13 +18,16 @@ import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
 public class MouseHelp {
+
     private static class FakeCursor {
+
         VBAO display = null;
 
         public FakeCursor(ELTexture image, int hotx, int hoty) {
-            display = Shapes.getQuad(new VertexData().setXYZ(-hotx, -hoty, 0),
-                    new VertexData().setXYZ(image.getWidth(),
-                            image.getHeight(), 0), Shapes.XY);
+            display = Shapes.getQuad(
+                    new VertexData().setXYZ(-hotx, -hoty, 0), new VertexData()
+                            .setXYZ(image.getWidth(), image.getHeight(), 0),
+                    Shapes.XY);
             display.setTexture(image);
             display.setStatic(false);
         }
@@ -71,7 +74,8 @@ public class MouseHelp {
             MouseHelp.inst.x = Mouse.getX();
             MouseHelp.inst.y = Mouse.getY();
             for (int i = 0; i < MouseHelp.buttons; i++) {
-                MouseHelp.inst.lastFrameClick[i] = MouseHelp.inst.thisFrameClick[i];
+                MouseHelp.inst.lastFrameClick[i] =
+                        MouseHelp.inst.thisFrameClick[i];
                 MouseHelp.inst.thisFrameClick[i] = Mouse.isButtonDown(i);
             }
         } catch (Exception e) {
@@ -146,7 +150,8 @@ public class MouseHelp {
      * @see {@link MouseHelp#createFollowCursor(BufferedImage, int, int)
      *      createFollowCursor(BufferedImage, int, int)}
      */
-    public static void createFollowCursor(ELTexture texture, int hotx, int hoty) {
+    public static void createFollowCursor(ELTexture texture, int hotx,
+            int hoty) {
         /*
          * Hide mouse cursor in our window (prevents it from derping like
          * Synthesia)
@@ -185,8 +190,8 @@ public class MouseHelp {
          * Synthesia)
          */
         MouseHelp.replaceCursor(ELTexture.invisible, 0, 0);
-        texture = new BufferedTexture(DrawableUtils.scaledBufferedImage(
-                texture.toBufferedImage(), width, height));
+        texture = new BufferedTexture(DrawableUtils
+                .scaledBufferedImage(texture.toBufferedImage(), width, height));
         MouseHelp.inst.fake = new FakeCursor(texture, hotx, hoty);
     }
 

@@ -9,22 +9,23 @@ import org.lwjgl.opengl.Display;
 import emergencylanding.k.library.util.LUtils;
 
 public class OrgLWJGLOpenGLPackageAccess {
+
     static Object impl = null; // ACTUALLY a DisplayImplementaion
     static Method updateImpl = null, pollDevices = null;
 
     public static void updateImplementation() {
         if (impl == null) {
             try {
-                Method getI = Display.class
-                        .getDeclaredMethod("getImplementation");
+                Method getI =
+                        Display.class.getDeclaredMethod("getImplementation");
                 getI.setAccessible(true);
                 impl = getI.invoke(null);
                 updateImpl = impl.getClass().getDeclaredMethod("update");
                 updateImpl.setAccessible(true);
                 LUtils.print("LWJGL's implementation is secured.");
             } catch (Exception e) {
-                throw new IllegalStateException(
-                        "Implementation not accessable", e);
+                throw new IllegalStateException("Implementation not accessable",
+                        e);
             }
         }
         try {
@@ -32,9 +33,11 @@ public class OrgLWJGLOpenGLPackageAccess {
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Bad implementation", e);
         } catch (IllegalAccessException e) {
-            throw new IllegalStateException("Could not access update method", e);
+            throw new IllegalStateException("Could not access update method",
+                    e);
         } catch (InvocationTargetException e) {
-            throw new RuntimeException("Error during impl update", e.getCause());
+            throw new RuntimeException("Error during impl update",
+                    e.getCause());
         }
     }
 

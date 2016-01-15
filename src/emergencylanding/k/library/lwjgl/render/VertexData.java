@@ -331,7 +331,7 @@ public class VertexData implements Cloneable {
 
     @Override
     protected VertexData clone() throws CloneNotSupportedException {
-        VertexData vd =  (VertexData) super.clone();
+        VertexData vd = (VertexData) super.clone();
         vd.order = order;
         vd.colors = colors.clone();
         vd.texCoords = texCoords.clone();
