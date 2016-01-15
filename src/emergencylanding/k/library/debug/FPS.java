@@ -11,17 +11,17 @@ public class FPS {
         LUtils.init(); // init if not done already, other wise errors
     }
     public static final long millis = 1000, micro = 1000 * FPS.millis;
-    public static int maxFPSCounters = 100;
+    public static final int MAX_FPS_COUNTERS = 100;
     private static int nextIndex = 1;
     /** time at last frame */
-    private static long[] lastFrame = new long[FPS.maxFPSCounters];
+    private static long[] lastFrame = new long[FPS.MAX_FPS_COUNTERS];
     /** frames per second */
-    private static int[] fps = new int[FPS.maxFPSCounters];
+    private static int[] fps = new int[FPS.MAX_FPS_COUNTERS];
     /** last fps time */
-    private static long[] lastFPS = new long[FPS.maxFPSCounters];
+    private static long[] lastFPS = new long[FPS.MAX_FPS_COUNTERS];
     private static String permTitle = "";
-    private static boolean[] enabled = new boolean[FPS.maxFPSCounters];
-    private static boolean[] hasFPSTitle = new boolean[FPS.maxFPSCounters];
+    private static boolean[] enabled = new boolean[FPS.MAX_FPS_COUNTERS];
+    private static boolean[] hasFPSTitle = new boolean[FPS.MAX_FPS_COUNTERS];
     private static String tempTitle;
 
     public static int update(int index) {
@@ -129,7 +129,7 @@ public class FPS {
     }
 
     public static int genIndex() {
-        if (FPS.nextIndex > FPS.maxFPSCounters) {
+        if (FPS.nextIndex > FPS.MAX_FPS_COUNTERS) {
             throw new IndexOutOfBoundsException("Too many FPS counters");
         }
         return FPS.nextIndex++;
