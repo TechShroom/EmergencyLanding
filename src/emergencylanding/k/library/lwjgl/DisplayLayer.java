@@ -193,7 +193,7 @@ public class DisplayLayer {
 
     public static void loop(int dfps) throws LWJGLException {
         Display.sync(dfps);
-        int delta = FPS.update(0);
+        int delta = FPS.update(FPS.DISPLAY_FPS_COUNTER);
         if (Display.wasResized()) {
             GLData.resizedRefresh();
         }

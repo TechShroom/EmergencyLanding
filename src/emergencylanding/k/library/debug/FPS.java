@@ -8,11 +8,13 @@ import emergencylanding.k.library.util.LUtils;
 
 public class FPS {
     static {
-        LUtils.init(); // init if not done already, other wise errors
+        LUtils.init(); // init if not done already, otherwise errors
     }
+    
     public static final long millis = 1000, micro = 1000 * FPS.millis;
     public static final int MAX_FPS_COUNTERS = 100;
-    private static int nextIndex = 1;
+    private static int nextIndex = 0;
+    public static final int DISPLAY_FPS_COUNTER = genIndex();
     /** time at last frame */
     private static long[] lastFrame = new long[FPS.MAX_FPS_COUNTERS];
     /** frames per second */

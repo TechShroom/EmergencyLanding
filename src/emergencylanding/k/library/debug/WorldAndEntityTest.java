@@ -16,17 +16,18 @@ import emergencylanding.k.library.util.DrawableUtils;
 import emergencylanding.k.library.util.LUtils;
 
 public class WorldAndEntityTest extends KMain {
+
     private static Thread is, ip;
     private static boolean run = true;
     private static final int TICKS_PER_SECOND = 60;
     private static final int FRAMES_PER_SECOND = 60;
-    public static final int DISPLAY_FPS_INDEX = 0, IS_INDEX = FPS.genIndex(),
-            INTERPOLATE_INDEX = FPS.genIndex();
+    public static final int DISPLAY_FPS_INDEX = FPS.DISPLAY_FPS_COUNTER,
+            IS_INDEX = FPS.genIndex(), INTERPOLATE_INDEX = FPS.genIndex();
 
     public static void main(String[] args) {
         try {
-            DisplayLayer.initDisplay(false, 800, 500, "Testing "
-                    + LUtils.LIB_NAME, false, false, args);
+            DisplayLayer.initDisplay(false, 800, 500,
+                    "Testing " + LUtils.LIB_NAME, false, false, args);
             FPS.enable(WorldAndEntityTest.DISPLAY_FPS_INDEX);
             WorldAndEntityTest.startISThreads();
             while (WorldAndEntityTest.run) {
@@ -43,6 +44,7 @@ public class WorldAndEntityTest extends KMain {
 
     private static void startISThreads() {
         Runnable isr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override
@@ -62,6 +64,7 @@ public class WorldAndEntityTest extends KMain {
         WorldAndEntityTest.is.start();
 
         Runnable ipr = new Runnable() {
+
             Sync s = new Sync();
 
             @Override
@@ -69,8 +72,8 @@ public class WorldAndEntityTest extends KMain {
                 FPS.init(WorldAndEntityTest.INTERPOLATE_INDEX);
                 while (WorldAndEntityTest.run) {
                     s.sync(WorldAndEntityTest.FRAMES_PER_SECOND);
-                    int delta = FPS
-                            .update(WorldAndEntityTest.INTERPOLATE_INDEX);
+                    int delta =
+                            FPS.update(WorldAndEntityTest.INTERPOLATE_INDEX);
                     WorldManager.interpolate(delta);
                 }
             }
@@ -107,8 +110,9 @@ public class WorldAndEntityTest extends KMain {
             e.setXYZVel(1, 1, 0);
         }
         quad = Shapes.getQuad(new VertexData().setRGB(255, 255, 255),
-                new VertexData().setXYZ(Display.getWidth(),
-                        Display.getHeight(), 0), Shapes.XY);
+                new VertexData().setXYZ(Display.getWidth(), Display.getHeight(),
+                        0),
+                Shapes.XY);
         quad.setStatic(false);
     }
 
