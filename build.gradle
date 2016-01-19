@@ -123,7 +123,7 @@ license {
     ignoreFailures = false
     strictCheck = true
     include '**/*.java'
-    exclude '**/osadata/**/*.java'
+    exclude '**/Color.java'
     mapping {
         java = 'SLASHSTAR_STYLE'
     }
