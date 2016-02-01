@@ -35,10 +35,7 @@ import java.io.Serializable;
 import java.nio.ByteBuffer;
 
 /**
- * A mutable Color class
- * 
- * @author $Author$
- * @version $Revision$ $Id$
+ * An immutable Color class.
  */
 public final class Color implements Serializable {
 
@@ -107,10 +104,141 @@ public final class Color implements Serializable {
      */
     public final static Color BLUE = new Color(0, 0, 255);
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Read a color from a byte buffer
+     * 
+     * @param src
+     *            The source buffer
+     */
+    public static Color readRGBA(ByteBuffer src) {
+        return new Color(src.get(), src.get(), src.get(), src.get());
+    }
+
+    /**
+     * Read a color from a byte buffer
+     * 
+     * @param src
+     *            The source buffer
+     */
+    public static Color readRGB(ByteBuffer src) {
+        return new Color(src.get(), src.get(), src.get());
+    }
+
+    /**
+     * Read a color from a byte buffer
+     * 
+     * @param src
+     *            The source buffer
+     */
+    public static Color readARGB(ByteBuffer src) {
+        byte alpha = src.get();
+        byte red = src.get();
+        byte green = src.get();
+        byte blue = src.get();
+        return new Color(red, green, blue, alpha);
+    }
+
+    /**
+     * Read a color from a byte buffer
+     * 
+     * @param src
+     *            The source buffer
+     */
+    public static Color readBGRA(ByteBuffer src) {
+        byte blue = src.get();
+        byte green = src.get();
+        byte red = src.get();
+        byte alpha = src.get();
+        return new Color(red, green, blue, alpha);
+    }
+
+    /**
+     * Read a color from a byte buffer
+     * 
+     * @param src
+     *            The source buffer
+     */
+    public static Color readBGR(ByteBuffer src) {
+        byte blue = src.get();
+        byte green = src.get();
+        byte red = src.get();
+        return new Color(red, green, blue, 255);
+    }
+
+    /**
+     * Read a color from a byte buffer
+     * 
+     * @param src
+     *            The source buffer
+     */
+    public static Color readABGR(ByteBuffer src) {
+        byte alpha = src.get();
+        byte blue = src.get();
+        byte green = src.get();
+        byte red = src.get();
+        return new Color(red, green, blue, alpha);
+    }
+
+    /**
+     * HSB to RGB conversion, pinched from java.awt.Color.
+     * 
+     * @param hue
+     *            (0..1.0f)
+     * @param saturation
+     *            (0..1.0f)
+     * @param brightness
+     *            (0..1.0f)
+     */
+    public static Color fromHSB(float hue, float saturation, float brightness) {
+        byte red = 0, green = 0, blue = 0;
+        if (saturation == 0.0F) {
+            red = green = blue = (byte) (brightness * 255F + 0.5F);
+        } else {
+            float f3 = (hue - (float) Math.floor(hue)) * 6F;
+            float f4 = f3 - (float) Math.floor(f3);
+            float f5 = brightness * (1.0F - saturation);
+            float f6 = brightness * (1.0F - saturation * f4);
+            float f7 = brightness * (1.0F - saturation * (1.0F - f4));
+            switch ((int) f3) {
+                case 0:
+                    red = (byte) (brightness * 255F + 0.5F);
+                    green = (byte) (f7 * 255F + 0.5F);
+                    blue = (byte) (f5 * 255F + 0.5F);
+                    break;
+                case 1:
+                    red = (byte) (f6 * 255F + 0.5F);
+                    green = (byte) (brightness * 255F + 0.5F);
+                    blue = (byte) (f5 * 255F + 0.5F);
+                    break;
+                case 2:
+                    red = (byte) (f5 * 255F + 0.5F);
+                    green = (byte) (brightness * 255F + 0.5F);
+                    blue = (byte) (f7 * 255F + 0.5F);
+                    break;
+                case 3:
+                    red = (byte) (f5 * 255F + 0.5F);
+                    green = (byte) (f6 * 255F + 0.5F);
+                    blue = (byte) (brightness * 255F + 0.5F);
+                    break;
+                case 4:
+                    red = (byte) (f7 * 255F + 0.5F);
+                    green = (byte) (f5 * 255F + 0.5F);
+                    blue = (byte) (brightness * 255F + 0.5F);
+                    break;
+                case 5:
+                    red = (byte) (brightness * 255F + 0.5F);
+                    green = (byte) (f5 * 255F + 0.5F);
+                    blue = (byte) (f6 * 255F + 0.5F);
+                    break;
+            }
+        }
+        return new Color(red, green, blue);
+    }
 
     /** Color components, publicly accessible */
-    private byte red, green, blue, alpha;
+    private final byte red, green, blue, alpha;
 
     /**
      * Constructor for Color.
@@ -137,48 +265,17 @@ public final class Color implements Serializable {
      * Constructor for Color.
      */
     public Color(int r, int g, int b, int a) {
-        set(r, g, b, a);
+        this((byte) r, (byte) g, (byte) b, (byte) a);
     }
 
     /**
      * Constructor for Color.
      */
     public Color(byte r, byte g, byte b, byte a) {
-        set(r, g, b, a);
-    }
-
-    /**
-     * Set a color
-     */
-    public void set(int r, int g, int b, int a) {
-        this.red = (byte) r;
-        this.green = (byte) g;
-        this.blue = (byte) b;
-        this.alpha = (byte) a;
-    }
-
-    /**
-     * Set a color
-     */
-    public void set(byte r, byte g, byte b, byte a) {
         this.red = r;
         this.green = g;
         this.blue = b;
         this.alpha = a;
-    }
-
-    /**
-     * Set a color
-     */
-    public void set(int r, int g, int b) {
-        set(r, g, b, 255);
-    }
-
-    /**
-     * Set a color
-     */
-    public void set(byte r, byte g, byte b) {
-        set(r, g, b, (byte) 255);
     }
 
     /**
@@ -207,62 +304,6 @@ public final class Color implements Serializable {
      */
     public int getAlpha() {
         return this.alpha & 0xFF;
-    }
-
-    /**
-     * Set the Red component
-     */
-    public void setRed(int red) {
-        this.red = (byte) red;
-    }
-
-    /**
-     * Set the Green component
-     */
-    public void setGreen(int green) {
-        this.green = (byte) green;
-    }
-
-    /**
-     * Set the Blue component
-     */
-    public void setBlue(int blue) {
-        this.blue = (byte) blue;
-    }
-
-    /**
-     * Set the Alpha component
-     */
-    public void setAlpha(int alpha) {
-        this.alpha = (byte) alpha;
-    }
-
-    /**
-     * Set the Red component
-     */
-    public void setRed(byte red) {
-        this.red = red;
-    }
-
-    /**
-     * Set the Green component
-     */
-    public void setGreen(byte green) {
-        this.green = green;
-    }
-
-    /**
-     * Set the Blue component
-     */
-    public void setBlue(byte blue) {
-        this.blue = blue;
-    }
-
-    /**
-     * Set the Alpha component
-     */
-    public void setAlpha(byte alpha) {
-        this.alpha = alpha;
     }
 
     /**
@@ -399,150 +440,6 @@ public final class Color implements Serializable {
         dest.put(this.green);
         dest.put(this.red);
         dest.put(this.alpha);
-    }
-
-    /**
-     * Read a color from a byte buffer
-     * 
-     * @param src
-     *            The source buffer
-     */
-    public void readRGBA(ByteBuffer src) {
-        this.red = src.get();
-        this.green = src.get();
-        this.blue = src.get();
-        this.alpha = src.get();
-    }
-
-    /**
-     * Read a color from a byte buffer
-     * 
-     * @param src
-     *            The source buffer
-     */
-    public void readRGB(ByteBuffer src) {
-        this.red = src.get();
-        this.green = src.get();
-        this.blue = src.get();
-    }
-
-    /**
-     * Read a color from a byte buffer
-     * 
-     * @param src
-     *            The source buffer
-     */
-    public void readARGB(ByteBuffer src) {
-        this.alpha = src.get();
-        this.red = src.get();
-        this.green = src.get();
-        this.blue = src.get();
-    }
-
-    /**
-     * Read a color from a byte buffer
-     * 
-     * @param src
-     *            The source buffer
-     */
-    public void readBGRA(ByteBuffer src) {
-        this.blue = src.get();
-        this.green = src.get();
-        this.red = src.get();
-        this.alpha = src.get();
-    }
-
-    /**
-     * Read a color from a byte buffer
-     * 
-     * @param src
-     *            The source buffer
-     */
-    public void readBGR(ByteBuffer src) {
-        this.blue = src.get();
-        this.green = src.get();
-        this.red = src.get();
-    }
-
-    /**
-     * Read a color from a byte buffer
-     * 
-     * @param src
-     *            The source buffer
-     */
-    public void readABGR(ByteBuffer src) {
-        this.alpha = src.get();
-        this.blue = src.get();
-        this.green = src.get();
-        this.red = src.get();
-    }
-
-    /**
-     * Set this color's color by copying another color
-     * 
-     * @param src
-     *            The source color
-     */
-    public void setColor(Color src) {
-        this.red = src.getRedByte();
-        this.green = src.getGreenByte();
-        this.blue = src.getBlueByte();
-        this.alpha = src.getAlphaByte();
-    }
-
-    /**
-     * HSB to RGB conversion, pinched from java.awt.Color.
-     * 
-     * @param hue
-     *            (0..1.0f)
-     * @param saturation
-     *            (0..1.0f)
-     * @param brightness
-     *            (0..1.0f)
-     */
-    public void fromHSB(float hue, float saturation, float brightness) {
-        if (saturation == 0.0F) {
-            this.red =
-                    this.green = this.blue = (byte) (brightness * 255F + 0.5F);
-        } else {
-            float f3 = (hue - (float) Math.floor(hue)) * 6F;
-            float f4 = f3 - (float) Math.floor(f3);
-            float f5 = brightness * (1.0F - saturation);
-            float f6 = brightness * (1.0F - saturation * f4);
-            float f7 = brightness * (1.0F - saturation * (1.0F - f4));
-            switch ((int) f3) {
-                case 0:
-                    this.red = (byte) (brightness * 255F + 0.5F);
-                    this.green = (byte) (f7 * 255F + 0.5F);
-                    this.blue = (byte) (f5 * 255F + 0.5F);
-                    break;
-                case 1:
-                    this.red = (byte) (f6 * 255F + 0.5F);
-                    this.green = (byte) (brightness * 255F + 0.5F);
-                    this.blue = (byte) (f5 * 255F + 0.5F);
-                    break;
-                case 2:
-                    this.red = (byte) (f5 * 255F + 0.5F);
-                    this.green = (byte) (brightness * 255F + 0.5F);
-                    this.blue = (byte) (f7 * 255F + 0.5F);
-                    break;
-                case 3:
-                    this.red = (byte) (f5 * 255F + 0.5F);
-                    this.green = (byte) (f6 * 255F + 0.5F);
-                    this.blue = (byte) (brightness * 255F + 0.5F);
-                    break;
-                case 4:
-                    this.red = (byte) (f7 * 255F + 0.5F);
-                    this.green = (byte) (f5 * 255F + 0.5F);
-                    this.blue = (byte) (brightness * 255F + 0.5F);
-                    break;
-                case 5:
-                    this.red = (byte) (brightness * 255F + 0.5F);
-                    this.green = (byte) (f5 * 255F + 0.5F);
-                    this.blue = (byte) (f6 * 255F + 0.5F);
-                    break;
-            }
-        }
     }
 
     /**

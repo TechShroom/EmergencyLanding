@@ -27,9 +27,11 @@ package com.techshroom.emergencylanding.library.util;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.nio.FloatBuffer;
+import java.text.DecimalFormat;
 
 import com.flowpowered.math.imaginary.Quaternionf;
 import com.flowpowered.math.matrix.Matrix4f;
+import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector3f;
 
 public final class Maths {
@@ -324,6 +326,138 @@ public final class Maths {
             theta -= 360;
         }
         return theta;
+    }
+
+    /**
+     * 1 &rarr; 1st, 2 &rarr; 2nd, 3 &rarr; 3rd, etc.
+     */
+    public static String toOrdinalNumber(int i) {
+        switch (i % 100) {
+            // Special cases: 11, 12, 13 all use th.
+            case 11:
+            case 12:
+            case 13:
+                return i + "th";
+            // Normal cases
+            default:
+                switch (i % 10) {
+                    // X1 == st (1st, 21st)
+                    case 1:
+                        return i + "st";
+                    // X2 == nd (2nd, 22nd)
+                    case 2:
+                        return i + "nd";
+                    // X3 == rd (3rd, 23rd)
+                    case 3:
+                        return i + "rd";
+                    // Rest == th (8th, 25th)
+                    default:
+                        return i + "th";
+                }
+        }
+    }
+
+    private static final String[] TENS_NAMES =
+            { "", " ten", " twenty", " thirty", " forty", " fifty", " sixty",
+                    " seventy", " eighty", " ninety" };
+
+    private static final String[] NUM_NAMES = { "", " one", " two", " three",
+            " four", " five", " six", " seven", " eight", " nine", " ten",
+            " eleven", " twelve", " thirteen", " fourteen", " fifteen",
+            " sixteen", " seventeen", " eighteen", " nineteen" };
+
+    private static String convertLessThanOneThousand(int number) {
+        String soFar;
+
+        int mod100 = number % 100;
+        if (mod100 < 20) {
+            soFar = NUM_NAMES[mod100];
+            number /= 100;
+        } else {
+            soFar = NUM_NAMES[number % 10];
+            number /= 10;
+
+            soFar = TENS_NAMES[number % 10] + soFar;
+            number /= 10;
+        }
+        if (number == 0)
+            return soFar;
+        return NUM_NAMES[number] + " hundred" + soFar;
+    }
+
+    public static String convertNumberToEnglish(long number) {
+        // 0 to 999 999 999 999
+        if (number == 0) {
+            return "zero";
+        }
+
+        String snumber = Long.toString(number);
+
+        // pad with "0"
+        String mask = "000000000000";
+        DecimalFormat df = new DecimalFormat(mask);
+        snumber = df.format(number);
+
+        // XXXnnnnnnnnn
+        int billions = Integer.parseInt(snumber.substring(0, 3));
+        // nnnXXXnnnnnn
+        int millions = Integer.parseInt(snumber.substring(3, 6));
+        // nnnnnnXXXnnn
+        int hundredThousands = Integer.parseInt(snumber.substring(6, 9));
+        // nnnnnnnnnXXX
+        int thousands = Integer.parseInt(snumber.substring(9, 12));
+
+        String tradBillions = (billions == 0 ? ""
+                : convertLessThanOneThousand(billions) + " billion ");
+        String result = tradBillions;
+
+        String tradMillions = (millions == 0 ? ""
+                : convertLessThanOneThousand(millions) + " million ");
+        result += tradMillions;
+
+        String tradHundredThousands;
+        switch (hundredThousands) {
+            case 0:
+                tradHundredThousands = "";
+                break;
+            case 1:
+                tradHundredThousands = "one thousand ";
+                break;
+            default:
+                tradHundredThousands =
+                        convertLessThanOneThousand(hundredThousands)
+                                + " thousand ";
+        }
+        result += tradHundredThousands;
+
+        String tradThousand = convertLessThanOneThousand(thousands);
+        result += tradThousand;
+
+        // remove extra spaces!
+        return result.replaceAll("^\\s+", "").replaceAll("\\b\\s{2,}\\b", " ");
+    }
+
+    public static Vector2d rotate(Vector2d v, double sin, double cos) {
+        return new Vector2d(v.getX() * cos - v.getY() * sin,
+                v.getX() * sin + v.getY() * cos);
+    }
+
+    public static int addWithOverflowChecks(int... ints) {
+        int ret = 0;
+        for (int i : ints) {
+            try {
+                ret = Math.addExact(ret, i);
+            } catch (ArithmeticException err) {
+                if (i < ret) {
+                    // Overflow negative
+                    return Integer.MIN_VALUE;
+                } else {
+                    // Overflow positive
+                    return Integer.MAX_VALUE;
+                }
+            }
+        }
+        return ret;
     }
 
 }

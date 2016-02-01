@@ -22,95 +22,81 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-// package com.techshroom.emergencylanding.library.debug;
-//
-// import java.awt.Color;
-// import java.awt.Font;
-// import java.awt.Graphics;
-// import java.awt.image.BufferedImage;
-// import java.util.HashMap;
-//
-// import javax.swing.JFrame;
-//
-// import org.lwjgl.opengl.Display;
-//
-// import com.techshroom.emergencylanding.library.internalstate.ELEntity;
-// import com.techshroom.emergencylanding.library.lwjgl.DisplayLayer;
-// import com.techshroom.emergencylanding.library.lwjgl.Shapes;
-// import com.techshroom.emergencylanding.library.lwjgl.render.Render;
-// import com.techshroom.emergencylanding.library.lwjgl.render.StringRenderer;
-// import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
-// import com.techshroom.emergencylanding.library.lwjgl.render.VertexData;
-// import com.techshroom.emergencylanding.library.lwjgl.tex.BufferedTexture;
-// import com.techshroom.emergencylanding.library.main.KMain;
-// import com.techshroom.emergencylanding.library.util.DrawableUtils;
-//
-// public class FontTest extends KMain {
-//
-// static StringRenderer strrend;
-// static VBAO image = null;
-//
-// public static void main(String[] args) throws Exception {
-// DisplayLayer.initDisplay(false, 800, 600, "Fonts!", false, false, args);
-// FPS.enable(0);
-// while (!Display.isCloseRequested()) {
-// DisplayLayer.loop(12000);
-// }
-// strrend.destroy();
-// DisplayLayer.destroy();
-// System.exit(0);
-// }
-//
-// @Override
-// public void onDisplayUpdate(int delta) {
-// image.draw();
-// strrend.drawString(200, 200, "A", 1, 1);
-// strrend.drawString(100, 100, "Font is TNR Bold!!\nlorem ipsum", 1, 1);
-// }
-//
-// @Override
-// public void init(String[] args) {
-// final Font f = new Font("times new roman", Font.PLAIN, 16);
-// strrend = new StringRenderer(f, true, Color.RED);
-//
-// final BufferedImage strrendimg1 =
-// DrawableUtils.getFontImage('A', true, f, 19, Color.BLUE);
-//
-// image = Shapes
-// .getQuad(new VertexData().setXYZ(300, 300, 0),
-// new VertexData().setXYZ(strrendimg1.getWidth(),
-// strrendimg1.getHeight(), 0),
-// Shapes.XY)
-// .setTexture(new BufferedTexture(strrendimg1));
-//
-// System.err.println(image);
-//
-// // draw the matching data using a JFrame's graphics
-// JFrame j = new JFrame("Fonts!") {
-//
-// private static final long serialVersionUID = 1L;
-//
-// @Override
-// public void paint(Graphics g) {
-// super.paint(g);
-// g.setFont(f);
-// g.drawImage(strrendimg1, 200, 200, null);
-// g.drawString(
-// "This is a test and a test and a test test test\nThis is a test and a test
-// and a test test test\nThis is a test and a test and a test test test\nThis is
-// a test and a test and a test test test\n",
-// 100, 100);
-// }
-// };
-// j.setSize(800, 600);
-// j.setVisible(true);
-// }
-//
-// @Override
-// public void registerRenders(
-// HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender)
-// {
-// // TODO Auto-generated method stub
-//
-// }
-// }
+package com.techshroom.emergencylanding.library.debug;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.FileChannel;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.lwjgl.glfw.GLFW;
+
+import com.flowpowered.math.vector.Vector2f;
+import com.google.common.base.Throwables;
+import com.techshroom.emergencylanding.library.lwjgl.DisplayLayer;
+import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
+import com.techshroom.emergencylanding.library.lwjgl.render.string.FontStorage.FontRenderingData;
+import com.techshroom.emergencylanding.library.lwjgl.render.string.StringRenderer;
+import com.techshroom.emergencylanding.library.main.KMain;
+
+public class FontTest extends KMain {
+
+    static StringRenderer strrend;
+    static VBAO image = null;
+    private static DisplayLayer layer;
+
+    public static void main(String[] args) throws Exception {
+        try {
+            layer = DisplayLayer.initDisplay(0, 800, 600, "Fonts!", false, true,
+                    args);
+            layer.getDisplayFPSTracker().enable(layer.getWindow());
+            while (!layer.shouldClose()) {
+                layer.loop(120);
+            }
+        } finally {
+            if (layer != null) {
+                layer.destroy();
+            }
+            DisplayLayer.finalExitCall();
+        }
+    }
+
+    @Override
+    public void onDisplayUpdate(int delta) {
+        if (strrend == null) {
+            try {
+                strrend = FontRenderingData.create(() -> {
+                    try {
+                        return FileChannel.open(getFontPath());
+                    } catch (IOException e) {
+                        throw Throwables.propagate(e);
+                    }
+                }, 24).getStringRenderer();
+            } catch (IOException e) {
+                e.printStackTrace();
+                GLFW.glfwSetWindowShouldClose(layer.getWindow(),
+                        GLFW.GLFW_TRUE);
+            }
+        }
+        strrend.renderString("A", new Vector2f(200, 200));
+        strrend.renderString("Font is TNR Bold!!\nlorem ipsum",
+                new Vector2f(100, 100));
+    }
+
+    @Override
+    public void init(DisplayLayer layer, String[] args) {
+    }
+
+    private Path getFontPath() {
+        URL url =
+                getClass().getProtectionDomain().getCodeSource().getLocation();
+        try {
+            return Paths.get(url.toURI()).resolve("fonts/anonpro.ttf");
+        } catch (URISyntaxException e) {
+            throw Throwables.propagate(e);
+        }
+    }
+
+}

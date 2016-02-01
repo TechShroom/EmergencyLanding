@@ -24,19 +24,45 @@
  */
 package com.techshroom.emergencylanding.library.util;
 
+import java.util.function.IntUnaryOperator;
+
 public class Strings {
+
+    public static String repeat(int codePoint, int times) {
+        if (times == 0) {
+            return "";
+        }
+        char[] codeChars = Character.toChars(codePoint);
+        StringBuilder str = new StringBuilder(codeChars.length * times);
+        for (int i = 0; i < times; i++) {
+            str.append(codeChars);
+        }
+        return str.toString();
+    }
+
+    public static String repeat(String s, int times) {
+        if (s.isEmpty() || times == 0) {
+            return "";
+        }
+        StringBuilder str = new StringBuilder(s.length() * times);
+        for (int i = 0; i < times; i++) {
+            str.append(s);
+        }
+        return str.toString();
+    }
+
     /**
      * Returns the amount of <tt>c</tt>'s in <tt>s</tt>
      * 
      * @param s
      *            - the string to check
      * @param c
-     *            - the char to count
+     *            - the code point to count
      * @return the number of <tt>c</tt>'s in <tt>s</tt>
      */
-    public static int count(String s, char c) {
-        // regex with negated char = removal of all but the char
-        return s.replaceAll("[^\\Q" + c + "\\E]", "").length();
+    public static int count(String s, int c) {
+        // int cast ok - all strings < Integer.MAX_VALUE length
+        return (int) s.codePoints().filter(x -> x == c).count();
     }
 
     /**
@@ -47,7 +73,7 @@ public class Strings {
      *            - a number from 0-9
      * @return the char that matches
      */
-    public static char getCharForNum(byte number) {
+    public static char getCharForNum(int number) {
         if (number > 9) {
             throw new IndexOutOfBoundsException("number > 9");
         }
@@ -71,4 +97,26 @@ public class Strings {
         // byte
         return (byte) (c - 48);
     }
+
+    public static String uppercaseFirstCodePoint(String s) {
+        return modifyFirstCodePoint(s, Character::toUpperCase);
+    }
+
+    public static String lowercaseFirstCodePoint(String s) {
+        return modifyFirstCodePoint(s, Character::toLowerCase);
+    }
+
+    public static String modifyFirstCodePoint(String s, IntUnaryOperator op) {
+        if (s.length() == 0) {
+            return s;
+        } else if (s.length() == 1) {
+            return s.toUpperCase();
+        }
+        int codePoint = s.codePointAt(0);
+        int sizeOfCodePoint = Character.charCount(codePoint);
+        char[] mapped = Character.toChars(op.applyAsInt(codePoint));
+        return new StringBuilder(s.length()).append(mapped)
+                .append(s.substring(sizeOfCodePoint)).toString();
+    }
+
 }
