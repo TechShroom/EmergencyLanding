@@ -104,6 +104,8 @@ public class GLData {
         try {
             notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         } catch (OpenGLException ogle) {
+            System.err.println("Warning: OGLE in something prior to unload:");
+            ogle.printStackTrace();
         }
     }
 
@@ -259,7 +261,10 @@ public class GLData {
         if (err != GL_NO_ERROR) {
             LUtils.print("[GLErrorReporter] GLError in " + location + ": "
                     + GLUtil.getErrorString(err) + " (id: " + err + ")");
-            throw new OpenGLException(err);
+            // Dump stack in case the OGLE gets caught
+            OpenGLException ex = new OpenGLException(err);
+            ex.printStackTrace();
+            throw ex;
         }
     }
 

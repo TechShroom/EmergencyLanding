@@ -25,7 +25,9 @@
 package com.techshroom.emergencylanding.library.lwjgl.render.string;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static org.lwjgl.opengl.GL11.GL_MAX_TEXTURE_SIZE;
 import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.glGetInteger;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -71,23 +73,16 @@ import com.techshroom.emergencylanding.library.shapeup.Rectangle;
 import com.techshroom.emergencylanding.library.util.Maths;
 
 /**
- * A TrueType font implementation originally for Slick, edited for Bobjob's
- * Engine, and now for EmergencyLanding.
- * 
- * @author James Chambers (Jimmy)
- * @author Jeremy Adams (elias4444)
- * @author Kevin Glass (kevglass)
- * @author Peter Korzuszek (genail)
- * @author new version edited by David Aaron Muhar (bobjob)
+ * API for {@link STBTruetype}.
  * 
  * @author Kenzie Togami (kenzierocks)
  */
 public class StringRenderer {
 
     // Chars per row
-    private static final int FONT_TO_REGULAR_WIDTH = 1000;
+    private static final int FONT_TO_REGULAR_WIDTH = 10;
     // Chars per col
-    private static final int FONT_TO_REGULAR_HEIGHT = 1000;
+    private static final int FONT_TO_REGULAR_HEIGHT = 10;
     private static final Range<Integer> ASCII_RANGE = Range.closedOpen(0, 256);
 
     /**
@@ -142,9 +137,13 @@ public class StringRenderer {
                 this.fontData = loadFont(data.getInputStream()));
         this.fontHeight = STBTruetype.stbtt_ScaleForPixelHeight(fontInfo,
                 data.getFontSize());
-        this.width =
-                (int) ((data.getFontSize() * 0.5) * FONT_TO_REGULAR_WIDTH) + 1;
-        this.height = (int) (data.getFontSize() * FONT_TO_REGULAR_HEIGHT) + 1;
+        int maxTexSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
+        this.width = Math.min(
+                (int) ((data.getFontSize() * 0.5) * FONT_TO_REGULAR_WIDTH) + 1,
+                maxTexSize);
+        this.height = Math.min(
+                (int) (data.getFontSize() * FONT_TO_REGULAR_HEIGHT) + 1,
+                maxTexSize);
         System.err.println(new Vector2i(this.width, this.height));
         this.pixels = BufferUtils.createByteBuffer(this.width * this.height);
         this.pixelsTexture =
@@ -202,8 +201,6 @@ public class StringRenderer {
                     range.chardata_for_range(range.num_chars());
             IntBuffer data =
                     range.array_of_unicode_codepoints(range.num_chars());
-            System.err.println(range);
-            System.err.println(chars);
             for (int j = 0; j < chars.limit(); j++) {
                 STBTTPackedchar ch = chars.get(j);
                 this.pixelsTexture
@@ -211,7 +208,8 @@ public class StringRenderer {
                                 Rectangle.fromLengthAndWidth(
                                         ch.xoff2() - ch.xoff(),
                                         ch.yoff2() - ch.yoff()));
-                this.codePointMap.put(data.get(j), ch);
+                int codePoint = data.get(j);
+                this.codePointMap.put(codePoint, ch);
             }
         }
         rangeList.stream().flatMap(Set::stream)
@@ -232,7 +230,7 @@ public class StringRenderer {
                 checkArgument(Character.isValidCodePoint(codePoint),
                         "Code points must be valid");
             }
-            STBTTPackRange stbRange = STBTTPackRange.calloc();
+            STBTTPackRange stbRange = buffer.get(i);
 
             stbRange.font_size(this.fontHeight);
 
@@ -240,16 +238,14 @@ public class StringRenderer {
 
             IntBuffer data = BufferUtils.createIntBuffer(intSizes);
             data.put(intSet.stream().mapToInt(Integer::intValue).toArray());
+            data.flip();
             stbRange.array_of_unicode_codepoints(data);
 
             STBTTPackedchar.Buffer packedChar =
                     STBTTPackedchar.calloc(intSizes);
             stbRange.chardata_for_range(packedChar);
-
-            System.err.println(packedChar);
-            buffer.put(stbRange);
         }
-        buffer.flip();
+        // buffer.flip();
         return buffer;
     }
 
@@ -275,9 +271,9 @@ public class StringRenderer {
         packCodePointRanges(codePointsToLoad.build());
         int[] codePoints = str.codePoints().toArray();
         this.pixelsTexture.bind();
-        FloatBuffer xpos = BufferUtils.createFloatBuffer(1);
+        FloatBuffer xpos = MemoryUtil.memAllocFloat(1);
         xpos.put(0, pos.getX());
-        FloatBuffer ypos = BufferUtils.createFloatBuffer(1);
+        FloatBuffer ypos = MemoryUtil.memAllocFloat(1);
         ypos.put(0, pos.getY());
         STBTTPackedchar.Buffer singleBuffer = STBTTPackedchar.calloc(1);
         try {
@@ -308,11 +304,11 @@ public class StringRenderer {
         VertexData[] data = new VertexData[4];
         data[0] = new VertexData().setXYZ(quad.x0(), quad.y0(), 0)
                 .setUV(quad.s0(), quad.t0());
-        data[0] = new VertexData().setXYZ(quad.x1(), quad.y0(), 0)
+        data[1] = new VertexData().setXYZ(quad.x1(), quad.y0(), 0)
                 .setUV(quad.s1(), quad.t0());
-        data[0] = new VertexData().setXYZ(quad.x1(), quad.y1(), 0)
+        data[2] = new VertexData().setXYZ(quad.x1(), quad.y1(), 0)
                 .setUV(quad.s1(), quad.t1());
-        data[0] = new VertexData().setXYZ(quad.x0(), quad.y1(), 0)
+        data[3] = new VertexData().setXYZ(quad.x0(), quad.y1(), 0)
                 .setUV(quad.s0(), quad.t1());
         return data;
     }
@@ -320,7 +316,6 @@ public class StringRenderer {
     private void destroy() {
         this.codePointMap.forEach((codePoint, stbChar) -> {
             this.storedCodePoints.clear(codePoint);
-            stbChar.free();
         });
         for (int i = this.storedCodePoints.nextSetBit(0); i >= 0; i =
                 this.storedCodePoints.nextSetBit(i + 1)) {

@@ -229,6 +229,7 @@ public class DisplayLayer {
         GLData.clearAndLoad();
         ELTexture.doBindings();
         KMain.getInst().onDisplayUpdate(delta);
+        GLData.notifyOnGLError("postImplementationDisplayUpdate");
         this.mouseHelp.onDisplayUpdate();
         GLData.unload();
         GLFW.glfwSwapBuffers(this.window);

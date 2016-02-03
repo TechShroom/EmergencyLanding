@@ -268,6 +268,7 @@ public abstract class ELTexture {
                 binding.set(true);
                 for (Runnable r : glThreadQueue) {
                     r.run();
+                    GLData.notifyOnGLError("runningBindings");
                 }
                 glThreadQueue.clear();
             }

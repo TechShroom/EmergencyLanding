@@ -26,6 +26,8 @@ package com.techshroom.emergencylanding.library.lwjgl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
 import com.techshroom.emergencylanding.library.lwjgl.render.VertexData;
@@ -151,7 +153,7 @@ public class Shapes {
      * @return a {@link VBAO} for use in drawing.
      */
     public static VBAO getQuad(VertexData[] vertices) {
-        if (vertices == null) {
+        if (vertices == null || Stream.of(vertices).anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("vertices cannot be null");
         }
         if (vertices.length != 4) {
