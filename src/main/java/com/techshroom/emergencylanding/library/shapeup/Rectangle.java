@@ -1,9 +1,11 @@
 package com.techshroom.emergencylanding.library.shapeup;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.flowpowered.math.TrigMath;
 import com.flowpowered.math.vector.Vector2d;
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.techshroom.emergencylanding.library.shapeup.generated_please_ignore.PointSet;
@@ -91,22 +93,45 @@ public class Rectangle
 
     @Override
     public Vector2d get1stPoint() {
-        return null;
+        return this.points.get(0);
     }
 
     @Override
     public Vector2d get2ndPoint() {
-        return null;
+        return this.points.get(1);
     }
 
     @Override
     public Vector2d get3rdPoint() {
-        return null;
+        return this.points.get(2);
     }
 
     @Override
     public Vector2d get4thPoint() {
-        return null;
+        return this.points.get(3);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Rectangle && equals((Rectangle) obj));
+    }
+
+    public boolean equals(Rectangle rect) {
+        return (rect == this) || (Double.compare(this.width, rect.width) == 0
+                && Double.compare(this.height, rect.height) == 0
+                && Double.compare(this.radians, rect.radians) == 0);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.width, this.height, this.radians);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("points", this.points)
+                .add("width", this.width).add("height", this.height)
+                .add("radians", this.radians).toString();
     }
 
 }

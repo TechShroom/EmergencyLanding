@@ -51,6 +51,7 @@ import java.util.Arrays;
 import org.lwjgl.BufferUtils;
 
 import com.techshroom.emergencylanding.library.internalstate.Victor;
+import com.techshroom.emergencylanding.library.lwjgl.tex.Texture;
 import com.techshroom.emergencylanding.library.lwjgl.tex.ELTexture;
 import com.techshroom.emergencylanding.library.util.DrawableUtils;
 import com.techshroom.emergencylanding.library.util.LUtils;
@@ -121,7 +122,7 @@ public class VBAO implements Cloneable {
     /**
      * The texture used by this VBAO, if any.
      */
-    public ELTexture tex = null;
+    public Texture tex = null;
     /**
      * The original data.
      */

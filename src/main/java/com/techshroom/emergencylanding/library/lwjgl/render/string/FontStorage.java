@@ -74,7 +74,7 @@ public final class FontStorage {
 
     private static final LoadingCache<FontRenderingData, StringRenderer> RENDER_CACHE =
             CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES)
-                    .maximumWeight(10 * 1024 * 1024)
+                    .maximumWeight(3041937L /* sizeof new instance */ * 1024)
                     .weigher(new StringRenderer.CacheWeigher())
                     .ticker(GLFWTicker.INSTANCE)
                     .removalListener(StringRenderer::onRemoval)

@@ -61,7 +61,7 @@ import com.techshroom.emergencylanding.library.lwjgl.render.GLData;
 import com.techshroom.emergencylanding.library.main.KMain;
 import com.techshroom.emergencylanding.library.util.LUtils;
 
-public abstract class ELTexture {
+public abstract class ELTexture implements Texture {
 
     public static class DestTexture extends ELTexture {
 
@@ -328,6 +328,7 @@ public abstract class ELTexture {
         return this.id;
     }
 
+    @Override
     public void bind() {
         glActiveTexture(GL_TEXTURE0);
         try {
@@ -338,15 +339,18 @@ public abstract class ELTexture {
         }
     }
 
+    @Override
     public void unbind() {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, GLData.NONE);
     }
 
+    @Override
     public int getWidth() {
         return this.dim.getX();
     }
 
+    @Override
     public int getHeight() {
         return this.dim.getY();
     }

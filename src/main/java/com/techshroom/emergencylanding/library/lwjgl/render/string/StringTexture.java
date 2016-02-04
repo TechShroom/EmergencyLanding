@@ -16,7 +16,6 @@ import static org.lwjgl.opengl.GL11.glGetInteger;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
 import static org.lwjgl.opengl.GL11.glTexParameteri;
-import static org.lwjgl.opengl.GL11.glTexSubImage2D;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
@@ -27,6 +26,7 @@ import org.lwjgl.opengl.OpenGLException;
 
 import com.flowpowered.math.vector.Vector2d;
 import com.techshroom.emergencylanding.library.lwjgl.render.GLData;
+import com.techshroom.emergencylanding.library.lwjgl.tex.Texture;
 import com.techshroom.emergencylanding.library.lwjgl.tex.ELTexture;
 import com.techshroom.emergencylanding.library.shapeup.Rectangle;
 import com.techshroom.emergencylanding.library.util.LUtils;
@@ -38,9 +38,10 @@ import com.techshroom.emergencylanding.library.util.LUtils;
  * Usage of the texture will only work properly with the string rendering shader
  * that takes the red channel and maps it to all channels.
  */
-public class StringTexture {
+public class StringTexture implements Texture {
 
     private final ByteBuffer pixels;
+    private final byte[] compareChanges;
     private final int width;
     private final int height;
     private transient int glTextureID;
@@ -49,6 +50,7 @@ public class StringTexture {
         this.pixels = pixels;
         this.width = width;
         this.height = height;
+        this.compareChanges = new byte[this.pixels.capacity()];
         ELTexture.addRunnableToQueue(this::bindOpenGLTextures);
     }
 
@@ -81,6 +83,7 @@ public class StringTexture {
         GLData.notifyOnGLError("generatingMipmaps");
     }
 
+    @Override
     public int getWidth() {
         return this.width;
     }
@@ -89,21 +92,57 @@ public class StringTexture {
         return this.pixels;
     }
 
+    @Override
     public int getHeight() {
         return this.height;
     }
 
+    @Override
     public void bind() {
-        glBindTexture(GL_TEXTURE_2D, this.glTextureID);
-        GLData.notifyOnGLError("bindingStringTexture");
+        glActiveTexture(GL_TEXTURE0);
+        try {
+            glBindTexture(GL_TEXTURE_2D, this.glTextureID);
+            GLData.notifyOnGLError("bindingStringTexture");
+        } catch (OpenGLException ogle) {
+            System.err.println("OpenGL encountered an error while binding id #"
+                    + this.glTextureID + ": " + ogle.getLocalizedMessage());
+            ogle.printStackTrace();
+        }
+    }
+
+    @Override
+    public void unbind() {
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, GLData.NONE);
+        GLData.notifyOnGLError("unbindingStringTexture");
     }
 
     public void onUpdatedPixels(Vector2d offset, Rectangle changedPixels) {
         bind();
-        glTexSubImage2D(GL_TEXTURE_2D, 0, (int) offset.getX(),
-                (int) offset.getY(), (int) changedPixels.getWidth(),
-                (int) changedPixels.getHeight(), GL_RED, GL_UNSIGNED_BYTE,
-                this.pixels);
+        byte[] oldPixels = this.compareChanges.clone();
+        byte[] newPixels = this.compareChanges;
+        this.pixels.mark();
+        this.pixels.get(newPixels);
+        this.pixels.reset();
+        for (int i = 0; i < oldPixels.length; i++) {
+            byte old = oldPixels[i];
+            byte newP = newPixels[i];
+            if (old != newP) {
+                System.err.println(
+                        "difference @ " + i + ": " + old + " != " + newP);
+            }
+        }
+        System.err.println("Updating texture: " + this.pixels + " rect: "
+                + changedPixels + "; off: " + offset);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0,
+                GL_RED, GL_UNSIGNED_BYTE, this.pixels);
+        // Disabled until i figure out how to get the small update buffer
+        // effciently.
+        // glTexSubImage2D(GL_TEXTURE_2D, 0, (int) offset.getX(),
+        // (int) offset.getY(),
+        // (int) (offset.getX() + changedPixels.getWidth()),
+        // (int) (offset.getY() + changedPixels.getHeight()), GL_RED,
+        // GL_UNSIGNED_BYTE, this.pixels);
         GLData.notifyOnGLError("updatingStringTexture");
     }
 

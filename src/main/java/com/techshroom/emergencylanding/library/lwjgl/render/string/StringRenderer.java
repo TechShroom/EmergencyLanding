@@ -79,10 +79,11 @@ import com.techshroom.emergencylanding.library.util.Maths;
  */
 public class StringRenderer {
 
+    private static final int MAX_CHARS_PER_TEXTURE = 1024;
     // Chars per row
-    private static final int FONT_TO_REGULAR_WIDTH = 10;
+    private static final int FONT_TO_REGULAR_WIDTH = 100;
     // Chars per col
-    private static final int FONT_TO_REGULAR_HEIGHT = 10;
+    private static final int FONT_TO_REGULAR_HEIGHT = 100;
     private static final Range<Integer> ASCII_RANGE = Range.closedOpen(0, 256);
 
     /**
@@ -93,9 +94,11 @@ public class StringRenderer {
 
         @Override
         public int weigh(FontRenderingData key, StringRenderer value) {
-            return Maths.addWithOverflowChecks(
+            int space = Maths.addWithOverflowChecks(
                     value.storedCodePoints.cardinality(),
                     value.fontData.limit(), value.pixels.limit());
+            // System.err.println("Taking up " + space);
+            return space;
         }
 
     }
@@ -122,7 +125,12 @@ public class StringRenderer {
     }
 
     private final BitSet storedCodePoints = new BitSet();
-    private final Map<Integer, STBTTPackedchar> codePointMap = new HashMap<>();
+    // Use number of ascii chars. We know we'll always hold that much.
+    private final Map<Integer, Integer> codePointToCharDataIndex =
+            new HashMap<>(
+                    ASCII_RANGE.upperEndpoint() - ASCII_RANGE.lowerEndpoint());
+    private final STBTTPackedchar.Buffer charData;
+    private int lastUsedBufferIndex = -1;
     private final ByteBuffer fontData;
     private final STBTTPackContext context = STBTTPackContext.create();
     private final ByteBuffer pixels;
@@ -148,8 +156,11 @@ public class StringRenderer {
         this.pixels = BufferUtils.createByteBuffer(this.width * this.height);
         this.pixelsTexture =
                 new StringTexture(this.pixels, this.width, this.height);
+        // Can probably assume a certain amount of characters.
+        // TODO fine tune.
+        this.charData = STBTTPackedchar.calloc(MAX_CHARS_PER_TEXTURE);
         if (STBTruetype.stbtt_PackBegin(this.context, this.pixels, this.width,
-                this.height, 0, 0) == 0) {
+                this.height, 0, 1) == 0) {
             throw new IllegalStateException("Failed to load font");
         }
         STBTruetype.stbtt_PackSetOversampling(this.context, 2, 2);
@@ -188,8 +199,9 @@ public class StringRenderer {
 
     private void
             packCodePointRangesFinal(List<? extends Set<Integer>> rangeList) {
+        int[] offsetIntoChardata = new int[1];
         STBTTPackRange.Buffer stbRanges =
-                convertRangeListToSTBTTRanges(rangeList);
+                convertRangeListToSTBTTRanges(rangeList, offsetIntoChardata);
         if (STBTruetype.stbtt_PackFontRanges(this.context, this.fontData, 0,
                 stbRanges) == 0) {
             throw new IllegalArgumentException(
@@ -203,13 +215,13 @@ public class StringRenderer {
                     range.array_of_unicode_codepoints(range.num_chars());
             for (int j = 0; j < chars.limit(); j++) {
                 STBTTPackedchar ch = chars.get(j);
-                this.pixelsTexture
-                        .onUpdatedPixels(new Vector2d(ch.xoff(), ch.xoff()),
-                                Rectangle.fromLengthAndWidth(
-                                        ch.xoff2() - ch.xoff(),
-                                        ch.yoff2() - ch.yoff()));
+                this.pixelsTexture.onUpdatedPixels(
+                        new Vector2d(ch.x0(), ch.y0()),
+                        Rectangle.fromLengthAndWidth(ch.x1() - ch.x0(),
+                                ch.y1() - ch.y0()));
                 int codePoint = data.get(j);
-                this.codePointMap.put(codePoint, ch);
+                this.codePointToCharDataIndex.put(codePoint,
+                        offsetIntoChardata[0] + j);
             }
         }
         rangeList.stream().flatMap(Set::stream)
@@ -217,7 +229,8 @@ public class StringRenderer {
     }
 
     private STBTTPackRange.Buffer convertRangeListToSTBTTRanges(
-            List<? extends Set<Integer>> rangeList) {
+            List<? extends Set<Integer>> rangeList, int[] offsetIntoCharData) {
+        offsetIntoCharData[0] = this.lastUsedBufferIndex + 1;
         STBTTPackRange.Buffer buffer = STBTTPackRange.create(rangeList.size());
         for (int i = 0; i < rangeList.size(); i++) {
             Set<Integer> intSet = rangeList.get(i);
@@ -241,9 +254,12 @@ public class StringRenderer {
             data.flip();
             stbRange.array_of_unicode_codepoints(data);
 
-            STBTTPackedchar.Buffer packedChar =
-                    STBTTPackedchar.calloc(intSizes);
-            stbRange.chardata_for_range(packedChar);
+            // Get next slice.
+            int start = this.lastUsedBufferIndex + 1;
+            int end = this.lastUsedBufferIndex = start + intSizes;
+            STBTTPackedchar.Buffer subBufferView = STBTTPackedchar
+                    .create(this.charData.address(start), start - end);
+            stbRange.chardata_for_range(subBufferView);
         }
         // buffer.flip();
         return buffer;
@@ -275,28 +291,23 @@ public class StringRenderer {
         xpos.put(0, pos.getX());
         FloatBuffer ypos = MemoryUtil.memAllocFloat(1);
         ypos.put(0, pos.getY());
-        STBTTPackedchar.Buffer singleBuffer = STBTTPackedchar.calloc(1);
+        STBTTAlignedQuad quad = STBTTAlignedQuad.calloc();
         try {
             for (int i = 0; i < codePoints.length; i++) {
-                STBTTPackedchar codePointPacked =
-                        this.codePointMap.get(codePoints[i]);
-                singleBuffer.put(0, codePointPacked);
-                STBTTAlignedQuad quad = STBTTAlignedQuad.calloc();
-                try {
-                    STBTruetype.stbtt_GetPackedQuad(singleBuffer, this.width,
-                            this.height, 0, xpos, ypos, quad, GL_TRUE);
-                    // TODO: optimize somehow?
-                    VBAO strRenderPos = Shapes.getQuad(getVertexData(quad));
-                    strRenderPos.draw();
-                    strRenderPos.destroy();
-                } finally {
-                    quad.free();
-                }
+                STBTruetype.stbtt_GetPackedQuad(this.charData, this.width,
+                        this.height,
+                        this.codePointToCharDataIndex.get(codePoints[i]), xpos,
+                        ypos, quad, GL_TRUE);
+                // TODO: optimize somehow?
+                VBAO strRenderPos = Shapes.getQuad(getVertexData(quad));
+                strRenderPos.tex = this.pixelsTexture;
+                strRenderPos.draw();
+                strRenderPos.destroy();
             }
         } finally {
+            quad.free();
             MemoryUtil.memFree(xpos);
             MemoryUtil.memFree(ypos);
-            MemoryUtil.memFree(singleBuffer);
         }
     }
 
@@ -314,24 +325,12 @@ public class StringRenderer {
     }
 
     private void destroy() {
-        this.codePointMap.forEach((codePoint, stbChar) -> {
-            this.storedCodePoints.clear(codePoint);
-        });
-        for (int i = this.storedCodePoints.nextSetBit(0); i >= 0; i =
-                this.storedCodePoints.nextSetBit(i + 1)) {
-            if (!this.codePointMap.containsKey(i)) {
-                System.err.println(
-                        "Warning: stored code point without a char for codePoint "
-                                + i);
-            } else {
-                this.codePointMap.get(i).free();
-                this.storedCodePoints.clear(i);
-            }
-            if (i == Integer.MAX_VALUE) {
-                break;
-            }
-        }
-        this.codePointMap.clear();
+        System.err.println("Destroying string renderer...");
+        System.err.println("Whose fault?");
+        Thread.dumpStack();
+        MemoryUtil.memFree(this.charData);
+        this.codePointToCharDataIndex.clear();
+        this.storedCodePoints.clear();
         this.fontData.limit(0);
         STBTruetype.stbtt_PackEnd(this.context);
         this.pixels.limit(0);
