@@ -52,6 +52,7 @@ import org.lwjgl.stb.STBTTPackRange;
 import org.lwjgl.stb.STBTTPackedchar;
 import org.lwjgl.stb.STBTruetype;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.system.Pointer;
 
 import com.flowpowered.math.vector.Vector2d;
 import com.flowpowered.math.vector.Vector2f;
@@ -70,6 +71,7 @@ import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
 import com.techshroom.emergencylanding.library.lwjgl.render.VertexData;
 import com.techshroom.emergencylanding.library.lwjgl.render.string.FontStorage.FontRenderingData;
 import com.techshroom.emergencylanding.library.shapeup.Rectangle;
+import com.techshroom.emergencylanding.library.util.DeallocatedException;
 import com.techshroom.emergencylanding.library.util.Maths;
 
 /**
@@ -107,8 +109,7 @@ public class StringRenderer {
             throws IOException {
         ByteBuffer buffer;
 
-        try (
-                SeekableByteChannel fc = font.get()) {
+        try (SeekableByteChannel fc = font.get()) {
             buffer = BufferUtils.createByteBuffer((int) fc.size() + 1);
 
             while (fc.read(buffer) != -1) {
@@ -163,7 +164,7 @@ public class StringRenderer {
                 this.height, 0, 1) == 0) {
             throw new IllegalStateException("Failed to load font");
         }
-        STBTruetype.stbtt_PackSetOversampling(this.context, 2, 2);
+        // STBTruetype.stbtt_PackSetOversampling(this.context, 2, 2);
         packAsciiRange();
     }
 
@@ -207,12 +208,13 @@ public class StringRenderer {
             throw new IllegalArgumentException(
                     "Failed to PackFontRanges on " + rangeList);
         }
+        System.err.println(MemoryUtil.memAddress(this.pixels));
+        System.err.println(MemoryUtil.memGetLong(this.context.address()
+                + Pointer.POINTER_SIZE * 2 + 6 * Integer.BYTES));
         for (int i = 0; i < stbRanges.limit(); i++) {
             STBTTPackRange range = stbRanges.get(i);
-            STBTTPackedchar.Buffer chars =
-                    range.chardata_for_range(range.num_chars());
-            IntBuffer data =
-                    range.array_of_unicode_codepoints(range.num_chars());
+            STBTTPackedchar.Buffer chars = range.chardata_for_range();
+            IntBuffer data = range.array_of_unicode_codepoints();
             for (int j = 0; j < chars.limit(); j++) {
                 STBTTPackedchar ch = chars.get(j);
                 this.pixelsTexture.onUpdatedPixels(
@@ -294,10 +296,13 @@ public class StringRenderer {
         STBTTAlignedQuad quad = STBTTAlignedQuad.calloc();
         try {
             for (int i = 0; i < codePoints.length; i++) {
+                Integer char_index =
+                        this.codePointToCharDataIndex.get(codePoints[i]);
+                if (char_index == null) {
+                    throw new DeallocatedException();
+                }
                 STBTruetype.stbtt_GetPackedQuad(this.charData, this.width,
-                        this.height,
-                        this.codePointToCharDataIndex.get(codePoints[i]), xpos,
-                        ypos, quad, GL_TRUE);
+                        this.height, char_index, xpos, ypos, quad, GL_TRUE);
                 // TODO: optimize somehow?
                 VBAO strRenderPos = Shapes.getQuad(getVertexData(quad));
                 strRenderPos.tex = this.pixelsTexture;
@@ -328,7 +333,7 @@ public class StringRenderer {
         System.err.println("Destroying string renderer...");
         System.err.println("Whose fault?");
         Thread.dumpStack();
-        MemoryUtil.memFree(this.charData);
+        this.charData.free();
         this.codePointToCharDataIndex.clear();
         this.storedCodePoints.clear();
         this.fontData.limit(0);

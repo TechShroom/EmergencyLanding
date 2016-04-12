@@ -54,12 +54,10 @@ public class TestSound extends KMain {
 
     @Override
     public void init(DisplayLayer layer, String[] args) {
-        SoundPlayer.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, .50f,
-                true);
-        SoundPlayer.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, .10f,
-                true);
-        SoundPlayer.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, 2.15f,
-                true);
+        SoundPlayer player = new SoundPlayer();
+        player.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, .50f, true);
+        player.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, .10f, true);
+        player.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, 2.15f, true);
     }
 
 }

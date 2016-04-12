@@ -24,38 +24,48 @@
  */
 package com.techshroom.emergencylanding.library.sound;
 
-import java.io.IOException;
+import static com.google.common.base.Preconditions.checkState;
+
+import java.net.MalformedURLException;
+import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 import java.nio.file.Paths;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
+import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL;
+import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
-import org.lwjgl.openal.ALContext;
+import org.lwjgl.openal.ALC10;
+import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.openal.ALUtil;
+
+import com.techshroom.emergencylanding.imported.WaveData;
 
 public class SoundPlayer {
 
-    static {
-        ALContext.create();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
+    private final Thread startedThread = Thread.currentThread();
 
-            @Override
-            public void run() {
-                ALC.destroy();
-            }
-        });
+    public SoundPlayer() {
+        long device = ALC10.alcOpenDevice((ByteBuffer) null);
+        if (device == 0) {
+            throw new IllegalStateException(
+                    "Failed to open the default device.");
+        }
+        long context = ALC10.alcCreateContext(device, null);
+        if (context == 0) {
+            throw new IllegalStateException("no context?");
+        }
+        ALC10.alcMakeContextCurrent(context);
+        ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+        AL.createCapabilities(deviceCaps);
     }
 
-    /* TODO implement the hell out of this */
     /**
      * Plays .wav file
      * 
      * @param soundFile
      */
-    public static void playWAV(String soundFile) {
+    public void playWAV(String soundFile) {
         playWAV(soundFile, 1.0f);
     }
 
@@ -65,7 +75,7 @@ public class SoundPlayer {
      * @param soundFile
      * @param volume
      */
-    public static void playWAV(String soundFile, float volume) {
+    public void playWAV(String soundFile, float volume) {
         playWAV(soundFile, volume, 1.0f);
     }
 
@@ -76,7 +86,7 @@ public class SoundPlayer {
      * @param volume
      * @param pitch
      */
-    public static void playWAV(String soundFile, float volume, float pitch) {
+    public void playWAV(String soundFile, float volume, float pitch) {
         playWAV(soundFile, volume, pitch, false);
     }
 
@@ -88,18 +98,46 @@ public class SoundPlayer {
      * @param pitch
      * @param loop
      */
-    public static void playWAV(String soundFile, float volume, float pitch,
+    public void playWAV(String soundFile, float volume, float pitch,
             boolean loop) {
-        try (
-                AudioInputStream data = AudioSystem
-                        .getAudioInputStream(Paths.get(soundFile).toFile())) {
-            Clip clip = AudioSystem.getClip();
-            clip.open(data);
-            clip.start();
-        } catch (UnsupportedAudioFileException | IOException
-                | LineUnavailableException e) {
-            e.printStackTrace();
-            return;
+        checkState(this.startedThread == Thread.currentThread(),
+                "cross-thread AL usage!");
+        int buffer = AL10.alGenBuffers();
+        ALUtil.checkALError();
+
+        WaveData waveFile;
+        try {
+            waveFile = WaveData.create(Paths.get(soundFile).toUri().toURL())
+                    .orElseThrow(() -> new IllegalStateException(
+                            "file " + soundFile + " caused errors"));
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("bad file " + e);
         }
+        AL10.alBufferData(buffer, waveFile.format, waveFile.data,
+                waveFile.samplerate);
+        waveFile.dispose();
+        ALUtil.checkALError();
+
+        int source = AL10.alGenSources();
+        ALUtil.checkALError();
+
+        AL10.alSourcei(source, AL10.AL_BUFFER, buffer);
+        AL10.alSourcef(source, AL10.AL_PITCH, pitch);
+        AL10.alSourcef(source, AL10.AL_GAIN, volume);
+        AL10.alSource3f(source, AL10.AL_POSITION, 0, 0, 0);
+        AL10.alSource3f(source, AL10.AL_VELOCITY, 0, 0, 0);
+        AL10.alSourcei(source, AL10.AL_LOOPING,
+                loop ? AL10.AL_TRUE : AL10.AL_FALSE);
+        ALUtil.checkALError();
+
+        AL10.alListener3f(AL10.AL_POSITION, 0, 0, 0);
+        AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
+        FloatBuffer buf = BufferUtils.createFloatBuffer(6);
+        buf.put(new float[] { 0, 0, -1, 0, 1, 0 });
+        buf.flip();
+        AL10.alListenerfv(AL10.AL_ORIENTATION, buf);
+
+        AL10.alSourcePlay(source);
     }
+
 }

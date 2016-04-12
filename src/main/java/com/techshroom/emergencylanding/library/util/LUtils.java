@@ -46,6 +46,7 @@ import javax.sound.midi.MidiDevice.Info;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.Configuration;
 import org.lwjgl.system.Platform;
 
 import com.techshroom.emergencylanding.library.util.interfaces.IOConsumer;
@@ -74,72 +75,11 @@ public final class LUtils {
     public static PrintStream sysout = System.out, syserr = System.err;
     public static String PLATFORM_NAME = "unknown";
 
-    static {
-        PLATFORM_NAME = Platform.get().getName();
-        String osName = System.getProperty("os.name");
-        if (osName.startsWith("SunOS")) {
-            PLATFORM_NAME = "solaris";
-        }
-        overrideStandardStreams();
-        ERROR_CB = GLFWErrorCallback.createPrint();
-        GLFW.glfwSetErrorCallback(ERROR_CB);
-    }
-
     public static final String elPrintStr =
             String.format("[" + LIB_NAME + "-%s]", LUtils.VERSION);
 
     public static void print(String msg) {
         System.err.println(elPrintStr + " " + msg);
-    }
-
-    private static void injectNatives() {
-        String natives = LUtils.getELTop() + File.separator + "res"
-                + File.separator + "libs" + File.separator + "natives"
-                + File.separator + PLATFORM_NAME;
-        System.setProperty("org.lwjgl.librarypath", natives);
-        try {
-            addLibraryPath(natives);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        System.err.println("Natives injected.");
-    }
-
-    /**
-     * Adds the specified path to the java library path
-     *
-     * @param pathToAdd
-     *            the path to add
-     * @throws Exception
-     */
-    public static void addLibraryPath(String pathToAdd) throws Exception {
-        final Field usrPathsField =
-                ClassLoader.class.getDeclaredField("usr_paths");
-        usrPathsField.setAccessible(true);
-
-        // get array of paths
-        final String[] paths = (String[]) usrPathsField.get(null);
-
-        // check if the path to add is already present
-        for (String path : paths) {
-            if (path.equals(pathToAdd)) {
-                return;
-            }
-        }
-
-        // add the new path
-        final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
-        newPaths[newPaths.length - 1] = pathToAdd;
-        usrPathsField.set(null, newPaths);
-    }
-
-    private static void overrideStandardStreams() {
-        System.err.println("Replacing streams with methodized...");
-        MethodizedSTDStream sysout = new MethodizedSTDStream(System.out);
-        System.setOut(new PrintStream(sysout));
-        MethodizedSTDStream syserr = new MethodizedSTDStream(System.err);
-        System.setErr(new PrintStream(syserr));
-        syserr.orig.println("Finished.");
     }
 
     /**
@@ -181,8 +121,55 @@ public final class LUtils {
                     .replace("/C:/", "C:/").replace("\\C:\\", "C:\\");
         }
         LUtils.print("Using EL_TOP " + EL_TOP);
+    }
 
-        injectNatives();
+    static {
+        Configuration.DEBUG.set(true);
+        PLATFORM_NAME = Platform.get().getName();
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("SunOS")) {
+            PLATFORM_NAME = "solaris";
+        }
+        overrideStandardStreams();
+        ERROR_CB = GLFWErrorCallback.createPrint();
+        GLFW.glfwSetErrorCallback(ERROR_CB);
+    }
+
+    /**
+     * Adds the specified path to the java library path
+     *
+     * @param pathToAdd
+     *            the path to add
+     * @throws Exception
+     */
+    public static void addLibraryPath(String pathToAdd) throws Exception {
+        final Field usrPathsField =
+                ClassLoader.class.getDeclaredField("usr_paths");
+        usrPathsField.setAccessible(true);
+
+        // get array of paths
+        final String[] paths = (String[]) usrPathsField.get(null);
+
+        // check if the path to add is already present
+        for (String path : paths) {
+            if (path.equals(pathToAdd)) {
+                return;
+            }
+        }
+
+        // add the new path
+        final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
+        newPaths[newPaths.length - 1] = pathToAdd;
+        usrPathsField.set(null, newPaths);
+    }
+
+    private static void overrideStandardStreams() {
+        System.err.println("Replacing streams with methodized...");
+        MethodizedSTDStream sysout = new MethodizedSTDStream(System.out);
+        System.setOut(new PrintStream(sysout));
+        MethodizedSTDStream syserr = new MethodizedSTDStream(System.err);
+        System.setErr(new PrintStream(syserr));
+        syserr.orig.println("Finished.");
     }
 
     public static final int debugLevel = Integer.parseInt(
@@ -434,8 +421,7 @@ public final class LUtils {
 
         if (isType == 0) {
             LUtils.print("Using raw file input stream");
-            try (
-                    InputStream stream = new FileInputStream(path)) {
+            try (InputStream stream = new FileInputStream(path)) {
                 return consumer.consumeStream(stream);
             }
         } else if (isType == 1 || isType == 2) {
@@ -460,11 +446,9 @@ public final class LUtils {
                     pathToCurrFile.substring(0, pathToCurrFile.length() - 1);
             String extra = path.replace(pathToCurrFile, "");
             LUtils.print("Attempting to load from " + file);
-            try (
-                    ZipFile zf = new ZipFile(file);) {
+            try (ZipFile zf = new ZipFile(file);) {
                 ZipEntry ze = zf.getEntry(extra);
-                try (
-                        InputStream stream = zf.getInputStream(ze)) {
+                try (InputStream stream = zf.getInputStream(ze)) {
                     return consumer.consumeStream(stream);
                 }
             }
