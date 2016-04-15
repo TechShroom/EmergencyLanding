@@ -27,7 +27,7 @@ package com.techshroom.emergencylanding.library.debug;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -67,9 +67,9 @@ public class FontTest extends KMain {
     public void onDisplayUpdate(int delta) {
         if (strrend == null) {
             try {
-                strrend = FontRenderingData.create(() -> {
+                strrend = FontRenderingData.create("anonpro", () -> {
                     try {
-                        return FileChannel.open(getFontPath());
+                        return Files.newInputStream(getFontPath());
                     } catch (IOException e) {
                         throw Throwables.propagate(e);
                     }

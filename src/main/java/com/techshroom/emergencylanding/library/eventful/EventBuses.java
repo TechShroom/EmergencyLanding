@@ -29,6 +29,11 @@ import net.engio.mbassy.bus.MBassador;
 public final class EventBuses {
 
     /**
+     * Game state events. Includes things like entering and exiting render
+     * phases.
+     */
+    public static final MBassador<Event> STATE_EVENTS = new MBassador<>();
+    /**
      * Mouse + key event bus.
      */
     public static final MBassador<Event> INPUT_EVENTS = new MBassador<>();

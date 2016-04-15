@@ -24,6 +24,13 @@
  */
 package com.techshroom.emergencylanding.library.lwjgl;
 
+import static org.lwjgl.nanovg.NanoVG.nvgBeginFrame;
+import static org.lwjgl.nanovg.NanoVG.nvgEndFrame;
+import static org.lwjgl.nanovg.NanoVGGL3.NVG_ANTIALIAS;
+import static org.lwjgl.nanovg.NanoVGGL3.NVG_DEBUG;
+import static org.lwjgl.nanovg.NanoVGGL3.nvgCreateGL3;
+import static org.lwjgl.nanovg.NanoVGGL3.nvgDeleteGL3;
+
 import java.lang.instrument.IllegalClassFormatException;
 import java.nio.IntBuffer;
 import java.util.Collections;
@@ -63,6 +70,7 @@ public class DisplayLayer {
     private final GLFWFramebufferSizeCallback sizeCallback;
     private final MouseHelp mouseHelp;
     private final Keys keys;
+    private final long nvgHandle;
 
     /**
      * Initializes the display and KMain instance. Parameter notes are found on
@@ -85,7 +93,7 @@ public class DisplayLayer {
      */
     public static DisplayLayer initDisplay(long fullscreenMonitor, int width,
             int height, String title, boolean resizable, String[] args)
-                    throws Exception {
+            throws Exception {
         return DisplayLayer.initDisplay(fullscreenMonitor, width, height, title,
                 resizable, true, args);
     }
@@ -172,6 +180,14 @@ public class DisplayLayer {
                 resizable, vsync, args, main);
     }
 
+    public static DisplayLayer getForContext() {
+        long context = GLFW.glfwGetCurrentContext();
+        if (context == 0) {
+            throw new NullPointerException("No calling context");
+        }
+        return createdMap.get(context);
+    }
+
     private DisplayLayer(long fullscreenMonitor, int width, int height,
             String title, boolean resizable, boolean vsync, String[] args,
             KMain main) {
@@ -221,6 +237,13 @@ public class DisplayLayer {
         main.init(this, args);
         GLData.notifyOnGLError(currentMethodName);
         LUtils.print("Using OpenGL v" + LUtils.getGLVer());
+
+        int flags = NVG_ANTIALIAS;
+        if (Boolean.getBoolean(LUtils.SHORT_LIB_NAME + ".nvg.debug")) {
+            flags |= NVG_DEBUG;
+        }
+        this.nvgHandle = nvgCreateGL3(flags);
+        GLData.notifyOnGLError(currentMethodName);
     }
 
     public void loop(int dfps) {
@@ -228,7 +251,16 @@ public class DisplayLayer {
         int delta = this.displayFPSTracker.update();
         GLData.clearAndLoad();
         ELTexture.doBindings();
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        GLFW.glfwGetWindowSize(this.window, width, height);
+        int windowWidth = width.get(0);
+        GLFW.glfwGetFramebufferSize(this.window, width, null);
+        // eh...hack
+        nvgBeginFrame(this.nvgHandle, windowWidth, height.get(0),
+                width.get(0) / windowWidth);
         KMain.getInst().onDisplayUpdate(delta);
+        nvgEndFrame(this.nvgHandle);
         GLData.notifyOnGLError("postImplementationDisplayUpdate");
         this.mouseHelp.onDisplayUpdate();
         GLData.unload();
@@ -247,6 +279,7 @@ public class DisplayLayer {
     }
 
     public void destroy() {
+        nvgDeleteGL3(this.nvgHandle);
         GLFW.glfwDestroyWindow(this.window);
     }
 
@@ -273,6 +306,10 @@ public class DisplayLayer {
 
     public long getWindow() {
         return this.window;
+    }
+
+    public long getNvgHandle() {
+        return this.nvgHandle;
     }
 
     public boolean shouldClose() {

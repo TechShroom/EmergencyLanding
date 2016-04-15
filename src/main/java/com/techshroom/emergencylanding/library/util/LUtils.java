@@ -33,22 +33,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.Configuration;
 import org.lwjgl.system.Platform;
 
+import com.google.common.io.ByteStreams;
 import com.techshroom.emergencylanding.library.util.interfaces.IOConsumer;
 
 public final class LUtils {
@@ -479,6 +483,15 @@ public final class LUtils {
          * System.err.println("Early icon load"); r.run(); } else {
          * ELTexture.addRunnableToQueue(r); }
          */
+    }
+
+    public static ByteBuffer inputStreamToDirectByteBuffer(
+            Supplier<InputStream> streamSupplier) throws IOException {
+        try (InputStream stream = streamSupplier.get()) {
+            byte[] data = ByteStreams.toByteArray(stream);
+            return (ByteBuffer) BufferUtils.createByteBuffer(data.length)
+                    .put(data).rewind();
+        }
     }
 
 }

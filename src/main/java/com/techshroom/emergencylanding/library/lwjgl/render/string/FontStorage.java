@@ -1,13 +1,13 @@
 package com.techshroom.emergencylanding.library.lwjgl.render.string;
 
 import java.io.IOException;
-import java.nio.channels.SeekableByteChannel;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -22,41 +22,59 @@ public final class FontStorage {
 
         public enum Style {
             BOLD, ITALIC;
+
+            public static String stringify(Collection<Style> styles) {
+                StringBuffer buffer = new StringBuffer();
+                styles.stream().distinct().forEach(style -> {
+                    if (style == BOLD) {
+                        buffer.append("-bold");
+                    } else if (style == ITALIC) {
+                        buffer.append("-italic");
+                    } else {
+                        throw new IllegalArgumentException(
+                                "Don't know what style " + style + " is.");
+                    }
+                });
+                return buffer.toString();
+            }
         }
 
-        public static FontRenderingData create(
-                Supplier<SeekableByteChannel> fontPath, int fontSize,
-                Style... style) {
-            return create(fontPath, fontSize, ImmutableSet.copyOf(style));
+        public static FontRenderingData create(String fontId,
+                Supplier<InputStream> fontData, int fontSize, Style... style) {
+            return create(fontId, fontData, fontSize,
+                    ImmutableSet.copyOf(style));
         }
 
-        public static FontRenderingData create(
-                Supplier<SeekableByteChannel> fontPath, int fontSize,
-                Style style) {
-            return create(fontPath, fontSize, ImmutableSet.of(style));
+        public static FontRenderingData create(String fontId,
+                Supplier<InputStream> fontData, int fontSize, Style style) {
+            return create(fontId, fontData, fontSize, ImmutableSet.of(style));
         }
 
-        public static FontRenderingData create(
-                Supplier<SeekableByteChannel> fontPath, int fontSize,
-                Style styleA, Style styleB) {
-            return create(fontPath, fontSize, ImmutableSet.of(styleA, styleB));
+        public static FontRenderingData create(String fontId,
+                Supplier<InputStream> fontData, int fontSize, Style styleA,
+                Style styleB) {
+            return create(fontId, fontData, fontSize,
+                    ImmutableSet.of(styleA, styleB));
         }
 
-        public static FontRenderingData
-                create(Supplier<SeekableByteChannel> fontPath, int fontSize) {
-            return create(fontPath, fontSize, ImmutableSet.of());
+        public static FontRenderingData create(String fontId,
+                Supplier<InputStream> fontData, int fontSize) {
+            return create(fontId, fontData, fontSize, ImmutableSet.of());
         }
 
-        public static FontRenderingData create(
-                Supplier<SeekableByteChannel> fontPath, int fontSize,
+        public static FontRenderingData create(String fontId,
+                Supplier<InputStream> fontData, int fontSize,
                 Collection<Style> style) {
-            return new AutoValue_FontStorage_FontRenderingData(fontPath,
-                    ImmutableSet.copyOf(style), fontSize);
+            return new AutoValue_FontStorage_FontRenderingData(fontData,
+                    ImmutableSet.copyOf(style), fontId + Style.stringify(style),
+                    fontSize);
         }
 
-        public abstract Supplier<SeekableByteChannel> getInputStream();
+        public abstract Supplier<InputStream> getInputStream();
 
         public abstract ImmutableSet<Style> getStyle();
+
+        public abstract String getFontIdentifier();
 
         public abstract int getFontSize();
 
@@ -68,6 +86,22 @@ public final class FontStorage {
                 Throwables.propagateIfInstanceOf(cause, IOException.class);
                 throw Throwables.propagate(cause);
             }
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == this) {
+                return true;
+            }
+            if (o instanceof FontStorage.FontRenderingData) {
+                FontStorage.FontRenderingData that =
+                        (FontStorage.FontRenderingData) o;
+                return (getStyle().equals(that.getStyle()))
+                        && (getFontIdentifier()
+                                .equals(that.getFontIdentifier()))
+                        && (getFontSize() == that.getFontSize());
+            }
+            return false;
         }
 
     }
