@@ -1,10 +1,10 @@
 EmergencyLanding
 ================
+A game engine for Java games. Open source, because why not?
 
-### Version 1.3.1 ###
+Built on OpenGL 3.2, uses modern OpenGL.
 
-
-Built on OpenGL 3.0, uses modern OpenGL.
+[![Build Status](https://travis-ci.org/TechShroom/EmergencyLanding.svg?branch=master)](https://travis-ci.org/TechShroom/EmergencyLanding)
 
 System Requirements:
 ----
@@ -18,10 +18,3 @@ System Requirements:
 * Linux
     * OpenGL 3.2
     * Any graphics card driver after 2009
-
-This also relies on KCore, here are the parts required from the distributed libs:
-* Arrays
-* Classes
-* Core
-* Reflect
-* Strings
