@@ -8,7 +8,7 @@ import com.flowpowered.math.vector.Vector2d;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
-import com.techshroom.emergencylanding.library.shapeup.generated_please_ignore.PointSet;
+import com.techshroom.emergencylanding.library.shapeup.generated.PointSet;
 import com.techshroom.emergencylanding.library.util.Maths;
 
 public class Rectangle

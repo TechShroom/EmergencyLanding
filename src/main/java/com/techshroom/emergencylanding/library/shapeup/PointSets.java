@@ -5,7 +5,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.Collection;
 
 import com.flowpowered.math.vector.Vectord;
-import com.techshroom.emergencylanding.library.shapeup.generated_please_ignore.PointSet;
+import com.techshroom.emergencylanding.library.shapeup.generated.PointSet;
 
 public final class PointSets {
 

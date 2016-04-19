@@ -64,7 +64,7 @@ public class PointClassGenerator {
 
     private static final String FOLDER = "src/generated/java";
     private static final String PACKAGE =
-            "com.techshroom.emergencylanding.library.shapeup.generated_please_ignore";
+            "com.techshroom.emergencylanding.library.shapeup.generated";
     private static final String INDENTATION = Strings.repeat(' ', 4);
     private static final TypeVariableName VECTOR_D =
             TypeVariableName.get("V", ClassName.get(Vectord.class));
