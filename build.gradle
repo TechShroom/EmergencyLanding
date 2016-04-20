@@ -146,7 +146,7 @@ license {
 import org.apache.tools.ant.filters.ReplaceTokens
 
 task detokenizeSource(type: Copy) {
-    from 'src/main/java'
+    from sourceSets.main.allJava.srcDirs
     into 'build/detokenizedSource'
     inputs.property 'version', project.version.toString()
     filter(ReplaceTokens, tokens: [
