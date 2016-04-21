@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.techshroom.emergencylanding.library.eventful.window;
+package com.techshroom.emergencylanding.library.eventful.events.window;
 
 import com.techshroom.emergencylanding.library.eventful.Event;
 import com.techshroom.emergencylanding.library.lwjgl.control.Cursor;

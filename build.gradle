@@ -54,6 +54,10 @@ configurations.all {
 repositories {
     mavenCentral()
     maven {
+        name = 'sponge'
+        url = 'http://repo.spongepowered.org/maven'
+    }
+    maven {
         name "central snapshots"
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
@@ -77,6 +81,7 @@ dependencies {
     compile group: 'net.engio', name: 'mbassador', version: '1.2.4.2'
     compile group: 'org.l33tlabs.twl', name: 'pngdecoder', version: '1.0'
     compile group: 'com.squareup', name: 'javapoet', version: '1.6.1'
+    compile group: 'org.spongepowered', name: 'event-gen-core', version: '1.1.0'
     addAPTReqWComp group: 'com.google.guava', name: 'guava', version: '19.0'
     addAPT group: 'com.google.auto.factory', name: 'auto-factory', version: '1.0-SNAPSHOT'
     addAPT group: 'com.google.auto.service', name: 'auto-service', version: '1.0-SNAPSHOT'
@@ -100,15 +105,15 @@ dependencies {
 apply plugin: 'event-impl-gen'
 
 // Compile time code generator for the event factory
-ext.eventBasePackage = 'src/main/java/com/techshroom/emergencylanding/library/eventful'
+ext.eventBasePackage = 'src/main/java/com/techshroom/emergencylanding/library/eventful/events'
 genEventImpl {
     includeSrc = [
         "${project.eventBasePackage}/"
     ]
     excludeSrc = []
-    outputDir = 'src/main/java/'
+    outputDir = 'src/generated/java/'
     outputFactory = 'com.techshroom.emergencylanding.library.eventful.EmergencyLandingEventFactory'
-    eventImplCreateMethod = 'ocom.techshroom.emergencylanding.library.eventful.EmergencyLandingEventFactoryUtils.createEventImpl'
+    eventImplCreateMethod = 'com.techshroom.emergencylanding.library.eventful.EmergencyLandingEventFactoryUtils.createEventImpl'
     sortPriorityPrefix = 'original'
     groupingPrefixes = ['from': 'to']
     validateCode = false

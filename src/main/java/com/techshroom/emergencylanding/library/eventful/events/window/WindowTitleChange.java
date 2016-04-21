@@ -22,20 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.techshroom.emergencylanding.library.eventful.render;
+package com.techshroom.emergencylanding.library.eventful.events.window;
 
 import com.techshroom.emergencylanding.library.eventful.Event;
 
-public interface RenderEvent extends Event {
-
-    long getRenderDelta();
-
-    interface Setup extends RenderEvent {
-
-    }
-
-    interface TearDown extends RenderEvent {
-
-    }
+public interface WindowTitleChange extends WindowEvent, Event.Cancellable {
+    
+    String getOldTitle();
+    
+    String getNewTitle();
 
 }

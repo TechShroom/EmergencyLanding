@@ -22,14 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.techshroom.emergencylanding.library.eventful.render;
+package com.techshroom.emergencylanding.library.eventful.events.gui;
 
-public interface NanoVGRenderEvent extends RenderEvent {
+import com.techshroom.emergencylanding.library.eventful.Event;
+import com.techshroom.emergencylanding.library.gui.Button;
 
-    interface Begin extends NanoVGRenderEvent {
+public interface ButtonEvent extends Event {
+    
+    interface Click extends ButtonEvent, Event.Cancellable {
+        
     }
-
-    interface End extends NanoVGRenderEvent {
-    }
+    
+    Button getButton();
 
 }

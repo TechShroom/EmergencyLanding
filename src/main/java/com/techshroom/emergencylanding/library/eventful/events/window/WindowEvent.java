@@ -22,14 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.techshroom.emergencylanding.library.eventful.window;
+package com.techshroom.emergencylanding.library.eventful.events.window;
 
-public interface WindowDestructionEvent extends WindowEvent {
 
-    interface Pre extends WindowDestructionEvent {
-    }
-
-    interface Post extends WindowDestructionEvent {
-    }
+public interface WindowEvent {
+    
+    long getWindow();
 
 }

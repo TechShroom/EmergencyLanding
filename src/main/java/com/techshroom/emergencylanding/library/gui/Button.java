@@ -26,8 +26,8 @@ package com.techshroom.emergencylanding.library.gui;
 
 import java.awt.geom.Rectangle2D;
 
-import com.techshroom.emergencylanding.library.eventful.gui.ButtonEvent;
-import com.techshroom.emergencylanding.library.eventful.window.MouseEvent;
+import com.techshroom.emergencylanding.library.eventful.events.window.MouseEvent;
+import com.techshroom.emergencylanding.library.eventful.events.gui.ButtonEvent;
 import com.techshroom.emergencylanding.library.lwjgl.Shapes;
 import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
 import com.techshroom.emergencylanding.library.lwjgl.render.VertexData;
