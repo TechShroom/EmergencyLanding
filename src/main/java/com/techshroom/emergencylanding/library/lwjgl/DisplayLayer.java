@@ -192,7 +192,7 @@ public class DisplayLayer {
             String title, boolean resizable, boolean vsync, String[] args,
             KMain main) {
         LUtils.print("Using LWJGL v" + org.lwjgl.Version.getVersion());
-        if (GLFW.glfwInit() != GLFW.GLFW_TRUE) {
+        if (!GLFW.glfwInit()) {
             throw new IllegalStateException("glfwInit failed!");
         }
         GLFW.glfwDefaultWindowHints();
@@ -313,7 +313,7 @@ public class DisplayLayer {
     }
 
     public boolean shouldClose() {
-        return GLFW.glfwWindowShouldClose(this.window) == GLFW.GLFW_TRUE;
+        return GLFW.glfwWindowShouldClose(this.window);
     }
 
     public Vector3f convertFromWindowToFramebuffer(Vector3f vec) {

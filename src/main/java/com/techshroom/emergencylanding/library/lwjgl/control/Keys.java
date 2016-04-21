@@ -39,7 +39,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
  * @author Kenzie Togami
  * 
  */
-public final class Keys implements GLFWKeyCallback.SAM {
+public final class Keys implements GLFWKeyCallback {
 
     private static final Map<Long, Keys> helperMap = new HashMap<>();
 

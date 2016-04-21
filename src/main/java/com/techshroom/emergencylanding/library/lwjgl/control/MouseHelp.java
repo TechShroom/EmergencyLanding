@@ -29,9 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWCursorEnterCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import com.techshroom.emergencylanding.library.lwjgl.Shapes;
 import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
@@ -39,8 +37,7 @@ import com.techshroom.emergencylanding.library.lwjgl.render.VertexData;
 import com.techshroom.emergencylanding.library.lwjgl.tex.ELTexture;
 import com.techshroom.emergencylanding.library.util.DrawableUtils;
 
-public final class MouseHelp implements GLFWMouseButtonCallback.SAM,
-        GLFWCursorEnterCallback.SAM, GLFWCursorPosCallback.SAM {
+public final class MouseHelp {
 
     private static class FakeCursor {
 
@@ -89,12 +86,18 @@ public final class MouseHelp implements GLFWMouseButtonCallback.SAM,
     }
 
     private final long window;
-    private final GLFWMouseButtonCallback thisMBCB =
-            GLFWMouseButtonCallback.create(this);
-    private final GLFWCursorEnterCallback thisCECB =
-            GLFWCursorEnterCallback.create(this);
+    // private final GLFWMouseButtonCallback thisMBCB =
+    // GLFWMouseButtonCallback.create(this);
+    // private final GLFWCursorEnterCallback thisCECB =
+    // GLFWCursorEnterCallback.create(this);
     private final GLFWCursorPosCallback thisCPCB =
-            GLFWCursorPosCallback.create(this);
+            GLFWCursorPosCallback.create((window, xpos, ypos) -> {
+                ypos = DrawableUtils.getWindowHeight() - ypos;
+                double oldX = this.x;
+                double oldY = this.y;
+                this.x = xpos;
+                this.y = ypos;
+            });
     @SuppressWarnings("unused")
     // Used to keep a strong ref to the images, etc.
     private Cursor currentCursor;
@@ -104,8 +107,8 @@ public final class MouseHelp implements GLFWMouseButtonCallback.SAM,
 
     private MouseHelp(long window) {
         this.window = window;
-        GLFW.glfwSetMouseButtonCallback(window, this.thisMBCB);
-        GLFW.glfwSetCursorEnterCallback(window, this.thisCECB);
+        // GLFW.glfwSetMouseButtonCallback(window, this.thisMBCB);
+        // GLFW.glfwSetCursorEnterCallback(window, this.thisCECB);
         GLFW.glfwSetCursorPosCallback(window, this.thisCPCB);
         useCursor(Cursor.getStandardCursor(GLFW.GLFW_ARROW_CURSOR));
     }
@@ -180,23 +183,5 @@ public final class MouseHelp implements GLFWMouseButtonCallback.SAM,
         if (this.fake != null) {
             this.fake.drawAt(this.x, this.y);
         }
-    }
-
-    @Override
-    public void invoke(long window, int button, int action, int mods) {
-    }
-
-    @Override
-    public void invoke(long window, double xpos, double ypos) {
-        ypos = DrawableUtils.getWindowHeight() - ypos;
-        double oldX = this.x;
-        double oldY = this.y;
-        this.x = xpos;
-        this.y = ypos;
-    }
-
-    @Override
-    public void invoke(long window, int entered) {
-
     }
 }
