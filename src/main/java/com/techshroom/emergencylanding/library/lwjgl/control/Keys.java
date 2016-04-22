@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.glfw.GLFWKeyCallbackI;
 
 /**
  * A class that uses the AWT event system for callbacks on {@link KeyEvent
@@ -39,7 +40,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
  * @author Kenzie Togami
  * 
  */
-public final class Keys implements GLFWKeyCallback {
+public final class Keys implements GLFWKeyCallbackI {
 
     private static final Map<Long, Keys> helperMap = new HashMap<>();
 
