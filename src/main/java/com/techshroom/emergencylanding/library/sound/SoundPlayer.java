@@ -29,6 +29,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.nio.file.Paths;
 
 import org.lwjgl.BufferUtils;
@@ -51,7 +52,7 @@ public class SoundPlayer {
             throw new IllegalStateException(
                     "Failed to open the default device.");
         }
-        long context = ALC10.alcCreateContext(device, null);
+        long context = ALC10.alcCreateContext(device, (IntBuffer) null);
         if (context == 0) {
             throw new IllegalStateException("no context?");
         }
