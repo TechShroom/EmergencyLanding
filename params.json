@@ -1,0 +1,6 @@
+{
+  "name": "EmergencyLanding",
+  "tagline": "EmergencyLanding is the new CrashCourse. Built on OpenGL 3.2.",
+  "body": "EmergencyLanding\r\n================\r\nA game engine for Java games. Open source, because why not?\r\n\r\nBuilt on OpenGL 3.2, uses modern OpenGL.\r\n\r\n[![Build Status](https://travis-ci.org/TechShroom/EmergencyLanding.svg?branch=master)](https://travis-ci.org/TechShroom/EmergencyLanding)\r\n\r\nSystem Requirements:\r\n----\r\n* Mac OSX:\r\n    * OpenGL 3.2\r\n    * OSX 10.7+ (as a result of requiring 3.2)\r\n    * Any graphics card driver after 2009\r\n* Windows:\r\n    * OpenGL 3.2\r\n    * Any graphics card driver after 2009\r\n* Linux\r\n    * OpenGL 3.2\r\n    * Any graphics card driver after 2009\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
