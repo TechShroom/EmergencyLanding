@@ -142,11 +142,13 @@ public class Shapes {
 
     /**
      * Quads must have vertex data like this: <br>
+     * <code>
      * 1------4<br>
      * |......|<br>
      * |......|<br>
      * |......|<br>
      * 2------3<br>
+     * </code>
      * 
      * @param vertices
      *            - the vertices to use
@@ -166,18 +168,22 @@ public class Shapes {
     /**
      * Cubes must have vertex data like this: <br>
      * Front:<br>
+     * <code>
      * 1------4<br>
      * |......|<br>
      * |......|<br>
      * |......|<br>
      * 2------3<br>
+     * </code>
      * <br>
      * Back:<br>
+     * <code>
      * 5------8<br>
      * |......|<br>
      * |......|<br>
      * |......|<br>
      * 6------7<br>
+     * </code>
      * 
      * @param vertices
      *            - the vertices to use
