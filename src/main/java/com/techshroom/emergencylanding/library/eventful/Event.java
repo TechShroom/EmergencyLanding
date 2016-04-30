@@ -24,13 +24,12 @@
  */
 package com.techshroom.emergencylanding.library.eventful;
 
-import org.spongepowered.api.eventgencore.annotation.PropertySettings;
-
 public interface Event {
 
     interface Cancellable extends Event {
 
-        @PropertySettings(requiredParameter = false)
+        // TODO write event factory stuff, ignore this with annotation
+        // @PropertySettings(requiredParameter = false)
         boolean isCanceled();
 
         void setCanceled(boolean canceled);
