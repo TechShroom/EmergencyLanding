@@ -25,7 +25,7 @@
 package com.techshroom.emergencylanding.library.util;
 
 /**
- * Thrown when a deallocated/destoryed object is used.
+ * Thrown when a deallocated/destroyed object is used.
  */
 public class DeallocatedException extends RuntimeException {
 
