@@ -22,5 +22,7 @@ Stages can have other stages run underneath them. It is up to the parent to hand
 Simple sub-stage system underneath the Main Stage from the sample above:
 ![Sample Sub-stage Setup](ascii-images/basic-sub-stage.png)
 
+(Note: The `ExitSignalException` above would be implemented without stacktraces, making it much more efficient. **Do not** use stacktraces for signal exceptions!)
+
 ### Multi-threading Stages
 Stages should not exist across threads. The concept of a thread would be hard to work in to such a system while keeping it simple and easy to use. Instead, each thread should have its own Stages that do not mingle with another thread.
