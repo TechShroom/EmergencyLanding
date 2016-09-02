@@ -66,9 +66,19 @@ public final class PreShaderOps {
                 index++;
             }
         }
-        Matrix4f finalMat = m;
-        return Stream.of(in).map(v -> apply(v, finalMat))
-                .toArray(Vector3f[]::new);
+        return m;
+    }
+
+    public static Vector3f apply(Vector3f in) {
+        return apply(in, getApplies());
+    }
+
+    public static Vector3f[] applyMany(Vector3f... in) {
+        if (in.length == 1) {
+            throw new UnsupportedOperationException("Use apply(Vector3f) for singular array.");
+        }
+        Matrix4f apply = getApplies();
+        return Stream.of(in).map(v -> apply(v, apply)).toArray(Vector3f[]::new);
     }
 
     /**
@@ -81,12 +91,8 @@ public final class PreShaderOps {
      */
     private static Vector3f apply(Vector3f vec, Matrix4f m) {
         float vx = vec.getX(), vy = vec.getY(), vz = vec.getZ();
-        return new Vector3f(
-                m.get(0, 0) * vx + m.get(0, 1) * vy + m.get(0, 2) * vz
-                        + m.get(0, 3),
-                m.get(1, 0) * vx + m.get(1, 1) * vy + m.get(1, 2) * vz
-                        + m.get(1, 3),
-                m.get(2, 0) * vx + m.get(2, 1) * vy + m.get(2, 2) * vz
-                        + m.get(2, 3));
+        return new Vector3f(m.get(0, 0) * vx + m.get(0, 1) * vy + m.get(0, 2) * vz + m.get(0, 3),
+                m.get(1, 0) * vx + m.get(1, 1) * vy + m.get(1, 2) * vz + m.get(1, 3),
+                m.get(2, 0) * vx + m.get(2, 1) * vy + m.get(2, 2) * vz + m.get(2, 3));
     }
 }
