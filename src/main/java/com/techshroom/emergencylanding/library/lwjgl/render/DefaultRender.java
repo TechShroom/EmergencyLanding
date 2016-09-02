@@ -1,7 +1,7 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
+ * Copyright (c) TechShroom Studios <https://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,7 +30,7 @@ import com.techshroom.emergencylanding.library.util.DrawableUtils;
 
 public class DefaultRender extends Render<ELEntity> {
 
-    VBAO quad = Shapes.getQuad(new VertexData(),
+    private VBAO quad = Shapes.getQuad(new VertexData(),
             new VertexData().setXYZ(10, 10, 10), Shapes.XY);
     {
         this.quad.setStatic(false);
