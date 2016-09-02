@@ -1,7 +1,6 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -61,8 +60,12 @@ public class DisplayLayer {
     }
 
     private static final Map<Long, DisplayLayer> createdMap = new HashMap<>();
-    public static final Map<Long, DisplayLayer> CREATED =
-            Collections.unmodifiableMap(createdMap);
+    public static final Map<Long, DisplayLayer> CREATED = Collections.unmodifiableMap(createdMap);
+
+    private static final ThreadLocal<IntBuffer> WIDTH_BUFFER =
+            ThreadLocal.withInitial(() -> BufferUtils.createIntBuffer(2));
+    private static final ThreadLocal<IntBuffer> HEIGHT_BUFFER =
+            ThreadLocal.withInitial(() -> BufferUtils.createIntBuffer(2));
 
     private final long window;
     private final FPS displayFPSTracker;
@@ -91,11 +94,10 @@ public class DisplayLayer {
      * @throws Exception
      *             any exceptions will be thrown
      */
-    public static DisplayLayer initDisplay(long fullscreenMonitor, int width,
-            int height, String title, boolean resizable, String[] args)
-            throws Exception {
-        return DisplayLayer.initDisplay(fullscreenMonitor, width, height, title,
-                resizable, true, args);
+    public static DisplayLayer
+            initDisplay(long fullscreenMonitor, int width, int height, String title, boolean resizable, String[] args)
+                    throws Exception {
+        return DisplayLayer.initDisplay(fullscreenMonitor, width, height, title, resizable, true, args);
     }
 
     /**
@@ -119,21 +121,17 @@ public class DisplayLayer {
      * @throws Exception
      *             any exceptions will be thrown
      */
-    public static DisplayLayer initDisplay(long fullscreenMonitor, int width,
-            int height, String title, boolean resizable, boolean vsync,
-            String[] args) throws Exception {
+    public static DisplayLayer
+            initDisplay(long fullscreenMonitor, int width, int height, String title, boolean resizable, boolean vsync, String[] args)
+                    throws Exception {
         try {
-            return DisplayLayer.initDisplay(fullscreenMonitor, width, height,
-                    title, resizable, vsync, args,
-                    Class.forName(LUtils
-                            .getFirstEntryNotThis(DisplayLayer.class.getName()))
-                            .asSubclass(KMain.class));
+            return DisplayLayer.initDisplay(fullscreenMonitor, width, height, title, resizable, vsync, args,
+                    Class.forName(LUtils.getFirstEntryNotThis(DisplayLayer.class.getName())).asSubclass(KMain.class));
         } catch (ClassCastException cce) {
-            if (cce.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX]
-                    .getClassName().equals(DisplayLayer.class.getName())) {
-                throw new IllegalClassFormatException("Class "
-                        + Class.forName(StackTraceInfo.getInvokingClassName())
-                        + " not implementing KMain!");
+            if (cce.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX].getClassName()
+                    .equals(DisplayLayer.class.getName())) {
+                throw new IllegalClassFormatException(
+                        "Class " + Class.forName(StackTraceInfo.getInvokingClassName()) + " not implementing KMain!");
             } else {
                 throw cce;
             }
@@ -165,19 +163,17 @@ public class DisplayLayer {
      *             any exceptions will be thrown
      */
 
-    public static DisplayLayer initDisplay(long fullscreenMonitor, int width,
-            int height, String title, boolean resizable, boolean vsync,
-            String[] args, Class<? extends KMain> cls) throws Exception {
+    public static DisplayLayer
+            initDisplay(long fullscreenMonitor, int width, int height, String title, boolean resizable, boolean vsync, String[] args, Class<? extends KMain> cls)
+                    throws Exception {
         KMain main = cls.newInstance();
-        return DisplayLayer.initDisplay(fullscreenMonitor, width, height, title,
-                resizable, vsync, args, main);
+        return DisplayLayer.initDisplay(fullscreenMonitor, width, height, title, resizable, vsync, args, main);
     }
 
-    public static DisplayLayer initDisplay(long fullscreenMonitor, int width,
-            int height, String title, boolean resizable, boolean vsync,
-            String[] args, KMain main) throws Exception {
-        return new DisplayLayer(fullscreenMonitor, width, height, title,
-                resizable, vsync, args, main);
+    public static DisplayLayer
+            initDisplay(long fullscreenMonitor, int width, int height, String title, boolean resizable, boolean vsync, String[] args, KMain main)
+                    throws Exception {
+        return new DisplayLayer(fullscreenMonitor, width, height, title, resizable, vsync, args, main);
     }
 
     public static DisplayLayer getForContext() {
@@ -188,23 +184,19 @@ public class DisplayLayer {
         return createdMap.get(context);
     }
 
-    private DisplayLayer(long fullscreenMonitor, int width, int height,
-            String title, boolean resizable, boolean vsync, String[] args,
-            KMain main) {
+    private DisplayLayer(long fullscreenMonitor, int width, int height, String title, boolean resizable, boolean vsync,
+            String[] args, KMain main) {
         LUtils.print("Using LWJGL v" + org.lwjgl.Version.getVersion());
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("glfwInit failed!");
         }
         GLFW.glfwDefaultWindowHints();
-        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE,
-                resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
-        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE,
-                GLFW.GLFW_OPENGL_CORE_PROFILE);
-        this.window = GLFW.glfwCreateWindow(width, height, title,
-                fullscreenMonitor, 0);
+        GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
+        this.window = GLFW.glfwCreateWindow(width, height, title, fullscreenMonitor, 0);
         if (this.window == 0) {
             // uh oh.
             throw new IllegalStateException("window creation failed.");
@@ -217,8 +209,7 @@ public class DisplayLayer {
 
         GLFW.glfwSwapInterval(vsync ? 1 : 0);
 
-        this.sizeCallback = GLFWFramebufferSizeCallback
-                .create((win, w, h) -> GLData.resizedRefresh(win));
+        this.sizeCallback = GLFWFramebufferSizeCallback.create((win, w, h) -> GLData.resizedRefresh(win));
         GLFW.glfwSetFramebufferSizeCallback(this.window, this.sizeCallback);
         this.mouseHelp = MouseHelp.getHelper(this.window);
         this.keys = Keys.getHelper(this.window);
@@ -257,8 +248,7 @@ public class DisplayLayer {
         int windowWidth = width.get(0);
         GLFW.glfwGetFramebufferSize(this.window, width, null);
         // eh...hack
-        nvgBeginFrame(this.nvgHandle, windowWidth, height.get(0),
-                width.get(0) / windowWidth);
+        nvgBeginFrame(this.nvgHandle, windowWidth, height.get(0), width.get(0) / windowWidth);
         KMain.getInst().onDisplayUpdate(delta);
         nvgEndFrame(this.nvgHandle);
         GLData.notifyOnGLError("postImplementationDisplayUpdate");
@@ -269,13 +259,11 @@ public class DisplayLayer {
     }
 
     public void intoFull() {
-        throw new UnsupportedOperationException(
-                "waiting on @kenzierocks to implement");
+        throw new UnsupportedOperationException("waiting on @kenzierocks to implement");
     }
 
     public void outOfFull() {
-        throw new UnsupportedOperationException(
-                "waiting on @kenzierocks to implement");
+        throw new UnsupportedOperationException("waiting on @kenzierocks to implement");
     }
 
     public void destroy() {
@@ -317,8 +305,8 @@ public class DisplayLayer {
     }
 
     public Vector3f convertFromWindowToFramebuffer(Vector3f vec) {
-        IntBuffer widthHolder = BufferUtils.createIntBuffer(2);
-        IntBuffer heightHolder = BufferUtils.createIntBuffer(2);
+        IntBuffer widthHolder = (IntBuffer) WIDTH_BUFFER.get().rewind();
+        IntBuffer heightHolder = (IntBuffer) HEIGHT_BUFFER.get().rewind();
         GLFW.glfwGetWindowSize(this.window, widthHolder, heightHolder);
         widthHolder.position(1);
         heightHolder.position(1);
