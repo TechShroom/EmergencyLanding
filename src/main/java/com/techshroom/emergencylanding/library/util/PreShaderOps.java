@@ -1,7 +1,7 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
+ * Copyright (c) TechShroom Studios <https://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +24,7 @@
  */
 package com.techshroom.emergencylanding.library.util;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.stream.Stream;
 
@@ -32,8 +33,8 @@ import com.flowpowered.math.vector.Vector3f;
 
 public final class PreShaderOps {
 
-    private static final LinkedList<Matrix4f> applies =
-            new LinkedList<Matrix4f>();
+    private static final LinkedList<Matrix4f> applies = new LinkedList<Matrix4f>();
+    private static Matrix4f currentProduct;
 
     private PreShaderOps() {
         throw new AssertionError("Nope.");
@@ -43,28 +44,43 @@ public final class PreShaderOps {
         for (Matrix4f m : in) {
             applies.add(m);
         }
+        if (in.length != 0) {
+            currentProduct = null;
+        }
     }
 
     public static void remove(int count) {
+        if (count > 0) {
+            currentProduct = null;
+        }
         for (; count > 0; count--) {
             applies.removeLast();
         }
     }
 
-    public static Vector3f[] apply(Vector3f... in) {
-        LinkedList<Matrix4f> c = new LinkedList<Matrix4f>(applies);
-        Matrix4f m = new Matrix4f();
-        int index = 0;
+    private static Matrix4f getApplies() {
+        if (currentProduct == null) {
+            return currentProduct = applyMatricies();
+        }
+        return currentProduct;
+    }
+
+    private static Matrix4f applyMatricies() {
+        LinkedList<Matrix4f> c = applies;
+        Matrix4f m;
         if (c.size() >= 1) {
-            for (Matrix4f mf : c) {
+            Iterator<Matrix4f> iter = c.iterator();
+            m = iter.next();
+            while (iter.hasNext()) {
+                Matrix4f mf = iter.next();
                 if (mf == null) {
-                    System.err.println("Null matrix");
-                    applies.remove(index);
+                    System.err.println("Warning: Null matrix");
                     continue;
                 }
                 m = m.mul(mf);
-                index++;
             }
+        } else {
+            m = Matrix4f.IDENTITY;
         }
         return m;
     }
