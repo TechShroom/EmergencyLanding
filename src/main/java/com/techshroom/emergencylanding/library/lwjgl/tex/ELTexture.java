@@ -51,12 +51,13 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.lwjgl.glfw.GLFWImage;
-import org.lwjgl.opengl.OpenGLException;
 
 import com.flowpowered.math.vector.Vector2i;
 import com.techshroom.emergencylanding.imported.Color;
 import com.techshroom.emergencylanding.library.debug.Memory;
+import com.techshroom.emergencylanding.library.exceptions.lwjgl.OpenGLException;
 import com.techshroom.emergencylanding.library.exceptions.lwjgl.RuntimeTextureBindException;
+import com.techshroom.emergencylanding.library.lwjgl.ErrUtil;
 import com.techshroom.emergencylanding.library.lwjgl.render.GLData;
 import com.techshroom.emergencylanding.library.main.KMain;
 import com.techshroom.emergencylanding.library.util.LUtils;
@@ -203,6 +204,7 @@ public abstract class ELTexture implements Texture {
                             glTexParameteri(GL_TEXTURE_2D,
                                     GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             glBindTexture(GL_TEXTURE_2D, ELTexture.this.id);
+                            ErrUtil.throwOGLIfError();
                         } catch (OpenGLException ogle) {
                             if (LUtils.debugLevel > 1) {
                                 System.err.println(

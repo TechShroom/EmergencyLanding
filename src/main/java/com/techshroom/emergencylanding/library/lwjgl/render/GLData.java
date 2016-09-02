@@ -66,10 +66,9 @@ import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.opengl.GLUtil;
-import org.lwjgl.opengl.OpenGLException;
 
 import com.flowpowered.math.matrix.Matrix4f;
+import com.techshroom.emergencylanding.library.exceptions.lwjgl.OpenGLException;
 import com.techshroom.emergencylanding.library.util.LUtils;
 import com.techshroom.emergencylanding.library.util.Maths;
 import com.techshroom.emergencylanding.library.util.StackTraceInfo;
@@ -102,7 +101,7 @@ public class GLData {
         // glUseProgram(NONE); // generates INVALID OPERATION, may be needed
         // however?
         try {
-            notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+            notifyOnGLError("unload");
         } catch (OpenGLException ogle) {
             System.err.println("Warning: OGLE in something prior to unload:");
             ogle.printStackTrace();
@@ -156,11 +155,9 @@ public class GLData {
     }
 
     private static void addVertexAndFragmentShaders() {
-        shaders.add(loadShader(LUtils.getELTop()
-                + "/shaders/vertex.glsl".replace('/', File.separatorChar),
+        shaders.add(loadShader(LUtils.getELTop() + "/shaders/vertex.glsl".replace('/', File.separatorChar),
                 GL_VERTEX_SHADER));
-        shaders.add(loadShader(LUtils.getELTop()
-                + "/shaders/texture.glsl".replace('/', File.separatorChar),
+        shaders.add(loadShader(LUtils.getELTop() + "/shaders/texture.glsl".replace('/', File.separatorChar),
                 GL_FRAGMENT_SHADER));
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
@@ -175,8 +172,7 @@ public class GLData {
         int bottom = 0;
         int far = -100;
         int near = 100;
-        orthoMatrix = Matrix4f.createOrthographic(right, left, top, bottom,
-                near, far);
+        orthoMatrix = Matrix4f.createOrthographic(right, left, top, bottom, near, far);
         storeData();
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
@@ -188,10 +184,8 @@ public class GLData {
     }
 
     public static void getLocations() {
-        orthoMatrixLocation =
-                glGetUniformLocation(comboShaderProgram, "orthoMatrix");
-        uniformTexEnabler =
-                glGetUniformLocation(comboShaderProgram, "utexenabled");
+        orthoMatrixLocation = glGetUniformLocation(comboShaderProgram, "orthoMatrix");
+        uniformTexEnabler = glGetUniformLocation(comboShaderProgram, "utexenabled");
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -199,9 +193,7 @@ public class GLData {
         StringBuilder shaderSource = new StringBuilder();
         int shaderID = 0;
 
-        try (
-                BufferedReader reader =
-                        new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 shaderSource.append(line).append("\n");
@@ -218,8 +210,7 @@ public class GLData {
         if (glGetShaderi(shaderID, GL_COMPILE_STATUS) == 0) {
             int len = glGetShaderi(shaderID, GL_INFO_LOG_LENGTH);
             if (len == 0) {
-                throw new IllegalStateException(
-                        "No errors, shaders broken SEVERELY");
+                throw new IllegalStateException("No errors, shaders broken SEVERELY");
             }
             System.err.println(glGetShaderInfoLog(shaderID, len));
         }
@@ -259,8 +250,8 @@ public class GLData {
     public static void notifyOnGLError(String location) {
         int err = glGetError();
         if (err != GL_NO_ERROR) {
-            LUtils.print("[GLErrorReporter] GLError in " + location + ": "
-                    + GLUtil.getErrorString(err) + " (id: " + err + ")");
+            LUtils.print("[GLErrorReporter] GLError in " + location + ": " + OpenGLException.translateGLErrorString(err)
+                    + " (id: " + err + ")");
             // Dump stack in case the OGLE gets caught
             OpenGLException ex = new OpenGLException(err);
             ex.printStackTrace();

@@ -38,9 +38,9 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
-import org.lwjgl.openal.ALUtil;
 
 import com.techshroom.emergencylanding.imported.WaveData;
+import com.techshroom.emergencylanding.library.lwjgl.ErrUtil;
 
 public class SoundPlayer {
 
@@ -49,8 +49,7 @@ public class SoundPlayer {
     public SoundPlayer() {
         long device = ALC10.alcOpenDevice((ByteBuffer) null);
         if (device == 0) {
-            throw new IllegalStateException(
-                    "Failed to open the default device.");
+            throw new IllegalStateException("Failed to open the default device.");
         }
         long context = ALC10.alcCreateContext(device, (IntBuffer) null);
         if (context == 0) {
@@ -99,37 +98,32 @@ public class SoundPlayer {
      * @param pitch
      * @param loop
      */
-    public void playWAV(String soundFile, float volume, float pitch,
-            boolean loop) {
-        checkState(this.startedThread == Thread.currentThread(),
-                "cross-thread AL usage!");
+    public void playWAV(String soundFile, float volume, float pitch, boolean loop) {
+        checkState(this.startedThread == Thread.currentThread(), "cross-thread AL usage!");
         int buffer = AL10.alGenBuffers();
-        ALUtil.checkALError();
+        ErrUtil.checkALError();
 
         WaveData waveFile;
         try {
             waveFile = WaveData.create(Paths.get(soundFile).toUri().toURL())
-                    .orElseThrow(() -> new IllegalStateException(
-                            "file " + soundFile + " caused errors"));
+                    .orElseThrow(() -> new IllegalStateException("file " + soundFile + " caused errors"));
         } catch (MalformedURLException e) {
             throw new IllegalArgumentException("bad file " + e);
         }
-        AL10.alBufferData(buffer, waveFile.format, waveFile.data,
-                waveFile.samplerate);
+        AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
         waveFile.dispose();
-        ALUtil.checkALError();
+        ErrUtil.checkALError();
 
         int source = AL10.alGenSources();
-        ALUtil.checkALError();
+        ErrUtil.checkALError();
 
         AL10.alSourcei(source, AL10.AL_BUFFER, buffer);
         AL10.alSourcef(source, AL10.AL_PITCH, pitch);
         AL10.alSourcef(source, AL10.AL_GAIN, volume);
         AL10.alSource3f(source, AL10.AL_POSITION, 0, 0, 0);
         AL10.alSource3f(source, AL10.AL_VELOCITY, 0, 0, 0);
-        AL10.alSourcei(source, AL10.AL_LOOPING,
-                loop ? AL10.AL_TRUE : AL10.AL_FALSE);
-        ALUtil.checkALError();
+        AL10.alSourcei(source, AL10.AL_LOOPING, loop ? AL10.AL_TRUE : AL10.AL_FALSE);
+        ErrUtil.checkALError();
 
         AL10.alListener3f(AL10.AL_POSITION, 0, 0, 0);
         AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);

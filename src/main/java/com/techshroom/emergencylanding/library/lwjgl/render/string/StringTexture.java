@@ -46,12 +46,11 @@ import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.opengl.OpenGLException;
-
 import com.flowpowered.math.vector.Vector2d;
+import com.techshroom.emergencylanding.library.exceptions.lwjgl.OpenGLException;
 import com.techshroom.emergencylanding.library.lwjgl.render.GLData;
-import com.techshroom.emergencylanding.library.lwjgl.tex.Texture;
 import com.techshroom.emergencylanding.library.lwjgl.tex.ELTexture;
+import com.techshroom.emergencylanding.library.lwjgl.tex.Texture;
 import com.techshroom.emergencylanding.library.shapeup.Rectangle;
 import com.techshroom.emergencylanding.library.util.LUtils;
 
