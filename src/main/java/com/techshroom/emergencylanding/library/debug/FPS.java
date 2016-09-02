@@ -1,7 +1,7 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
+ * Copyright (c) TechShroom Studios <https://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,6 +24,7 @@
  */
 package com.techshroom.emergencylanding.library.debug;
 
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 import org.lwjgl.glfw.GLFW;
@@ -38,29 +39,26 @@ public final class FPS {
         LUtils.init(); // init if not done already, otherwise errors
     }
 
+    private final LinkedList<Long> stored = new LinkedList<>();
+    private final TimeUnit divis;
+    private final transient long secondConversionRate;
     private long window;
-    private long lastFPS;
-    private long fps;
-    private long lastTime;
     private String permTitle = "";
 
     public FPS(String title) {
+        this(title, DEFAULT_TIME_UNIT);
+    }
+
+    public FPS(String title, TimeUnit divis) {
         setTitle(title);
+        this.divis = divis;
+        this.secondConversionRate = divis.convert(1, TimeUnit.SECONDS);
     }
 
     public int update() {
         int del = getDelta();
         updateFPS();
         return del;
-    }
-
-    public void init() {
-        init(DEFAULT_TIME_UNIT);
-    }
-
-    public void init(TimeUnit divis) {
-        getDelta(divis);
-        this.lastFPS = getTime(divis);
     }
 
     /**
@@ -72,30 +70,14 @@ public final class FPS {
      * @return milliseconds passed since last frame
      */
     public int getDelta() {
-        return getDelta(DEFAULT_TIME_UNIT);
-    }
-
-    /**
-     * Calculate how many divisions have passed since last frame.
-     * 
-     * @param index
-     *            - index of the FPS counter
-     * @param divis
-     *            - the division to return
-     * 
-     * @return divisions passed since last frame
-     */
-    public int getDelta(TimeUnit divis) {
-        long time = getTime(divis);
-        int delta = (int) (time - this.lastTime);
-        this.lastTime = time;
+        long time = getTime();
+        if (this.stored.isEmpty()) {
+            this.stored.addLast(time);
+        }
+        int delta = (int) (time - this.stored.getLast());
+        this.stored.addLast(time);
 
         return delta;
-    }
-
-    public long getTime(TimeUnit divis) {
-        long secondConversionRate = divis.convert(1, TimeUnit.SECONDS);
-        return (long) (GLFW.glfwGetTime() * secondConversionRate);
     }
 
     /**
@@ -106,25 +88,29 @@ public final class FPS {
      * @return The system time in milliseconds
      */
     public long getTime() {
-        return getTime(DEFAULT_TIME_UNIT);
+        return (long) (GLFW.glfwGetTime() * this.secondConversionRate);
     }
 
     /**
      * Calculate the FPS and set it in the title bar
      */
     private void updateFPS() {
-        if (getTime() - this.lastFPS > 1000) {
+        // pop off > one second
+        int oldFps = this.stored.size();
+        long min = this.stored.getLast() - this.divis.convert(1, TimeUnit.SECONDS);
+        while (this.stored.size() > 1 && this.stored.getFirst() < min) {
+            this.stored.pollFirst();
+        }
+        int fps = this.stored.size();
+        if (fps != oldFps) {
             if (this.window != 0) {
                 GLFW.glfwSetWindowTitle(this.window, getFPSTitle());
             }
-            this.fps = 0;
-            this.lastFPS += 1000;
         }
-        this.fps++;
     }
 
     private String getFPSTitle() {
-        return this.permTitle + " FPS: " + this.fps;
+        return this.permTitle + " FPS: " + this.stored.size();
     }
 
     public void setTitle(String reqTitle) {

@@ -1,7 +1,7 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
+ * Copyright (c) TechShroom Studios <https://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -78,7 +78,6 @@ public class CollisionsTest extends KMain {
             @Override
             public void run() {
                 FPS fps = new FPS("internal-state");
-                fps.init();
                 while (CollisionsTest.run) {
                     this.s.sync(CollisionsTest.TICKS_PER_SECOND);
                     int delta = fps.update();
@@ -103,7 +102,6 @@ public class CollisionsTest extends KMain {
             @Override
             public void run() {
                 FPS fps = new FPS("interpolate-state");
-                fps.init();
                 while (CollisionsTest.run) {
                     this.s.sync(CollisionsTest.FRAMES_PER_SECOND);
                     int delta = fps.update();

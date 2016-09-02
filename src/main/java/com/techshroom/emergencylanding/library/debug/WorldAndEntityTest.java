@@ -1,7 +1,7 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
+ * Copyright (c) TechShroom Studios <https://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -75,7 +75,6 @@ public class WorldAndEntityTest extends KMain {
             @Override
             public void run() {
                 FPS fps = new FPS("is");
-                fps.init();
                 while (WorldAndEntityTest.run) {
                     this.s.sync(WorldAndEntityTest.TICKS_PER_SECOND);
                     int delta = fps.update();

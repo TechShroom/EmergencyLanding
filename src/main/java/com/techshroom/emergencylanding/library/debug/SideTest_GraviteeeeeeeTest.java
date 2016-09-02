@@ -1,7 +1,7 @@
 /*
  * This file is part of EmergencyLanding, licensed under the MIT License (MIT).
  *
- * Copyright (c) TechShroom Studios <http://techshoom.com>
+ * Copyright (c) TechShroom Studios <https://techshoom.com>
  * Copyright (c) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -73,7 +73,6 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
             @Override
             public void run() {
                 FPS fps = new FPS("is");
-                fps.init();
                 while (SideTest_GraviteeeeeeeTest.run) {
                     this.s.sync(SideTest_GraviteeeeeeeTest.TICKS_PER_SECOND);
                     int delta = fps.update();
@@ -93,7 +92,6 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
             @Override
             public void run() {
                 FPS fps = new FPS("ip");
-                fps.init();
                 while (SideTest_GraviteeeeeeeTest.run) {
                     this.s.sync(SideTest_GraviteeeeeeeTest.FRAMES_PER_SECOND);
                     int delta = fps.update();
