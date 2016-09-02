@@ -39,8 +39,7 @@ public class BetterArrays {
         if (array == null) {
             o.println("Array is null.");
         }
-        o.println(array.getClass().getComponentType().getName() + "[] (length: "
-                + array.length + ") contents:");
+        o.println(array.getClass().getComponentType().getName() + "[] (length: " + array.length + ") contents:");
         int index = 0;
         for (Object object : array) {
             String out = "";
@@ -49,8 +48,7 @@ public class BetterArrays {
             if (object == null) {
                 out = "<null object>";
                 clazs = array.getClass().getComponentType().getName();
-            } else if (object instanceof String
-                    && ((String) object).equals("")) {
+            } else if (object instanceof String && ((String) object).equals("")) {
                 out = "<empty string>";
                 clazs = object.getClass().getName();
             } else {
@@ -70,8 +68,7 @@ public class BetterArrays {
             } else if (o == null) {
                 temp.add((T) null);
             } else {
-                System.err.println("Lost " + o + " because it was not of type "
-                        + generic.getName());
+                System.err.println("Lost " + o + " because it was not of type " + generic.getName());
             }
         }
         // Array is not generic
@@ -86,8 +83,7 @@ public class BetterArrays {
         }
         // Array is not generic
         @SuppressWarnings("unchecked")
-        T[] test = (T[]) Array.newInstance(in.getClass().getComponentType(),
-                in.length);
+        T[] test = (T[]) Array.newInstance(in.getClass().getComponentType(), in.length);
         boolean solved = false;
         boolean[] taken = new boolean[test.length];
         int total = test.length;
@@ -117,8 +113,7 @@ public class BetterArrays {
     public static <T> T[] repeatRandomArray(T[] in, int count) {
         // Array is not generic
         @SuppressWarnings("unchecked")
-        T[] array = (T[]) Array.newInstance(in.getClass().getComponentType(),
-                in.length);
+        T[] array = (T[]) Array.newInstance(in.getClass().getComponentType(), in.length);
         System.arraycopy(in, 0, array, 0, in.length);
         while (count > -1) {
             array = BetterArrays.randomArray(array);
@@ -156,8 +151,7 @@ public class BetterArrays {
      */
     public static int[] specificTraslate(byte[] in, int[] outtype) {
         if (in != null && in.length > 0) {
-            int[] out =
-                    outtype.length >= in.length ? outtype : new int[in.length];
+            int[] out = outtype.length >= in.length ? outtype : new int[in.length];
             int index = 0;
             for (byte b : in) {
                 out[index] = b;
@@ -165,20 +159,17 @@ public class BetterArrays {
             }
             return out;
         }
-        return (int[]) Array.newInstance(outtype.getClass().getComponentType(),
-                0);
+        return (int[]) Array.newInstance(outtype.getClass().getComponentType(), 0);
     }
 
     public static byte[] intToByteArray(int value) {
-        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16),
-                (byte) (value >>> 8), (byte) value };
+        return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
     }
 
     public static <T> T[] reverse(T[] stuff) {
         // Array is not generic
         @SuppressWarnings("unchecked")
-        T[] out = (T[]) Array.newInstance(stuff.getClass().getComponentType(),
-                stuff.length);
+        T[] out = (T[]) Array.newInstance(stuff.getClass().getComponentType(), stuff.length);
         for (int i = 0; i < stuff.length; i++) {
             out[stuff.length - i - 1] = stuff[i];
         }

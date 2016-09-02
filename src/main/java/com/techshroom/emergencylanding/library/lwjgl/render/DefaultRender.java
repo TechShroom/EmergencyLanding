@@ -30,8 +30,7 @@ import com.techshroom.emergencylanding.library.util.DrawableUtils;
 
 public class DefaultRender extends Render<ELEntity> {
 
-    private VBAO quad = Shapes.getQuad(new VertexData(),
-            new VertexData().setXYZ(10, 10, 10), Shapes.XY);
+    private VBAO quad = Shapes.getQuad(new VertexData(), new VertexData().setXYZ(10, 10, 10), Shapes.XY);
     {
         this.quad.setStatic(false);
     }

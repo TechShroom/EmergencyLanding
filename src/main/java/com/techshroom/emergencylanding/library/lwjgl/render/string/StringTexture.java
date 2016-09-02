@@ -82,25 +82,20 @@ public class StringTexture implements Texture {
         glActiveTexture(GL_TEXTURE0);
 
         try {
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                    GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             this.bind();
             GLData.notifyOnGLError("generatingBindings");
         } catch (OpenGLException ogle) {
             if (LUtils.debugLevel > 1) {
-                System.err.println(
-                        "OpenGL encountered an error while binding id #"
-                                + this.glTextureID + ": "
-                                + ogle.getLocalizedMessage());
+                System.err.println("OpenGL encountered an error while binding id #" + this.glTextureID + ": "
+                        + ogle.getLocalizedMessage());
             }
         }
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         GLData.notifyOnGLError("settingUnpackAlignment");
-        System.err.println(
-                "GL_MAX_TEXTURE_SIZE = " + glGetInteger(GL_MAX_TEXTURE_SIZE));
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0,
-                GL_RED, GL_UNSIGNED_BYTE, this.pixels);
+        System.err.println("GL_MAX_TEXTURE_SIZE = " + glGetInteger(GL_MAX_TEXTURE_SIZE));
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RED, GL_UNSIGNED_BYTE, this.pixels);
         GLData.notifyOnGLError("generatingInitialData");
         glGenerateMipmap(GL_TEXTURE_2D);
         GLData.notifyOnGLError("generatingMipmaps");
@@ -127,8 +122,8 @@ public class StringTexture implements Texture {
             glBindTexture(GL_TEXTURE_2D, this.glTextureID);
             GLData.notifyOnGLError("bindingStringTexture");
         } catch (OpenGLException ogle) {
-            System.err.println("OpenGL encountered an error while binding id #"
-                    + this.glTextureID + ": " + ogle.getLocalizedMessage());
+            System.err.println("OpenGL encountered an error while binding id #" + this.glTextureID + ": "
+                    + ogle.getLocalizedMessage());
             ogle.printStackTrace();
         }
     }
@@ -151,14 +146,11 @@ public class StringTexture implements Texture {
             byte old = oldPixels[i];
             byte newP = newPixels[i];
             if (old != newP) {
-                System.err.println(
-                        "difference @ " + i + ": " + old + " != " + newP);
+                System.err.println("difference @ " + i + ": " + old + " != " + newP);
             }
         }
-        System.err.println("Updating texture: " + this.pixels + " rect: "
-                + changedPixels + "; off: " + offset);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0,
-                GL_RED, GL_UNSIGNED_BYTE, this.pixels);
+        System.err.println("Updating texture: " + this.pixels + " rect: " + changedPixels + "; off: " + offset);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this.width, this.height, 0, GL_RED, GL_UNSIGNED_BYTE, this.pixels);
         // Disabled until i figure out how to get the small update buffer
         // effciently.
         // glTexSubImage2D(GL_TEXTURE_2D, 0, (int) offset.getX(),

@@ -40,8 +40,7 @@ public class MouseyTest extends KMain {
      */
     public static void main(String[] args) throws Exception {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing MOUSE",
-                    false, true, args);
+            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing MOUSE", false, true, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             while (!layer.shouldClose()) {
                 layer.loop(60);
@@ -68,8 +67,7 @@ public class MouseyTest extends KMain {
 
     @Override
     public void init(DisplayLayer layer, String[] args) {
-        layer.getMouseHelp().createFollowCursor(
-                new ColorTexture(Color.RED, new Vector2i(10, 10)), 0, 0);
+        layer.getMouseHelp().createFollowCursor(new ColorTexture(Color.RED, new Vector2i(10, 10)), 0, 0);
     }
 
 }

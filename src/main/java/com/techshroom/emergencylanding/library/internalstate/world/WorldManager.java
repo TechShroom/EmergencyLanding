@@ -34,8 +34,7 @@ public class WorldManager {
 
     private static ArrayList<World> worlds = new ArrayList<World>();
     private static ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
-    private static Lock read = WorldManager.rwLock.readLock(),
-            write = WorldManager.rwLock.writeLock();
+    private static Lock read = WorldManager.rwLock.readLock(), write = WorldManager.rwLock.writeLock();
 
     public static void addWorldToSystem(World w) {
         WorldManager.write.lock();

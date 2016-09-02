@@ -35,24 +35,18 @@ import com.google.common.collect.ImmutableList;
 import com.techshroom.emergencylanding.library.shapeup.generated.PointSet;
 import com.techshroom.emergencylanding.library.util.Maths;
 
-public class Rectangle
-        implements Shape.TwoDimensional<Rectangle>, PointSet.Four<Vector2d> {
+public class Rectangle implements Shape.TwoDimensional<Rectangle>, PointSet.Four<Vector2d> {
 
     public static Rectangle fromLengthAndWidth(double width, double height) {
-        return new Rectangle(
-                PointSet.Four.create(Vector2d.ZERO, new Vector2d(width, 0),
-                        new Vector2d(width, height), new Vector2d(0, height)),
-                width, height, 0);
+        return new Rectangle(PointSet.Four.create(Vector2d.ZERO, new Vector2d(width, 0), new Vector2d(width, height),
+                new Vector2d(0, height)), width, height, 0);
     }
 
-    public static Rectangle fromLengthWidthAndRadians(double width,
-            double height, double radians) {
-        return new Rectangle(computeRotatedPoints(width, height, radians),
-                width, height, radians);
+    public static Rectangle fromLengthWidthAndRadians(double width, double height, double radians) {
+        return new Rectangle(computeRotatedPoints(width, height, radians), width, height, radians);
     }
 
-    private static PointSet.Four<Vector2d> computeRotatedPoints(double width,
-            double height, double radians) {
+    private static PointSet.Four<Vector2d> computeRotatedPoints(double width, double height, double radians) {
         Vector2d bottomLeft = Vector2d.ZERO;
         Vector2d bottomRight = new Vector2d(width, 0);
         Vector2d topRight = new Vector2d(width, height);
@@ -71,8 +65,8 @@ public class Rectangle
     protected final double height;
     protected final double radians;
 
-    private Rectangle(PointSet.Four<Vector2d> points, double calculatedWidth,
-            double calculatedLength, double calculatedRadians) {
+    private Rectangle(PointSet.Four<Vector2d> points, double calculatedWidth, double calculatedLength,
+            double calculatedRadians) {
         this.points = ImmutableList.copyOf(PointSets.getCollection(points));
         this.width = calculatedWidth;
         this.height = calculatedLength;
@@ -94,20 +88,17 @@ public class Rectangle
 
     @Override
     public List<Vector2d> getPointsAtOffset(Vector2d offset) {
-        return FluentIterable.from(this.points).transform(x -> x.add(offset))
-                .toList();
+        return FluentIterable.from(this.points).transform(x -> x.add(offset)).toList();
     }
 
     @Override
     public Rectangle scale(Vector2d delta) {
-        return fromLengthWidthAndRadians(this.width * delta.getX(),
-                this.height * delta.getY(), this.radians);
+        return fromLengthWidthAndRadians(this.width * delta.getX(), this.height * delta.getY(), this.radians);
     }
 
     @Override
     public Rectangle rotateZ(double radians) {
-        return fromLengthWidthAndRadians(this.width, this.height,
-                this.radians + radians);
+        return fromLengthWidthAndRadians(this.width, this.height, this.radians + radians);
     }
 
     @Override
@@ -142,8 +133,7 @@ public class Rectangle
 
     public boolean equals(Rectangle rect) {
         return (rect == this) || (Double.compare(this.width, rect.width) == 0
-                && Double.compare(this.height, rect.height) == 0
-                && Double.compare(this.radians, rect.radians) == 0);
+                && Double.compare(this.height, rect.height) == 0 && Double.compare(this.radians, rect.radians) == 0);
     }
 
     @Override
@@ -153,9 +143,8 @@ public class Rectangle
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("points", this.points)
-                .add("width", this.width).add("height", this.height)
-                .add("radians", this.radians).toString();
+        return MoreObjects.toStringHelper(this).add("points", this.points).add("width", this.width)
+                .add("height", this.height).add("radians", this.radians).toString();
     }
 
 }

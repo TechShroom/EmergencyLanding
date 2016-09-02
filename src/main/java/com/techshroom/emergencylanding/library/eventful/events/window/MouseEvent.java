@@ -46,9 +46,9 @@ public interface MouseEvent {
         int getMouseButton();
 
         int getModifiers();
-        
+
         double getX();
-        
+
         double getY();
 
     }

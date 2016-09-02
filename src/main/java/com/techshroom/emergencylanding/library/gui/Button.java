@@ -46,21 +46,16 @@ public class Button extends GuiElement {
     private final double yLen;
     private volatile boolean pressed;
 
-    public Button(double x, double y, double xLength, double yLength,
-            ELTexture unpressedT, ELTexture pressedT) {
+    public Button(double x, double y, double xLength, double yLength, ELTexture unpressedT, ELTexture pressedT) {
         super(x, y);
         this.xLen = xLength;
         this.yLen = yLength;
         this.unpressedQuad = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
-                new VertexData().setXYZ((float) this.xLen, (float) this.yLen,
-                        0),
-                Shapes.XY);
+                new VertexData().setXYZ((float) this.xLen, (float) this.yLen, 0), Shapes.XY);
         this.unpressedQuad.setTexture(unpressedT);
         this.unpressedQuad.setStatic(false);
         this.pressedQuad = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
-                new VertexData().setXYZ((float) this.xLen, (float) this.yLen,
-                        0),
-                Shapes.XY);
+                new VertexData().setXYZ((float) this.xLen, (float) this.yLen, 0), Shapes.XY);
         this.pressedQuad.setTexture(pressedT);
         this.pressedQuad.setStatic(false);
     }
@@ -78,8 +73,7 @@ public class Button extends GuiElement {
 
     @Handler
     protected void onMouseClick(MouseEvent.Click event) {
-        Rectangle2D rect = new Rectangle2D.Double(this.xPos, this.xPos,
-                this.xLen, this.yLen);
+        Rectangle2D rect = new Rectangle2D.Double(this.xPos, this.xPos, this.xLen, this.yLen);
         if (rect.contains(event.getX(), event.getY())) {
             boolean wasPressed = this.pressed;
             if (event instanceof MouseEvent.Click.Press) {

@@ -52,8 +52,8 @@ public class Slider extends GuiElement {
     private boolean tracking;
     private String[] appendables;
 
-    public Slider(float x, float y, float min, float max, ELTexture slideImgTex,
-            ELTexture baseImgTex, String textForDisplay,
+    public Slider(float x, float y, float min, float max, ELTexture slideImgTex, ELTexture baseImgTex,
+            String textForDisplay,
             String[] stringsToAppend/* , StringRenderer renderer */) {
         super(x, y);
         ELTexture slideTex = slideImgTex;
@@ -71,16 +71,12 @@ public class Slider extends GuiElement {
         } else {
             fillDefaults(stringsToAppend);
         }
-        this.slide = Shapes.getQuad(
-                new VertexData().setXYZ(0, 0, 0), new VertexData()
-                        .setXYZ(slideTex.getWidth(), slideTex.getHeight(), 0),
-                Shapes.XY);
+        this.slide = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
+                new VertexData().setXYZ(slideTex.getWidth(), slideTex.getHeight(), 0), Shapes.XY);
         this.slide.setTexture(slideTex);
         this.slide.setStatic(false);
         this.base = Shapes.getQuad(new VertexData().setXYZ(0, 0, 0),
-                new VertexData().setXYZ(baseTex.getWidth(), baseTex.getHeight(),
-                        0),
-                Shapes.XY);
+                new VertexData().setXYZ(baseTex.getWidth(), baseTex.getHeight(), 0), Shapes.XY);
         this.base.setTexture(baseTex);
         this.base.setStatic(false);
     }
@@ -91,9 +87,7 @@ public class Slider extends GuiElement {
         for (float i = 0; i < 101; i++) {
             int ii = (int) i;
             if (i > cap - 1 || stringsToAppend[ii] == null) {
-                this.appendables[ii] =
-                        ((i * (this.maximum - this.minimum) / 100)
-                                + this.minimum) + "";
+                this.appendables[ii] = ((i * (this.maximum - this.minimum) / 100) + this.minimum) + "";
             } else {
                 this.appendables[ii] = stringsToAppend[ii];
             }
@@ -128,8 +122,8 @@ public class Slider extends GuiElement {
 
     @Handler
     public void onMouseEvent(MouseEvent event) {
-        Rectangle2D rect = new Rectangle2D.Double(this.xPos, this.xPos,
-                this.base.tex.getWidth(), this.base.tex.getHeight());
+        Rectangle2D rect =
+                new Rectangle2D.Double(this.xPos, this.xPos, this.base.tex.getWidth(), this.base.tex.getHeight());
         double x = 0;
         double y = 0;
         if (event instanceof MouseEvent.Click) {
@@ -155,14 +149,12 @@ public class Slider extends GuiElement {
         } else if (mx > x + this.maxXAdd) {
             this.percentage = 1;
         } else {
-            this.percentage =
-                    (mx - x + this.minXAdd) / (this.maxXAdd + this.minXAdd);
+            this.percentage = (mx - x + this.minXAdd) / (this.maxXAdd + this.minXAdd);
         }
     }
 
     private double calcSlideX(double x) {
-        double xres = x + this.percentage * this.base.tex.getWidth()
-                - this.minXAdd * 2;
+        double xres = x + this.percentage * this.base.tex.getWidth() - this.minXAdd * 2;
         if (this.percentage == 0) {
             xres = x;
         }

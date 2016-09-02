@@ -67,10 +67,8 @@ public final class LUtils {
 
     public static final String LIB_NAME = "EmergencyLanding".intern();
     public static final String SHORT_LIB_NAME = "EL".intern();
-    private static final String LOWER_LIB_NAME =
-            LIB_NAME.toLowerCase().intern();
-    private static final String LOWER_SHORT_LIB_NAME =
-            SHORT_LIB_NAME.toLowerCase().intern();
+    private static final String LOWER_LIB_NAME = LIB_NAME.toLowerCase().intern();
+    private static final String LOWER_SHORT_LIB_NAME = SHORT_LIB_NAME.toLowerCase().intern();
     private static final GLFWErrorCallback ERROR_CB;
 
     /**
@@ -79,8 +77,7 @@ public final class LUtils {
     public static PrintStream sysout = System.out, syserr = System.err;
     public static String PLATFORM_NAME = "unknown";
 
-    public static final String elPrintStr =
-            String.format("[" + LIB_NAME + "-%s]", LUtils.VERSION);
+    public static final String elPrintStr = String.format("[" + LIB_NAME + "-%s]", LUtils.VERSION);
 
     public static void print(String msg) {
         System.err.println(elPrintStr + " " + msg);
@@ -93,8 +90,8 @@ public final class LUtils {
     static {
         try {
             // reuse KCore's data
-            LUtils.TOP_LEVEL = Paths.get(".").toAbsolutePath().toString()
-                    .replace(File.separatorChar, '/').replaceFirst("/$", "");
+            LUtils.TOP_LEVEL =
+                    Paths.get(".").toAbsolutePath().toString().replace(File.separatorChar, '/').replaceFirst("/$", "");
             LUtils.print("Using TOP_LEVEL " + TOP_LEVEL);
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,8 +118,8 @@ public final class LUtils {
             LUtils.print("Assumed JAR launch.");
             EL_TOP = TOP_LEVEL;
         } else {
-            EL_TOP = ((tempName.startsWith("/") ? "" : "/") + tempName)
-                    .replace("/C:/", "C:/").replace("\\C:\\", "C:\\");
+            EL_TOP = ((tempName.startsWith("/") ? "" : "/") + tempName).replace("/C:/", "C:/").replace("\\C:\\",
+                    "C:\\");
         }
         LUtils.print("Using EL_TOP " + EL_TOP);
     }
@@ -147,8 +144,7 @@ public final class LUtils {
      * @throws Exception
      */
     public static void addLibraryPath(String pathToAdd) throws Exception {
-        final Field usrPathsField =
-                ClassLoader.class.getDeclaredField("usr_paths");
+        final Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");
         usrPathsField.setAccessible(true);
 
         // get array of paths
@@ -176,12 +172,11 @@ public final class LUtils {
         syserr.orig.println("Finished.");
     }
 
-    public static final int debugLevel = Integer.parseInt(
-            System.getProperty(LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
+    public static final int debugLevel =
+            Integer.parseInt(System.getProperty(LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
 
     static {
-        System.err.println(
-                LOWER_SHORT_LIB_NAME + ".debug.level" + ": " + debugLevel);
+        System.err.println(LOWER_SHORT_LIB_NAME + ".debug.level" + ": " + debugLevel);
     }
 
     /**
@@ -196,8 +191,7 @@ public final class LUtils {
      * @return the wanted boolean argument value, or the default value
      */
     public static boolean getArgB(String[] args, int index, boolean def) {
-        return Boolean.valueOf(
-                LUtils.getArgS(args, index, Boolean.valueOf(def).toString()));
+        return Boolean.valueOf(LUtils.getArgS(args, index, Boolean.valueOf(def).toString()));
     }
 
     /**
@@ -212,8 +206,7 @@ public final class LUtils {
      * @return the wanted integer argument value, or the default value
      */
     public static int getArgI(String[] args, int index, int def) {
-        return Integer.valueOf(
-                LUtils.getArgS(args, index, Integer.valueOf(def).toString()));
+        return Integer.valueOf(LUtils.getArgS(args, index, Integer.valueOf(def).toString()));
     }
 
     /**
@@ -228,8 +221,7 @@ public final class LUtils {
      * @return the wanted float argument value, or the default value
      */
     public static float getArgF(String[] args, int index, float def) {
-        return Float.valueOf(
-                LUtils.getArgS(args, index, Float.valueOf(def).toString()));
+        return Float.valueOf(LUtils.getArgS(args, index, Float.valueOf(def).toString()));
     }
 
     /**
@@ -244,8 +236,7 @@ public final class LUtils {
      * @return the wanted double argument value, or the default value
      */
     public static double getArgD(String[] args, int index, double def) {
-        return Double.valueOf(
-                LUtils.getArgS(args, index, Double.valueOf(def).toString()));
+        return Double.valueOf(LUtils.getArgS(args, index, Double.valueOf(def).toString()));
     }
 
     /**
@@ -263,8 +254,7 @@ public final class LUtils {
         if (args == null) {
             return def;
         }
-        return args.length <= index ? def
-                : args[index] == null ? def : args[index];
+        return args.length <= index ? def : args[index] == null ? def : args[index];
     }
 
     /**
@@ -282,8 +272,7 @@ public final class LUtils {
         if (src == null) {
             return def;
         }
-        return src.length <= index ? def
-                : src[index] == null ? def : src[index];
+        return src.length <= index ? def : src[index] == null ? def : src[index];
     }
 
     /**
@@ -309,8 +298,7 @@ public final class LUtils {
             cver_sepi[i] = Integer.parseInt(cver_sep[i]);
             vers_sepi[i] = Integer.parseInt(vers_sep[i]);
         }
-        boolean ret = cver_sepi[0] >= vers_sepi[0]
-                && cver_sepi[1] >= vers_sepi[1] && cver_sepi[2] >= vers_sepi[2];
+        boolean ret = cver_sepi[0] >= vers_sepi[0] && cver_sepi[1] >= vers_sepi[1] && cver_sepi[2] >= vers_sepi[2];
         LUtils.print("Returning " + ret);
         return ret;
     }
@@ -402,8 +390,7 @@ public final class LUtils {
      * @throws IOException
      *             if there are I/O errors
      */
-    public static <R> R processPathData(String path, IOConsumer<R> consumer)
-            throws IOException {
+    public static <R> R processPathData(String path, IOConsumer<R> consumer) throws IOException {
         LUtils.print("[Retriving InputStream for '" + path + "']");
         // Normalize to UNIX style
         path = path.replace(File.separatorChar, '/');
@@ -411,8 +398,7 @@ public final class LUtils {
         int isType = 0; // undefined=-1;fileis=0;zipis=1;jaris=1
         List<String> pathparts = Arrays.asList(path.split("/"));
         for (String part : pathparts) {
-            if (part.endsWith(".zip") || part.endsWith("jar")
-                    && !(pathparts.indexOf(part) == pathparts.size() - 1)) {
+            if (part.endsWith(".zip") || part.endsWith("jar") && !(pathparts.indexOf(part) == pathparts.size() - 1)) {
                 if (isType == 1) {
                     isType = 2;
                     break;
@@ -432,22 +418,18 @@ public final class LUtils {
             LUtils.print("Using recursive zip/jar searcher style " + isType);
             ArrayList<Integer> indexes = new ArrayList<Integer>();
             for (int i = 0; i < pathparts.size(); i++) {
-                if (pathparts.get(i).endsWith(".zip")
-                        || pathparts.get(i).endsWith(".jar")) {
-                    LUtils.print(
-                            "Adding zip/jar " + pathparts.get(i) + " at " + i);
+                if (pathparts.get(i).endsWith(".zip") || pathparts.get(i).endsWith(".jar")) {
+                    LUtils.print("Adding zip/jar " + pathparts.get(i) + " at " + i);
                     indexes.add(i);
                 }
             }
             String pathToCurrFile = "";
             for (int i = 0; i <= indexes.get(0); i++) {
                 String temp_ = pathparts.get(i);
-                LUtils.print(String.format("Appending '%s' to '%s'", temp_,
-                        pathToCurrFile));
+                LUtils.print(String.format("Appending '%s' to '%s'", temp_, pathToCurrFile));
                 pathToCurrFile += temp_ + "/";
             }
-            String file =
-                    pathToCurrFile.substring(0, pathToCurrFile.length() - 1);
+            String file = pathToCurrFile.substring(0, pathToCurrFile.length() - 1);
             String extra = path.replace(pathToCurrFile, "");
             LUtils.print("Attempting to load from " + file);
             try (ZipFile zf = new ZipFile(file);) {
@@ -465,8 +447,7 @@ public final class LUtils {
     }
 
     public static void setIcon(final InputStream is) {
-        throw new UnsupportedOperationException(
-                "GLFW does not support setting icons.");
+        throw new UnsupportedOperationException("GLFW does not support setting icons.");
         /*
          * GLFW cannot setIcons at this time if (Platform.get() ==
          * Platform.MACOSX) { // Set in the dock try {
@@ -485,12 +466,10 @@ public final class LUtils {
          */
     }
 
-    public static ByteBuffer inputStreamToDirectByteBuffer(
-            Supplier<InputStream> streamSupplier) throws IOException {
+    public static ByteBuffer inputStreamToDirectByteBuffer(Supplier<InputStream> streamSupplier) throws IOException {
         try (InputStream stream = streamSupplier.get()) {
             byte[] data = ByteStreams.toByteArray(stream);
-            return (ByteBuffer) BufferUtils.createByteBuffer(data.length)
-                    .put(data).rewind();
+            return (ByteBuffer) BufferUtils.createByteBuffer(data.length).put(data).rewind();
         }
     }
 

@@ -42,15 +42,13 @@ public abstract class Bounds {
      *             if the size of <code>bounds</code> does not match the value
      *             returned by {@link #pointCount()}.
      */
-    public abstract void setBounds(Point2D[] bounds)
-            throws IllegalArgumentException;
+    public abstract void setBounds(Point2D[] bounds) throws IllegalArgumentException;
 
     public abstract Point2D[] getBounds();
 
     @Override
     public String toString() {
-        return getClass().getName() + "["
-                + Arrays.toString(Geometry.pointsAsDoubles(getBounds())) + "]";
+        return getClass().getName() + "[" + Arrays.toString(Geometry.pointsAsDoubles(getBounds())) + "]";
     }
 
     /**

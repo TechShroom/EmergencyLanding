@@ -46,6 +46,7 @@ import java.lang.reflect.Method;
  */
 
 public class StackTraceInfo {
+
     /* (Lifted from virgo47's stackoverflow answer) */
     /**
      * Index of the StackTraceInfo methods in the stack
@@ -68,14 +69,13 @@ public class StackTraceInfo {
      * Makes the offset zero for the method that called the method that called
      * the current method, by adding the required offset
      */
-    public static final int DUAL_INVOKING_METHOD_ZERO = StackTraceInfo.INVOKING_METHOD_ZERO
-            + StackTraceInfo.INVOKING_METHOD_ZERO;
+    public static final int DUAL_INVOKING_METHOD_ZERO =
+            StackTraceInfo.INVOKING_METHOD_ZERO + StackTraceInfo.INVOKING_METHOD_ZERO;
     private static Method m;
 
     static {
         try {
-            StackTraceInfo.m = Throwable.class.getDeclaredMethod(
-                    "getStackTraceElement", int.class);
+            StackTraceInfo.m = Throwable.class.getDeclaredMethod("getStackTraceElement", int.class);
             StackTraceInfo.m.setAccessible(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,13 +93,11 @@ public class StackTraceInfo {
         }
         CLIENT_CODE_STACK_INDEX = i;
         System.err.println("Stack index is " + i);
-        System.err
-                .println("On JRE6/7, this should be 1, on JRE5 it should be 2.");
+        System.err.println("On JRE6/7, this should be 1, on JRE5 it should be 2.");
     }
 
     public static String getCurrentMethodName() {
-        return StackTraceInfo
-                .getCurrentMethodName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
+        return StackTraceInfo.getCurrentMethodName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
         // additional
         // overloaded method
         // call requires +1 offset
@@ -109,18 +107,15 @@ public class StackTraceInfo {
         Throwable here = new Throwable();
         StackTraceElement ste = null;
         try {
-            ste = (StackTraceElement) StackTraceInfo.m.invoke(here,
-                    StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset);
+            ste = (StackTraceElement) StackTraceInfo.m.invoke(here, StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset);
         } catch (Exception e) {
-            ste = here.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX
-                    + offset];
+            ste = here.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset];
         }
         return ste.getMethodName();
     }
 
     public static String getCurrentClassName() {
-        return StackTraceInfo
-                .getCurrentClassName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
+        return StackTraceInfo.getCurrentClassName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
         // additional
         // overloaded method
         // call requires +1 offset
@@ -130,18 +125,15 @@ public class StackTraceInfo {
         Throwable here = new Throwable();
         StackTraceElement ste = null;
         try {
-            ste = (StackTraceElement) StackTraceInfo.m.invoke(here,
-                    StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset);
+            ste = (StackTraceElement) StackTraceInfo.m.invoke(here, StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset);
         } catch (Exception e) {
-            ste = here.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX
-                    + offset];
+            ste = here.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset];
         }
         return ste.getClassName();
     }
 
     public static String getCurrentFileName() {
-        return StackTraceInfo
-                .getCurrentFileName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
+        return StackTraceInfo.getCurrentFileName(StackTraceInfo.INVOKING_METHOD_ZERO); // making
         // additional
         // overloaded method
         // call requires +1 offset
@@ -152,11 +144,9 @@ public class StackTraceInfo {
         Throwable here = new Throwable();
         StackTraceElement ste = null;
         try {
-            ste = (StackTraceElement) StackTraceInfo.m.invoke(here,
-                    StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset);
+            ste = (StackTraceElement) StackTraceInfo.m.invoke(here, StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset);
         } catch (Exception e) {
-            ste = here.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX
-                    + offset];
+            ste = here.getStackTrace()[StackTraceInfo.CLIENT_CODE_STACK_INDEX + offset];
         }
         String filename = ste.getFileName();
         int lineNumber = ste.getLineNumber();
@@ -165,83 +155,68 @@ public class StackTraceInfo {
     }
 
     public static String getInvokingMethodName() {
-        return StackTraceInfo
-                .getInvokingMethodName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
+        return StackTraceInfo.getInvokingMethodName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
     }
 
     public static String getInvokingMethodName(int offset) {
-        return StackTraceInfo.getCurrentMethodName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO); // re-uses
+        return StackTraceInfo.getCurrentMethodName(offset + StackTraceInfo.INVOKING_METHOD_ZERO); // re-uses
         // getCurrentMethodName()
         // with desired index
     }
 
     public static String getInvokingClassName() {
-        return StackTraceInfo
-                .getInvokingClassName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
+        return StackTraceInfo.getInvokingClassName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
     }
 
     public static String getInvokingClassName(int offset) {
-        return StackTraceInfo.getCurrentClassName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO); // re-uses
+        return StackTraceInfo.getCurrentClassName(offset + StackTraceInfo.INVOKING_METHOD_ZERO); // re-uses
         // getCurrentClassName()
         // with desired index
     }
 
     public static String getInvokingFileName() {
-        return StackTraceInfo
-                .getInvokingFileName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
+        return StackTraceInfo.getInvokingFileName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
     }
 
     public static String getInvokingFileName(int offset) {
-        return StackTraceInfo.getCurrentFileName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO); // re-uses
+        return StackTraceInfo.getCurrentFileName(offset + StackTraceInfo.INVOKING_METHOD_ZERO); // re-uses
         // getCurrentFileName()
         // with desired index
     }
 
     public static String getCurrentMethodNameFqn() {
-        return StackTraceInfo
-                .getCurrentMethodNameFqn(StackTraceInfo.INVOKING_METHOD_ZERO);
+        return StackTraceInfo.getCurrentMethodNameFqn(StackTraceInfo.INVOKING_METHOD_ZERO);
     }
 
     public static String getCurrentMethodNameFqn(int offset) {
-        String currentClassName = StackTraceInfo.getCurrentClassName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO);
-        String currentMethodName = StackTraceInfo.getCurrentMethodName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO);
+        String currentClassName = StackTraceInfo.getCurrentClassName(offset + StackTraceInfo.INVOKING_METHOD_ZERO);
+        String currentMethodName = StackTraceInfo.getCurrentMethodName(offset + StackTraceInfo.INVOKING_METHOD_ZERO);
 
         return currentClassName + "." + currentMethodName;
     }
 
     public static String getCurrentFileNameFqn() {
-        String CurrentMethodNameFqn = StackTraceInfo
-                .getCurrentMethodNameFqn(StackTraceInfo.INVOKING_METHOD_ZERO);
-        String currentFileName = StackTraceInfo
-                .getCurrentFileName(StackTraceInfo.INVOKING_METHOD_ZERO);
+        String CurrentMethodNameFqn = StackTraceInfo.getCurrentMethodNameFqn(StackTraceInfo.INVOKING_METHOD_ZERO);
+        String currentFileName = StackTraceInfo.getCurrentFileName(StackTraceInfo.INVOKING_METHOD_ZERO);
 
         return CurrentMethodNameFqn + "(" + currentFileName + ")";
     }
 
     public static String getInvokingMethodNameFqn() {
-        return StackTraceInfo
-                .getInvokingMethodNameFqn(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
+        return StackTraceInfo.getInvokingMethodNameFqn(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
     }
 
     public static String getInvokingMethodNameFqn(int offset) {
-        String invokingClassName = StackTraceInfo.getInvokingClassName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO);
-        String invokingMethodName = StackTraceInfo.getInvokingMethodName(offset
-                + StackTraceInfo.INVOKING_METHOD_ZERO);
+        String invokingClassName = StackTraceInfo.getInvokingClassName(offset + StackTraceInfo.INVOKING_METHOD_ZERO);
+        String invokingMethodName = StackTraceInfo.getInvokingMethodName(offset + StackTraceInfo.INVOKING_METHOD_ZERO);
 
         return invokingClassName + "." + invokingMethodName;
     }
 
     public static String getInvokingFileNameFqn() {
-        String invokingMethodNameFqn = StackTraceInfo
-                .getInvokingMethodNameFqn(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
-        String invokingFileName = StackTraceInfo
-                .getInvokingFileName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
+        String invokingMethodNameFqn =
+                StackTraceInfo.getInvokingMethodNameFqn(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
+        String invokingFileName = StackTraceInfo.getInvokingFileName(StackTraceInfo.DUAL_INVOKING_METHOD_ZERO);
 
         return invokingMethodNameFqn + "(" + invokingFileName + ")";
     }

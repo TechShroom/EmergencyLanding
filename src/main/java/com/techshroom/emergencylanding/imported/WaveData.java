@@ -97,8 +97,7 @@ public class WaveData {
      */
     public static Optional<WaveData> create(URL path) {
         try {
-            return create(AudioSystem.getAudioInputStream(
-                    new BufferedInputStream(path.openStream())));
+            return create(AudioSystem.getAudioInputStream(new BufferedInputStream(path.openStream())));
         } catch (Exception e) {
             LOGGER.warn("Unable to create from: " + path, e.getMessage());
             return Optional.empty();
@@ -113,8 +112,7 @@ public class WaveData {
      * @return WaveData containing data, or null if a failure occured
      */
     public static Optional<WaveData> create(String path) {
-        return create(Thread.currentThread().getContextClassLoader()
-                .getResource(path));
+        return create(Thread.currentThread().getContextClassLoader().getResource(path));
     }
 
     /**
@@ -142,8 +140,7 @@ public class WaveData {
      */
     public static Optional<WaveData> create(byte[] buffer) {
         try {
-            return create(AudioSystem.getAudioInputStream(
-                    new BufferedInputStream(new ByteArrayInputStream(buffer))));
+            return create(AudioSystem.getAudioInputStream(new BufferedInputStream(new ByteArrayInputStream(buffer))));
         } catch (Exception e) {
             LOGGER.warn("Unable to create from byte array", e.getMessage());
             return Optional.empty();
@@ -214,28 +211,23 @@ public class WaveData {
         try {
             int available = ais.available();
             if (available <= 0) {
-                available = ais.getFormat().getChannels()
-                        * (int) ais.getFrameLength()
+                available = ais.getFormat().getChannels() * (int) ais.getFrameLength()
                         * ais.getFormat().getSampleSizeInBits() / 8;
             }
             byte[] buf = new byte[ais.available()];
             int read = 0, total = 0;
-            while ((read = ais.read(buf, total, buf.length - total)) != -1
-                    && total < buf.length) {
+            while ((read = ais.read(buf, total, buf.length - total)) != -1 && total < buf.length) {
                 total += read;
             }
-            buffer = convertAudioBytes(buf,
-                    audioformat.getSampleSizeInBits() == 16,
-                    audioformat.isBigEndian() ? ByteOrder.BIG_ENDIAN
-                            : ByteOrder.LITTLE_ENDIAN);
+            buffer = convertAudioBytes(buf, audioformat.getSampleSizeInBits() == 16,
+                    audioformat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
         } catch (IOException ioe) {
             LOGGER.warn("IO error", ioe);
             return Optional.empty();
         }
 
         // create our result
-        WaveData wavedata = new WaveData(buffer, channels,
-                (int) audioformat.getSampleRate());
+        WaveData wavedata = new WaveData(buffer, channels, (int) audioformat.getSampleRate());
 
         // close stream
         try {
@@ -246,8 +238,7 @@ public class WaveData {
         return Optional.of(wavedata);
     }
 
-    private static ByteBuffer convertAudioBytes(byte[] audio_bytes,
-            boolean two_bytes_data, ByteOrder order) {
+    private static ByteBuffer convertAudioBytes(byte[] audio_bytes, boolean two_bytes_data, ByteOrder order) {
         ByteBuffer dest = ByteBuffer.allocateDirect(audio_bytes.length);
         dest.order(ByteOrder.nativeOrder());
         ByteBuffer src = ByteBuffer.wrap(audio_bytes);

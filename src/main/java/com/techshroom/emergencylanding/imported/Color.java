@@ -311,8 +311,7 @@ public final class Color implements Serializable {
      */
     @Override
     public String toString() {
-        return "Color [" + getRed() + ", " + getGreen() + ", " + getBlue()
-                + ", " + getAlpha() + "]";
+        return "Color [" + getRed() + ", " + getGreen() + ", " + getBlue() + ", " + getAlpha() + "]";
     }
 
     /**
@@ -320,10 +319,8 @@ public final class Color implements Serializable {
      */
     @Override
     public boolean equals(Object o) {
-        return (o != null) && (o instanceof Color)
-                && (((Color) o).getRed() == this.getRed())
-                && (((Color) o).getGreen() == this.getGreen())
-                && (((Color) o).getBlue() == this.getBlue())
+        return (o != null) && (o instanceof Color) && (((Color) o).getRed() == this.getRed())
+                && (((Color) o).getGreen() == this.getGreen()) && (((Color) o).getBlue() == this.getBlue())
                 && (((Color) o).getAlpha() == this.getAlpha());
     }
 
@@ -332,8 +329,7 @@ public final class Color implements Serializable {
      */
     @Override
     public int hashCode() {
-        return (this.red << 24) | (this.green << 16) | (this.blue << 8)
-                | this.alpha;
+        return (this.red << 24) | (this.green << 16) | (this.blue << 8) | this.alpha;
     }
 
     /*

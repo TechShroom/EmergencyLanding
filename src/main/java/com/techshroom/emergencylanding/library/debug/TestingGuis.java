@@ -46,12 +46,10 @@ public class TestingGuis extends KMain {
 
     public static void main(String[] args) {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 500,
-                    "Testing " + LUtils.LIB_NAME, true, args);
+            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing " + LUtils.LIB_NAME, true, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             TestingGuis.startISThreads();
-            System.err.println("percent of 656/1000 = "
-                    + Slider.getPercentClosestToValue(656, 0, 1000));
+            System.err.println("percent of 656/1000 = " + Slider.getPercentClosestToValue(656, 0, 1000));
             while (TestingGuis.run) {
                 TestingGuis.run = !layer.shouldClose();
                 layer.loop(120);
@@ -90,8 +88,7 @@ public class TestingGuis extends KMain {
     private String[] strvalues = new String[101];
     {
         this.strvalues[Slider.getPercentClosestToValue(0, 0, 1000)] = "Minimum";
-        this.strvalues[Slider.getPercentClosestToValue(1000, 0, 1000)] =
-                "Maximum";
+        this.strvalues[Slider.getPercentClosestToValue(1000, 0, 1000)] = "Maximum";
     }
 
     @Override
@@ -102,8 +99,7 @@ public class TestingGuis extends KMain {
     @Override
     public void init(DisplayLayer layer, String[] args) {
         TestingGuis.g = new Screen(layer.getWindow());
-        TestingGuis.slider = new Slider(50, 50, 0, 1000,
-                new ColorTexture(Color.RED, new Vector2i(10, 50)),
+        TestingGuis.slider = new Slider(50, 50, 0, 1000, new ColorTexture(Color.RED, new Vector2i(10, 50)),
                 new ColorTexture(Color.GREEN, new Vector2i(100, 50)), "Test: ",
                 this.strvalues/*
                                * , new StringRenderer( new

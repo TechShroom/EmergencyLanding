@@ -29,7 +29,7 @@ import java.io.InputStream;
 
 @FunctionalInterface
 public interface IOConsumer<R> {
-    
+
     R consumeStream(InputStream stream) throws IOException;
 
 }

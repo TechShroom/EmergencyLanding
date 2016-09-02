@@ -59,24 +59,18 @@ public final class DrawableUtils {
      *            kept together. Should be 1 if there is none.
      * @return the chopped buffer
      */
-    public static ByteBuffer chopBuffer(ByteBuffer buf, Vector2i oldWidthHeight,
-            int choppedWidth, int choppedHeight, int extraDimensions) {
-        if (buf.capacity() < choppedWidth * choppedHeight * extraDimensions
-                || oldWidthHeight.getX() < choppedHeight
-                || oldWidthHeight.getY() < choppedWidth
-                || extraDimensions < 1) {
-            throw new IndexOutOfBoundsException(
-                    "One of the dimensions is breaking the bounds of the buffer!");
+    public static ByteBuffer
+            chopBuffer(ByteBuffer buf, Vector2i oldWidthHeight, int choppedWidth, int choppedHeight, int extraDimensions) {
+        if (buf.capacity() < choppedWidth * choppedHeight * extraDimensions || oldWidthHeight.getX() < choppedHeight
+                || oldWidthHeight.getY() < choppedWidth || extraDimensions < 1) {
+            throw new IndexOutOfBoundsException("One of the dimensions is breaking the bounds of the buffer!");
         }
         if (buf.capacity() > buf.remaining()) {
             buf.rewind();
         }
-        ByteBuffer newBuf = ByteBuffer
-                .allocateDirect(choppedWidth * choppedHeight * extraDimensions);
-        byte[][][] arrayOfStuff =
-                new byte[choppedWidth][choppedHeight][extraDimensions];
-        for (int i = 0; i < oldWidthHeight.getX() * oldWidthHeight.getY()
-                * extraDimensions; i += extraDimensions) {
+        ByteBuffer newBuf = ByteBuffer.allocateDirect(choppedWidth * choppedHeight * extraDimensions);
+        byte[][][] arrayOfStuff = new byte[choppedWidth][choppedHeight][extraDimensions];
+        for (int i = 0; i < oldWidthHeight.getX() * oldWidthHeight.getY() * extraDimensions; i += extraDimensions) {
             int x = i / extraDimensions / oldWidthHeight.getX();
             int y = i / extraDimensions % oldWidthHeight.getY();
             LUtils.print("x/y=" + String.format("%s/%s", x, y));
@@ -149,14 +143,12 @@ public final class DrawableUtils {
     // }
 
     public static ELTexture getTextureFromFile(String file) {
-        ELTexture t = BufferedTexture.generateTexture("/",
-                file.replace('/', File.separatorChar));
+        ELTexture t = BufferedTexture.generateTexture("/", file.replace('/', File.separatorChar));
         System.err.println("Loaded " + file);
         return t;
     }
 
-    public static void glBeginRot(double theta, double rx, double ry,
-            double rz) {
+    public static void glBeginRot(double theta, double rx, double ry, double rz) {
         GLRotator.glBeginRot(theta, rx, ry, rz);
     }
 
@@ -196,14 +188,12 @@ public final class DrawableUtils {
         GLScaler.glEndScale();
     }
 
-    public static void beginStandardEntityRender(ELEntity entity, float posX,
-            float posY, float posZ) {
+    public static void beginStandardEntityRender(ELEntity entity, float posX, float posY, float posZ) {
         DrawableUtils.glBeginTrans(posX, posY, posZ);
         DrawableUtils.glBeginRot(entity.getYaw(), 0, 1, 0);
         DrawableUtils.glBeginRot(entity.getPitch(), 0, 0, 1);
         DrawableUtils.glBeginRot(entity.getRoll(), 1, 0, 0);
-        DrawableUtils.glBeginTrans(-(entity.getTex().getWidth() / 2),
-                -(entity.getTex().getHeight() / 2), 0);
+        DrawableUtils.glBeginTrans(-(entity.getTex().getWidth() / 2), -(entity.getTex().getHeight() / 2), 0);
     }
 
     public static int getWindowWidth() {

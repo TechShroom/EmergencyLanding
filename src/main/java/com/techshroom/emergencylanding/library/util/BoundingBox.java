@@ -45,13 +45,11 @@ public class BoundingBox implements ICollidable<BoundingBox> {
         // does nothing, leaves at defaults
     }
 
-    public BoundingBox(double x, double y, double width, double height,
-            double roll, double yaw, double pitch) {
+    public BoundingBox(double x, double y, double width, double height, double roll, double yaw, double pitch) {
         modBox(x, y, width, height, roll, yaw, pitch);
     }
 
-    public void modBox(double x, double y, double width, double height,
-            double roll, double yaw, double pitch) {
+    public void modBox(double x, double y, double width, double height, double roll, double yaw, double pitch) {
         this.box.setBounds(x, y, width + x, height + y);
         this.roll = roll;
         this.yaw = yaw;
@@ -65,8 +63,7 @@ public class BoundingBox implements ICollidable<BoundingBox> {
         }
         if (o instanceof BoundingBox) {
             BoundingBox bb = (BoundingBox) o;
-            return this.box.equals(bb.box) && this.roll == bb.roll
-                    && this.yaw == bb.yaw && this.pitch == bb.pitch;
+            return this.box.equals(bb.box) && this.roll == bb.roll && this.yaw == bb.yaw && this.pitch == bb.pitch;
         }
         return false;
     }
@@ -126,16 +123,11 @@ public class BoundingBox implements ICollidable<BoundingBox> {
         tmpB[1] = new Point2D.Double(boxB[0].getX(), boxB[1].getY());
         tmpB[2] = new Point2D.Double(boxB[1].getX(), boxB[0].getY());
         // left: LL to UL right: LR to UR top: UL to UR bottom: LL to LR
-        LineSeg lA = new LineSeg(tmpA[0], tmpA[1]),
-                rA = new LineSeg(tmpA[2], tmpA[3]),
-                tA = new LineSeg(tmpA[1], tmpA[3]),
-                bA = new LineSeg(tmpA[0], tmpA[2]);
-        LineSeg lB = new LineSeg(tmpB[0], tmpB[1]),
-                rB = new LineSeg(tmpB[2], tmpB[3]),
-                tB = new LineSeg(tmpB[1], tmpB[3]),
-                bB = new LineSeg(tmpB[0], tmpB[2]);
-        return lA.collidesWith(bB) || rA.collidesWith(tB) || bA.collidesWith(lB)
-                || tA.collidesWith(rB);
+        LineSeg lA = new LineSeg(tmpA[0], tmpA[1]), rA = new LineSeg(tmpA[2], tmpA[3]),
+                tA = new LineSeg(tmpA[1], tmpA[3]), bA = new LineSeg(tmpA[0], tmpA[2]);
+        LineSeg lB = new LineSeg(tmpB[0], tmpB[1]), rB = new LineSeg(tmpB[2], tmpB[3]),
+                tB = new LineSeg(tmpB[1], tmpB[3]), bB = new LineSeg(tmpB[0], tmpB[2]);
+        return lA.collidesWith(bB) || rA.collidesWith(tB) || bA.collidesWith(lB) || tA.collidesWith(rB);
     }
 
     private static class LineSeg implements ICollidable<LineSeg> {
@@ -153,14 +145,13 @@ public class BoundingBox implements ICollidable<BoundingBox> {
         }
 
         @Override
-        public boolean
-                collidesWith(ICollidable<? extends ICollidable<?>> other) {
-            return (other instanceof LineSeg) ? collidesWith((LineSeg) other)
-                    : false;
+        public boolean collidesWith(ICollidable<? extends ICollidable<?>> other) {
+            return (other instanceof LineSeg) ? collidesWith((LineSeg) other) : false;
         }
 
-        private static final double ERROR = Maths.med,
-                ERROR_PLUS_ONE = ERROR + 1; // close enough, jeez
+        private static final double ERROR = Maths.med, ERROR_PLUS_ONE = ERROR + 1; // close
+                                                                                   // enough,
+                                                                                   // jeez
 
         @Override
         public boolean collidesWith(LineSeg other) {
@@ -168,45 +159,33 @@ public class BoundingBox implements ICollidable<BoundingBox> {
             // http://devmag.org.za/2009/04/13/basic-collision-detection-in-2d-part-1/
             // for more info
             // then make sure between 0 and 1 for on segment
-            double denom = ((other.e.getY() - other.s.getY())
-                    * (this.e.getX() - this.s.getX()))
-                    - ((other.e.getX() - other.s.getX())
-                            * (this.e.getY() - this.s.getY()));
+            double denom = ((other.e.getY() - other.s.getY()) * (this.e.getX() - this.s.getX()))
+                    - ((other.e.getX() - other.s.getX()) * (this.e.getY() - this.s.getY()));
             if (denom == 0) {
                 return false;
             }
-            double ua = (((other.e.getX() - other.s.getX())
-                    * (this.s.getY() - other.s.getY()))
-                    - ((other.e.getY() - other.s.getY())
-                            * (this.s.getX() - other.s.getX())))
-                    / denom;
+            double ua = (((other.e.getX() - other.s.getX()) * (this.s.getY() - other.s.getY()))
+                    - ((other.e.getY() - other.s.getY()) * (this.s.getX() - other.s.getX()))) / denom;
             /*
              * The following 3 lines are only necessary if we are checking line
              * segments instead of infinite-length lines
              */
-            double ub = (((this.e.getX() - this.s.getX())
-                    * (this.s.getY() - other.s.getY()))
-                    - ((this.e.getY() - this.s.getY())
-                            * (this.s.getX() - other.s.getX())))
-                    / denom;
+            double ub = (((this.e.getX() - this.s.getX()) * (this.s.getY() - other.s.getY()))
+                    - ((this.e.getY() - this.s.getY()) * (this.s.getX() - other.s.getX()))) / denom;
             ua += 0.0;
             ub += 0.0;
-            if (Maths.lessThan(ua, -ERROR)
-                    || Maths.greaterThan(ua, ERROR_PLUS_ONE)
-                    || Maths.lessThan(ub, -ERROR)
+            if (Maths.lessThan(ua, -ERROR) || Maths.greaterThan(ua, ERROR_PLUS_ONE) || Maths.lessThan(ub, -ERROR)
                     || Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
                 if (LUtils.debugLevel > 1) {
                     System.err.println("[Begin]");
                     if (Maths.lessThan(ua, -ERROR)) {
-                        System.err.println(
-                                "ua " + ua + " was less than " + (-ERROR));
+                        System.err.println("ua " + ua + " was less than " + (-ERROR));
                     }
                     if (Maths.greaterThan(ua, ERROR_PLUS_ONE)) {
                         System.err.println("ua " + ua + " was greater than 1");
                     }
                     if (Maths.lessThan(ub, -ERROR)) {
-                        System.err.println(
-                                "ub " + ub + " was less than " + (-ERROR));
+                        System.err.println("ub " + ub + " was less than " + (-ERROR));
                     }
                     if (Maths.greaterThan(ub, ERROR_PLUS_ONE)) {
                         System.err.println("ub " + ub + " was greater than 1");
@@ -216,8 +195,7 @@ public class BoundingBox implements ICollidable<BoundingBox> {
                 return false;
             }
             if (LUtils.debugLevel > 1) {
-                System.err.println("We got some collisions of lines here: " + ua
-                        + ":" + ub);
+                System.err.println("We got some collisions of lines here: " + ua + ":" + ub);
             }
             return true;
         }

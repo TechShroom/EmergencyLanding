@@ -115,8 +115,7 @@ public class Strings {
         int codePoint = s.codePointAt(0);
         int sizeOfCodePoint = Character.charCount(codePoint);
         char[] mapped = Character.toChars(op.applyAsInt(codePoint));
-        return new StringBuilder(s.length()).append(mapped)
-                .append(s.substring(sizeOfCodePoint)).toString();
+        return new StringBuilder(s.length()).append(mapped).append(s.substring(sizeOfCodePoint)).toString();
     }
 
 }

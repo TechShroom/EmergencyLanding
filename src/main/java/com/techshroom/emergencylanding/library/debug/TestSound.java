@@ -35,8 +35,7 @@ public class TestSound extends KMain {
 
     public static void main(String[] args) throws Exception {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 600, "Testing EL Sound",
-                    true, args);
+            layer = DisplayLayer.initDisplay(0, 800, 600, "Testing EL Sound", true, args);
             while (!layer.shouldClose()) {
                 layer.loop(120);
             }

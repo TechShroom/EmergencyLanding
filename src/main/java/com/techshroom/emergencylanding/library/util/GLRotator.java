@@ -40,8 +40,7 @@ final class GLRotator {
         PreShaderOps.add(mats.toArray(new Matrix4f[mats.size()]));
     }
 
-    private static List<Matrix4f> mats(double theta, double rx, double ry,
-            double rz) {
+    private static List<Matrix4f> mats(double theta, double rx, double ry, double rz) {
         rx *= theta;
         ry *= theta;
         rz *= theta;

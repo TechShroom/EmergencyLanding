@@ -66,8 +66,7 @@ public abstract class ELTexture implements Texture {
 
     public static class DestTexture extends ELTexture {
 
-        public static HashMap<Integer, Integer> removed =
-                new HashMap<Integer, Integer>();
+        public static HashMap<Integer, Integer> removed = new HashMap<Integer, Integer>();
 
         public DestTexture(ELTexture texture) {
             this.buf = ByteBuffer.allocateDirect(1);
@@ -94,16 +93,13 @@ public abstract class ELTexture implements Texture {
     private int id = -1;
     private int useID = -1;
     // times two-thirds, but overflow conscious
-    public static final long TOTAL_TEXTURE_SPACE =
-            (Runtime.getRuntime().maxMemory() / 3) * 2;
+    public static final long TOTAL_TEXTURE_SPACE = (Runtime.getRuntime().maxMemory() / 3) * 2;
     // private static IntBuffer ids = BufferUtils.createIntBuffer(1);
-    private static Map<Integer, ELTexture> texlist =
-            new HashMap<Integer, ELTexture>();
+    private static Map<Integer, ELTexture> texlist = new HashMap<Integer, ELTexture>();
     public static long currentSpace = 0;
     public ByteBuffer buf = null;
     public Vector2i dim = null;
-    private static ArrayList<Runnable> glThreadQueue =
-            new ArrayList<Runnable>();
+    private static ArrayList<Runnable> glThreadQueue = new ArrayList<Runnable>();
     private static ArrayList<Runnable> queueLater = new ArrayList<Runnable>();
     /**
      * Maximum added runnables while runnables are being processed, to avoid
@@ -118,8 +114,7 @@ public abstract class ELTexture implements Texture {
 
     // Define static Textures AFTER this comment
 
-    public static final ELTexture invisible =
-            new ColorTexture(new Color(0, 0, 0, 0));
+    public static final ELTexture invisible = new ColorTexture(new Color(0, 0, 0, 0));
 
     public ELTexture() {
     }
@@ -135,16 +130,12 @@ public abstract class ELTexture implements Texture {
 
                 @Override
                 public void run() {
-                    if (ELTexture.this.buf == null
-                            || ELTexture.this.dim == null) {
-                        throw new RuntimeTextureBindException(
-                                "A required variable is null when creating textures!");
-                    } else if (ELTexture.this.buf
-                            .capacity() < ELTexture.this.dim.getY()
-                                    * ELTexture.this.dim.getX() * 4) {
-                        ByteBuffer tmp = ByteBuffer
-                                .allocateDirect(ELTexture.this.dim.getY()
-                                        * ELTexture.this.dim.getX() * 4);
+                    if (ELTexture.this.buf == null || ELTexture.this.dim == null) {
+                        throw new RuntimeTextureBindException("A required variable is null when creating textures!");
+                    } else if (ELTexture.this.buf.capacity() < ELTexture.this.dim.getY() * ELTexture.this.dim.getX()
+                            * 4) {
+                        ByteBuffer tmp =
+                                ByteBuffer.allocateDirect(ELTexture.this.dim.getY() * ELTexture.this.dim.getX() * 4);
                         tmp.put(ELTexture.this.buf);
                         ELTexture.this.buf = tmp;
                         ELTexture.this.buf.rewind();
@@ -154,8 +145,7 @@ public abstract class ELTexture implements Texture {
                     if ((lookAlike = ELTexture.similar(texObj)) != null) {
                         ELTexture.this.id = lookAlike.id;
                         if (LUtils.debugLevel > 1) {
-                            LUtils.print("Overrode id: " + ELTexture.this.id
-                                    + " (obj=" + texObj + ", overridden="
+                            LUtils.print("Overrode id: " + ELTexture.this.id + " (obj=" + texObj + ", overridden="
                                     + lookAlike + ")");
                         }
                         ELTexture.texlist.put(lookAlike.id, texObj);
@@ -166,51 +156,37 @@ public abstract class ELTexture implements Texture {
                             override = true;
                             ELTexture.this.id = ELTexture.this.useID;
                             if (LUtils.debugLevel > 1) {
-                                LUtils.print("Force-overrode id: "
-                                        + ELTexture.this.id);
+                                LUtils.print("Force-overrode id: " + ELTexture.this.id);
                             }
-                            if (ELTexture.texlist
-                                    .get(ELTexture.this.id) != null) {
-                                ELTexture.currentSpace -= ELTexture.texlist
-                                        .get(ELTexture.this.id).buf.capacity();
+                            if (ELTexture.texlist.get(ELTexture.this.id) != null) {
+                                ELTexture.currentSpace -= ELTexture.texlist.get(ELTexture.this.id).buf.capacity();
                             } else {
-                                LUtils.print("Interesting, it appears that id "
-                                        + ELTexture.this.id
+                                LUtils.print("Interesting, it appears that id " + ELTexture.this.id
                                         + " is null. This shouldn't be happening, but we'll let it slide for now.");
                             }
                         }
-                        if (ELTexture.currentSpace < ELTexture.TOTAL_TEXTURE_SPACE
-                                && ELTexture.this.id == -1
+                        if (ELTexture.currentSpace < ELTexture.TOTAL_TEXTURE_SPACE && ELTexture.this.id == -1
                                 && ELTexture.this.useID == -1) {
                             ELTexture.this.id = glGenTextures();
-                        } else if (ELTexture.this.id == -1
-                                && ELTexture.this.useID == -1) {
-                            LUtils.print("WARNING! Texture limit reached, "
-                                    + "not adding new textures! ("
-                                    + TOTAL_TEXTURE_SPACE + " < " + currentSpace
-                                    + ")");
+                        } else if (ELTexture.this.id == -1 && ELTexture.this.useID == -1) {
+                            LUtils.print("WARNING! Texture limit reached, " + "not adding new textures! ("
+                                    + TOTAL_TEXTURE_SPACE + " < " + currentSpace + ")");
                             return;
                         }
-                        if (DestTexture.removed
-                                .containsKey(ELTexture.this.id)) {
+                        if (DestTexture.removed.containsKey(ELTexture.this.id)) {
                             DestTexture.removed.remove(ELTexture.this.id);
                         }
                         // Create a new texture object in memory and bind it
                         glActiveTexture(GL_TEXTURE0);
                         try {
-                            glTexParameteri(GL_TEXTURE_2D,
-                                    GL_TEXTURE_MIN_FILTER,
-                                    GL_LINEAR_MIPMAP_LINEAR);
-                            glTexParameteri(GL_TEXTURE_2D,
-                                    GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
                             glBindTexture(GL_TEXTURE_2D, ELTexture.this.id);
                             ErrUtil.throwOGLIfError();
                         } catch (OpenGLException ogle) {
                             if (LUtils.debugLevel > 1) {
-                                System.err.println(
-                                        "OpenGL encountered an error while binding id #"
-                                                + ELTexture.this.id + ": "
-                                                + ogle.getLocalizedMessage());
+                                System.err.println("OpenGL encountered an error while binding id #" + ELTexture.this.id
+                                        + ": " + ogle.getLocalizedMessage());
                             }
                         }
 
@@ -221,15 +197,11 @@ public abstract class ELTexture implements Texture {
                         // Upload the texture data and generate mip maps (for
                         // scaling)
                         if (override) {
-                            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0,
-                                    ELTexture.this.dim.getX(),
-                                    ELTexture.this.dim.getY(), GL_RGBA,
-                                    GL_UNSIGNED_BYTE, ELTexture.this.buf);
+                            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, ELTexture.this.dim.getX(),
+                                    ELTexture.this.dim.getY(), GL_RGBA, GL_UNSIGNED_BYTE, ELTexture.this.buf);
                         } else {
-                            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                                    ELTexture.this.dim.getX(),
-                                    ELTexture.this.dim.getY(), 0, GL_RGBA,
-                                    GL_UNSIGNED_BYTE, ELTexture.this.buf);
+                            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ELTexture.this.dim.getX(),
+                                    ELTexture.this.dim.getY(), 0, GL_RGBA, GL_UNSIGNED_BYTE, ELTexture.this.buf);
                         }
                         glGenerateMipmap(GL_TEXTURE_2D);
                         ELTexture.texlist.put(ELTexture.this.id, texObj);
@@ -286,8 +258,7 @@ public abstract class ELTexture implements Texture {
                             reported.get(i).printStackTrace();
                         }
                         reported.clear();
-                        throw new RuntimeException("Too many bindings! ("
-                                + added + " > " + MAX_ADDED_BINDINGS + ")");
+                        throw new RuntimeException("Too many bindings! (" + added + " > " + MAX_ADDED_BINDINGS + ")");
                     }
                     glThreadQueue.addAll(queueLater);
                     queueLater.clear();
@@ -336,8 +307,8 @@ public abstract class ELTexture implements Texture {
         try {
             glBindTexture(GL_TEXTURE_2D, getID());
         } catch (OpenGLException ogle) {
-            System.err.println("OpenGL encountered an error while binding id #"
-                    + this.id + ": " + ogle.getLocalizedMessage());
+            System.err.println(
+                    "OpenGL encountered an error while binding id #" + this.id + ": " + ogle.getLocalizedMessage());
         }
     }
 
@@ -375,8 +346,7 @@ public abstract class ELTexture implements Texture {
     }
 
     public GLFWImage convertToGLFWImage() {
-        return GLFWImage.create().set(this.dim.getX(), this.dim.getY(),
-                this.buf);
+        return GLFWImage.create().set(this.dim.getX(), this.dim.getY(), this.buf);
     }
 
     private void destruction0() {

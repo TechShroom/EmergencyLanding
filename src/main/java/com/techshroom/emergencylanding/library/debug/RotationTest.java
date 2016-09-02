@@ -43,8 +43,7 @@ public class RotationTest extends KMain {
 
     public static void main(String[] args) {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing Rotations",
-                    false, true, args);
+            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing Rotations", false, true, args);
             System.err.println("loaded");
             while (run) {
                 run = !layer.shouldClose();
@@ -84,8 +83,7 @@ public class RotationTest extends KMain {
     }
 
     @Override
-    public void registerRenders(
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+    public void registerRenders(HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
         classToRender.put(TestCollisionEntity.class, new TextureRender());
     }
 

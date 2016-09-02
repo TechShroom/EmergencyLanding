@@ -33,8 +33,7 @@ import com.techshroom.emergencylanding.library.util.interfaces.ICollidable;
 
 public abstract class ELEntity implements ICollidable<ELEntity> {
 
-    protected Victor pos = new Victor(), posInter = new Victor(),
-            vel = new Victor(), velInter = new Victor();
+    protected Victor pos = new Victor(), posInter = new Victor(), vel = new Victor(), velInter = new Victor();
     protected BoundingBox box = new BoundingBox();
     protected float deltaT;
     protected float elapsed;
@@ -54,24 +53,22 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
         this.w = w;
     }
 
-    public ELEntity(World w, float posX, float posY, float posZ,
-            ELTexture texture) {
+    public ELEntity(World w, float posX, float posY, float posZ, ELTexture texture) {
         setXYZ(posX, posY, posZ);
         setTex(texture);
         this.w = w;
     }
 
-    public ELEntity(World w, float posX, float posY, float posZ, float xVel,
-            float yVel, float zVel, ELTexture texture) {
+    public ELEntity(World w, float posX, float posY, float posZ, float xVel, float yVel, float zVel,
+            ELTexture texture) {
         setXYZ(posX, posY, posZ);
         setXYZVel(xVel, yVel, zVel);
         setTex(texture);
         this.w = w;
     }
 
-    public ELEntity(World w, float posX, float posY, float posZ, float xVel,
-            float yVel, float zVel, float pitchRot, float yawRot, float rollRot,
-            ELTexture texture) {
+    public ELEntity(World w, float posX, float posY, float posZ, float xVel, float yVel, float zVel, float pitchRot,
+            float yawRot, float rollRot, ELTexture texture) {
         setXYZ(posX, posY, posZ);
         setXYZVel(xVel, yVel, zVel);
         this.box.setPitch(pitchRot);
@@ -91,8 +88,7 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
     public void updateOnTick(float delta) {
         this.elapsed = 0;
 
-        setXYZ(this.pos.x + this.vel.x * delta, this.pos.y + this.vel.y * delta,
-                this.pos.z + this.vel.z * delta);
+        setXYZ(this.pos.x + this.vel.x * delta, this.pos.y + this.vel.y * delta, this.pos.z + this.vel.z * delta);
 
         this.deltaT = delta;
     }
@@ -156,8 +152,7 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
      *            - Relative velZ
      */
     public void setRelativeXYZVel(float relXVel, float relYVel, float relZVel) {
-        setXYZVel(this.vel.x + relXVel, this.vel.y + relYVel,
-                this.vel.z + relZVel);
+        setXYZVel(this.vel.x + relXVel, this.vel.y + relYVel, this.vel.z + relZVel);
     }
 
     /**
@@ -320,8 +315,7 @@ public abstract class ELEntity implements ICollidable<ELEntity> {
     public Victor getInterpolated() {
         synchronized (this.posInter) {
             synchronized (this.velInter) {
-                this.posInter.update(this.posInter.x + this.velInter.x,
-                        this.posInter.y + this.velInter.y,
+                this.posInter.update(this.posInter.x + this.velInter.x, this.posInter.y + this.velInter.y,
                         this.posInter.z + this.velInter.z);
                 return this.posInter;
             }

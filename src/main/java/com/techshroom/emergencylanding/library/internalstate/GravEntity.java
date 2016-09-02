@@ -31,8 +31,7 @@ public class GravEntity extends ELEntity {
 
     private float grav;
 
-    public GravEntity(World w, float posX, float posY, float posZ,
-            ELTexture texture) {
+    public GravEntity(World w, float posX, float posY, float posZ, ELTexture texture) {
         super(w, posX, posY, posZ, texture);
         this.grav = 9.8f;
     }
@@ -50,8 +49,7 @@ public class GravEntity extends ELEntity {
      * @param gravity
      *            -Acceleration due to gravity
      */
-    public GravEntity(World w, float posX, float posY, float posZ,
-            ELTexture texture, float gravity) {
+    public GravEntity(World w, float posX, float posY, float posZ, ELTexture texture, float gravity) {
         super(w, posX, posY, posZ, texture);
         this.grav = gravity;
     }

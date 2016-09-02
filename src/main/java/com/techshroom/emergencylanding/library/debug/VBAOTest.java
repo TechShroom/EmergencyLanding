@@ -49,8 +49,7 @@ public class VBAOTest extends KMain {
      */
     public static void main(String[] args) throws Exception {
         try {
-            layer = DisplayLayer.initDisplay(0, 1000, 600, "VBAO NewElTest",
-                    false, false, args);
+            layer = DisplayLayer.initDisplay(0, 1000, 600, "VBAO NewElTest", false, false, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             while (!layer.shouldClose()) {
                 layer.loop(120000);
@@ -77,9 +76,8 @@ public class VBAOTest extends KMain {
         float[] v3 = { 200, 50, 0, 1f, 1f, 1f };
         float[] v4 = { 200, 200, 0, 1f, 1f, 1f };
         int order = VertexData.COLOR_FIRST;
-        VertexData[] verts =
-                { new VertexData(order, v1), new VertexData(order, v2),
-                        new VertexData(order, v3), new VertexData(order, v4) };
+        VertexData[] verts = { new VertexData(order, v1), new VertexData(order, v2), new VertexData(order, v3),
+                new VertexData(order, v4) };
         this.quad = Shapes.getQuad(verts);
         this.quad.setTexture(new ColorTexture(Color.BLUE));
         this.quad.setStatic(false);

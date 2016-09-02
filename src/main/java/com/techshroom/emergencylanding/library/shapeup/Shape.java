@@ -32,13 +32,11 @@ import com.flowpowered.math.vector.Vectord;
 
 public interface Shape<T extends Shape<T, P>, P extends Vectord> {
 
-    interface TwoDimensional<T extends TwoDimensional<T>>
-            extends Shape<T, Vector2d> {
+    interface TwoDimensional<T extends TwoDimensional<T>> extends Shape<T, Vector2d> {
 
     }
 
-    interface ThreeDimensional<T extends ThreeDimensional<T>>
-            extends Shape<T, Vector3d> {
+    interface ThreeDimensional<T extends ThreeDimensional<T>> extends Shape<T, Vector3d> {
 
         T rotateX(double radians);
 

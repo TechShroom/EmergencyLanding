@@ -24,9 +24,8 @@
  */
 package com.techshroom.emergencylanding.library.eventful.events.window;
 
-
 public interface WindowEvent {
-    
+
     long getWindow();
 
 }

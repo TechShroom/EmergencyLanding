@@ -75,8 +75,7 @@ public class Bounds3D extends Bounds {
      */
     @Override
     public Point2D[] getBounds() {
-        return new Point2D[] { new Point2D.Double(this.minx, this.miny),
-                new Point2D.Double(this.maxx, this.maxy),
+        return new Point2D[] { new Point2D.Double(this.minx, this.miny), new Point2D.Double(this.maxx, this.maxy),
                 new Point2D.Double(this.minz, this.maxz) };
     }
 }

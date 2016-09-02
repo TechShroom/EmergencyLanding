@@ -52,8 +52,7 @@ public class CollisionsTest extends KMain {
 
     public static void main(String[] args) {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing Collisions",
-                    false, false, args);
+            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing Collisions", false, false, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             CollisionsTest.startISThreads();
             while (CollisionsTest.run) {
@@ -135,8 +134,7 @@ public class CollisionsTest extends KMain {
     }
 
     @Override
-    public void registerRenders(
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+    public void registerRenders(HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
         classToRender.put(TestCollisionEntity.class, new TextureRender());
     }
 }

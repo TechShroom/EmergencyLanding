@@ -73,8 +73,7 @@ public class Sync {
             if (t == null || t.getName() == null) {
                 continue;
             }
-            if (t.getName().equals("LWJGL Timer")
-                    || t.getName().equals("KCore Win Fix")) {
+            if (t.getName().equals("LWJGL Timer") || t.getName().equals("KCore Win Fix")) {
                 needsAccuracy = false;
             }
         }
@@ -119,8 +118,7 @@ public class Sync {
         try {
             // sleep until the average sleep time is greater than the time
             // remaining till nextFrame
-            for (long t0 = getTime(), t1; this.nextFrame
-                    - t0 > this.sleepDurations.avg(); t0 = t1) {
+            for (long t0 = getTime(), t1; this.nextFrame - t0 > this.sleepDurations.avg(); t0 = t1) {
                 Thread.sleep(1);
                 this.sleepDurations.add((t1 = getTime()) - t0); // update
                                                                 // average
@@ -133,8 +131,7 @@ public class Sync {
 
             // yield until the average yield time is greater than the time
             // remaining till nextFrame
-            for (long t0 = getTime(), t1; this.nextFrame
-                    - t0 > this.yieldDurations.avg(); t0 = t1) {
+            for (long t0 = getTime(), t1; this.nextFrame - t0 > this.yieldDurations.avg(); t0 = t1) {
                 Thread.yield();
                 this.yieldDurations.add((t1 = getTime()) - t0); // update
                                                                 // average
@@ -145,8 +142,7 @@ public class Sync {
         }
 
         // schedule next frame, drop frame(s) if already too late for next frame
-        this.nextFrame = Math.max(this.nextFrame + Sync.NANOS_IN_SECOND / fps,
-                getTime());
+        this.nextFrame = Math.max(this.nextFrame + Sync.NANOS_IN_SECOND / fps, getTime());
     }
 
     /**

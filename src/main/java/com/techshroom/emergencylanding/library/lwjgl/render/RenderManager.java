@@ -69,12 +69,9 @@ public class RenderManager {
         r.doRender(e, interpolated);
         if (LUtils.debugLevel >= 1) {
             BoundingBox bb = e.getBB();
-            DrawableUtils.beginStandardEntityRender(e, interpolated.x,
-                    interpolated.y, interpolated.z);
+            DrawableUtils.beginStandardEntityRender(e, interpolated.x, interpolated.y, interpolated.z);
             VBAO bbbox = Shapes.getQuad(new VertexData().setRGB(255, 0, 0),
-                    new VertexData().setXYZ((float) (bb.getWidth()),
-                            (float) (bb.getHeight()), 0),
-                    Shapes.XY);
+                    new VertexData().setXYZ((float) (bb.getWidth()), (float) (bb.getHeight()), 0), Shapes.XY);
             bbbox.setStatic(false);
             bbbox.draw().destroy();
             DrawableUtils.endStandardEntityRender();
@@ -86,10 +83,8 @@ public class RenderManager {
         Render<?> r = null;
         if (RenderManager.classToRender.containsKey(cls)) {
             r = RenderManager.classToRender.get(cls);
-        } else if (cls.getSuperclass() != null
-                && ELEntity.class.isAssignableFrom(cls.getSuperclass())) {
-            r = RenderManager.getRendererForClass(
-                    (Class<? extends ELEntity>) cls.getSuperclass());
+        } else if (cls.getSuperclass() != null && ELEntity.class.isAssignableFrom(cls.getSuperclass())) {
+            r = RenderManager.getRendererForClass((Class<? extends ELEntity>) cls.getSuperclass());
         }
         return r;
     }

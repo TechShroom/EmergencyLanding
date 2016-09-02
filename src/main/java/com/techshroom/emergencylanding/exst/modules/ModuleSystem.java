@@ -58,8 +58,7 @@ public final class ModuleSystem {
      *         either returns the same class represented by the full binary name
      *         or a class that extends that class.
      */
-    public static <T extends IModule> T[]
-            getRegisteredModules(Class<T> moduleClass) {
+    public static <T extends IModule> T[] getRegisteredModules(Class<T> moduleClass) {
         @SuppressWarnings("unchecked")
         T[] array = (T[]) Array.newInstance(moduleClass, 0);
         if (moduleClass == null) {

@@ -47,8 +47,7 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
 
     public static void main(String[] args) {
         try {
-            layer = DisplayLayer.initDisplay(0, 1152, 720,
-                    "Testing CrashCourse", true, true, args);
+            layer = DisplayLayer.initDisplay(0, 1152, 720, "Testing CrashCourse", true, true, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             SideTest_GraviteeeeeeeTest.startISThreads();
             while (SideTest_GraviteeeeeeeTest.run) {
@@ -113,8 +112,7 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
         float y = this.e.getInterpolated().y;
         if (y > last != ((int) this.e.getYVel()) > 0) {
             if (((int) this.e.getYVel()) != 0) {
-                System.err.println(
-                        "vel != interp (velY=" + this.e.getYVel() + ")");
+                System.err.println("vel != interp (velY=" + this.e.getYVel() + ")");
             }
         }
         RenderManager.render(delta);
@@ -128,15 +126,13 @@ public class SideTest_GraviteeeeeeeTest extends KMain {
         w.addEntity(this.e);
         for (int i = 0; i < 100; i++) {
             GravEntity ge = new TestGravEntity(w);
-            ge.setXYZ(((float) Math.random() + 0.1f) * 1000f,
-                    ((float) Math.random() + 2f) * 100f, 0f);
+            ge.setXYZ(((float) Math.random() + 0.1f) * 1000f, ((float) Math.random() + 2f) * 100f, 0f);
             w.addEntity(ge);
         }
     }
 
     @Override
-    public void registerRenders(
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+    public void registerRenders(HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
         // TODO Auto-generated method stub
     }
 }

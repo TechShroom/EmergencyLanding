@@ -48,8 +48,7 @@ public class WorldAndEntityTest extends KMain {
 
     public static void main(String[] args) {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 500,
-                    "Testing " + LUtils.LIB_NAME, false, true, args);
+            layer = DisplayLayer.initDisplay(0, 800, 500, "Testing " + LUtils.LIB_NAME, false, true, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             WorldAndEntityTest.startISThreads();
             // This needs to wait until the windows shows up
@@ -134,8 +133,7 @@ public class WorldAndEntityTest extends KMain {
         }
         Vector2i size = DrawableUtils.getWindowSize(layer);
         this.quad = Shapes.getQuad(new VertexData().setRGB(255, 255, 255),
-                new VertexData().setXYZ(size.getX(), size.getY(), 0),
-                Shapes.XY);
+                new VertexData().setXYZ(size.getX(), size.getY(), 0), Shapes.XY);
         this.quad.setStatic(false);
     }
 

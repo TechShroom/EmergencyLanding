@@ -45,15 +45,13 @@ public class Mods {
 
     public static void findAndLoad() {
         if (loaded_mods) {
-            System.err.println(
-                    "Already loaded mod system, trying to load again?");
+            System.err.println("Already loaded mod system, trying to load again?");
             return;
         }
         System.err.println("EL Mod System starting...");
         if (!injectModsFolder()) {
-            System.err.println(
-                    "[WARNING] Mods folder does not exist or is a file, "
-                            + "add it if you want mods to be loaded from there.");
+            System.err.println("[WARNING] Mods folder does not exist or is a file, "
+                    + "add it if you want mods to be loaded from there.");
         }
         ArrayList<IMod> injected = ModInjector.findAndInject();
         System.err.println("Loaded mods from classpath.");
@@ -67,8 +65,7 @@ public class Mods {
             try {
                 m.init(inst);
             } catch (Exception e) {
-                System.err
-                        .println("Error registering mod " + m.getClass() + ":");
+                System.err.println("Error registering mod " + m.getClass() + ":");
                 e.printStackTrace();
                 injected.remove(m);
             }
@@ -111,11 +108,9 @@ public class Mods {
         return true;
     }
 
-    public static void registerRenders(
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+    public static void registerRenders(HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
         if (!loaded_mods) {
-            throw new IllegalStateException(
-                    "Registering renderers before loading mods!");
+            throw new IllegalStateException("Registering renderers before loading mods!");
         }
         for (IMod m : loaded) {
             HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> tmp =
@@ -127,8 +122,7 @@ public class Mods {
 
     public static List<IMod> getLoadedMods() {
         if (!loaded_mods) {
-            throw new IllegalStateException(
-                    "Getting loaded mods list before loading mods!");
+            throw new IllegalStateException("Getting loaded mods list before loading mods!");
         }
         return Collections.unmodifiableList(loaded);
     }

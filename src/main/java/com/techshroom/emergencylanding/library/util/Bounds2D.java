@@ -61,8 +61,7 @@ public class Bounds2D extends Bounds {
             dest = new Rectangle2D.Double();
         }
         if (this.cache == null) {
-            this.cache = new Rectangle2D.Double(this.minx, this.miny,
-                    this.maxx - this.minx, this.maxy - this.miny);
+            this.cache = new Rectangle2D.Double(this.minx, this.miny, this.maxx - this.minx, this.maxy - this.miny);
         }
         dest.setRect(this.cache);
         return dest;
@@ -180,7 +179,6 @@ public class Bounds2D extends Bounds {
 
     @Override
     public Point2D[] getBounds() {
-        return new Point2D[] { new Point2D.Double(this.minx, this.miny),
-                new Point2D.Double(this.maxx, this.maxy) };
+        return new Point2D[] { new Point2D.Double(this.minx, this.miny), new Point2D.Double(this.maxx, this.maxy) };
     }
 }

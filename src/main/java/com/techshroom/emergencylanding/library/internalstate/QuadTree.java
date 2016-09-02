@@ -132,11 +132,11 @@ public class QuadTree {
     private int itemToQuad(ELEntity entity) {
         return coordsToQuad(entity.getX(), entity.getY());
     }
-    
+
     private boolean coordsOutOfBounds(double x, double y) {
         return this.x2 < x || x < this.x1 || this.y2 < y || y < this.y1;
     }
-    
+
     private boolean itemOutOfBounds(ELEntity e) {
         return coordsOutOfBounds(e.getX(), e.getY());
     }
@@ -178,7 +178,7 @@ public class QuadTree {
 
     public void add(ELEntity entity) {
         if (itemOutOfBounds(entity)) {
-          //  throw new OutOfBoundsException();
+            // throw new OutOfBoundsException();
         }
         insert(entity);
     }
@@ -192,7 +192,7 @@ public class QuadTree {
                 // TODO how should we compare doubles?
                 // this might be "too accurate"
                 if (Double.compare(e.getX(), x) == 0 && Double.compare(e.getY(), y) == 0) {
-                       return e;
+                    return e;
                 }
             }
         } else {

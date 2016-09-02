@@ -40,9 +40,8 @@ public class TestEntity extends ELEntity {
 
     private Random rnd = new Random();
     boolean onScreenX = true, onScreenY = true;
-    private static ELTexture[] texmix = { new ColorTexture(Color.BLUE),
-            new ColorTexture(Color.RED), new ColorTexture(Color.GREEN),
-            new ColorTexture(Color.MAGENTA) };
+    private static ELTexture[] texmix = { new ColorTexture(Color.BLUE), new ColorTexture(Color.RED),
+            new ColorTexture(Color.GREEN), new ColorTexture(Color.MAGENTA) };
 
     public TestEntity(World w) {
         super(w, 0, 0, 0, TestEntity.texmix[0]);
@@ -59,8 +58,7 @@ public class TestEntity extends ELEntity {
         if (this.pos.y > size.getY() || this.pos.y < 0) {
             setYPos(!(this.pos.y > size.getY()) ? size.getY() : 0);
         }
-        if (Math.sqrt(
-                this.vel.y * this.vel.y + this.vel.x * this.vel.x) < 0.5) {
+        if (Math.sqrt(this.vel.y * this.vel.y + this.vel.x * this.vel.x) < 0.5) {
             setTex(BetterArrays.randomArray(TestEntity.texmix)[0]);
         }
         super.updateOnTick(delta);

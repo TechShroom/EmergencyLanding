@@ -68,8 +68,7 @@ public class World {
      */
     public List<ELEntity> getEntityList() {
         this.read.lock();
-        List<ELEntity> unmodlist = Collections
-                .unmodifiableList(new ArrayList<ELEntity>(this.loadedEntities));
+        List<ELEntity> unmodlist = Collections.unmodifiableList(new ArrayList<ELEntity>(this.loadedEntities));
         this.read.unlock();
         return unmodlist;
     }
@@ -124,8 +123,7 @@ public class World {
 
     @Override
     public String toString() {
-        return String.format(
-                "{World:{Entities:%s,width:%s,height:%s,length:%s}}",
-                this.loadedEntities, this.width, this.height, this.length);
+        return String.format("{World:{Entities:%s,width:%s,height:%s,length:%s}}", this.loadedEntities, this.width,
+                this.height, this.length);
     }
 }

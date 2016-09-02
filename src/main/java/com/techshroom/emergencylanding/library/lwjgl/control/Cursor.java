@@ -32,8 +32,7 @@ import com.techshroom.emergencylanding.library.lwjgl.tex.ELTexture;
 @AutoValue
 public abstract class Cursor {
 
-    private static final Cursor NORMAL_CURSOR =
-            fromHandle(GLFW.glfwCreateStandardCursor(GLFW.GLFW_ARROW_CURSOR));
+    private static final Cursor NORMAL_CURSOR = fromHandle(GLFW.glfwCreateStandardCursor(GLFW.GLFW_ARROW_CURSOR));
 
     public static Cursor getStandardCursor(int cursorType) {
         if (cursorType == GLFW.GLFW_ARROW_CURSOR) {
@@ -43,8 +42,7 @@ public abstract class Cursor {
     }
 
     public static Cursor createCursor(ELTexture image, int hotX, int hotY) {
-        return fromHandle(
-                GLFW.glfwCreateCursor(image.convertToGLFWImage(), hotX, hotY));
+        return fromHandle(GLFW.glfwCreateCursor(image.convertToGLFWImage(), hotX, hotY));
     }
 
     public static Cursor fromHandle(long handle) {

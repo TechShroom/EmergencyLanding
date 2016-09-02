@@ -32,7 +32,6 @@ import com.techshroom.emergencylanding.library.lwjgl.render.Render;
 public abstract class ELMod implements IMod {
 
     @Override
-    public void registerRenders(
-            HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
+    public void registerRenders(HashMap<Class<? extends ELEntity>, Render<? extends ELEntity>> classToRender) {
     }
 }

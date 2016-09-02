@@ -55,43 +55,36 @@ public final class FontStorage {
                     } else if (style == ITALIC) {
                         buffer.append("-italic");
                     } else {
-                        throw new IllegalArgumentException(
-                                "Don't know what style " + style + " is.");
+                        throw new IllegalArgumentException("Don't know what style " + style + " is.");
                     }
                 });
                 return buffer.toString();
             }
         }
 
-        public static FontRenderingData create(String fontId,
-                Supplier<InputStream> fontData, int fontSize, Style... style) {
-            return create(fontId, fontData, fontSize,
-                    ImmutableSet.copyOf(style));
+        public static FontRenderingData
+                create(String fontId, Supplier<InputStream> fontData, int fontSize, Style... style) {
+            return create(fontId, fontData, fontSize, ImmutableSet.copyOf(style));
         }
 
-        public static FontRenderingData create(String fontId,
-                Supplier<InputStream> fontData, int fontSize, Style style) {
+        public static FontRenderingData
+                create(String fontId, Supplier<InputStream> fontData, int fontSize, Style style) {
             return create(fontId, fontData, fontSize, ImmutableSet.of(style));
         }
 
-        public static FontRenderingData create(String fontId,
-                Supplier<InputStream> fontData, int fontSize, Style styleA,
-                Style styleB) {
-            return create(fontId, fontData, fontSize,
-                    ImmutableSet.of(styleA, styleB));
+        public static FontRenderingData
+                create(String fontId, Supplier<InputStream> fontData, int fontSize, Style styleA, Style styleB) {
+            return create(fontId, fontData, fontSize, ImmutableSet.of(styleA, styleB));
         }
 
-        public static FontRenderingData create(String fontId,
-                Supplier<InputStream> fontData, int fontSize) {
+        public static FontRenderingData create(String fontId, Supplier<InputStream> fontData, int fontSize) {
             return create(fontId, fontData, fontSize, ImmutableSet.of());
         }
 
-        public static FontRenderingData create(String fontId,
-                Supplier<InputStream> fontData, int fontSize,
-                Collection<Style> style) {
-            return new AutoValue_FontStorage_FontRenderingData(fontData,
-                    ImmutableSet.copyOf(style), fontId + Style.stringify(style),
-                    fontSize);
+        public static FontRenderingData
+                create(String fontId, Supplier<InputStream> fontData, int fontSize, Collection<Style> style) {
+            return new AutoValue_FontStorage_FontRenderingData(fontData, ImmutableSet.copyOf(style),
+                    fontId + Style.stringify(style), fontSize);
         }
 
         public abstract Supplier<InputStream> getInputStream();
@@ -118,11 +111,8 @@ public final class FontStorage {
                 return true;
             }
             if (o instanceof FontStorage.FontRenderingData) {
-                FontStorage.FontRenderingData that =
-                        (FontStorage.FontRenderingData) o;
-                return (getStyle().equals(that.getStyle()))
-                        && (getFontIdentifier()
-                                .equals(that.getFontIdentifier()))
+                FontStorage.FontRenderingData that = (FontStorage.FontRenderingData) o;
+                return (getStyle().equals(that.getStyle())) && (getFontIdentifier().equals(that.getFontIdentifier()))
                         && (getFontSize() == that.getFontSize());
             }
             return false;
@@ -132,15 +122,12 @@ public final class FontStorage {
 
     private static final LoadingCache<FontRenderingData, StringRenderer> RENDER_CACHE =
             CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES)
-                    .maximumWeight(3041937L /* sizeof new instance */ * 1024)
-                    .weigher(new StringRenderer.CacheWeigher())
-                    .ticker(GLFWTicker.INSTANCE)
-                    .removalListener(StringRenderer::onRemoval)
+                    .maximumWeight(3041937L /* sizeof new instance */ * 1024).weigher(new StringRenderer.CacheWeigher())
+                    .ticker(GLFWTicker.INSTANCE).removalListener(StringRenderer::onRemoval)
                     .build(new CacheLoader<FontRenderingData, StringRenderer>() {
 
                         @Override
-                        public StringRenderer load(FontRenderingData key)
-                                throws Exception {
+                        public StringRenderer load(FontRenderingData key) throws Exception {
                             return new StringRenderer(key);
                         }
                     });

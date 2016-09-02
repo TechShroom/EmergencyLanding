@@ -49,8 +49,7 @@ public class StringRenderer {
     /**
      * Weighs a {@link StringRenderer} by memory size.
      */
-    static final class CacheWeigher
-            implements Weigher<FontRenderingData, StringRenderer> {
+    static final class CacheWeigher implements Weigher<FontRenderingData, StringRenderer> {
 
         @Override
         public int weigh(FontRenderingData key, StringRenderer value) {
@@ -64,8 +63,7 @@ public class StringRenderer {
 
     }
 
-    static void onRemoval(
-            RemovalNotification<FontRenderingData, StringRenderer> rm) {
+    static void onRemoval(RemovalNotification<FontRenderingData, StringRenderer> rm) {
         rm.getValue().destroy();
     }
 
@@ -79,11 +77,8 @@ public class StringRenderer {
     StringRenderer(FontStorage.FontRenderingData data) throws IOException {
         this.data = data;
         this.nvgHandle = DisplayLayer.getForContext().getNvgHandle();
-        this.fontMem = nvgCreateFontMem(this.nvgHandle,
-                data.getFontIdentifier(),
-                this.fontData = LUtils
-                        .inputStreamToDirectByteBuffer(data.getInputStream()),
-                1);
+        this.fontMem = nvgCreateFontMem(this.nvgHandle, data.getFontIdentifier(),
+                this.fontData = LUtils.inputStreamToDirectByteBuffer(data.getInputStream()), 1);
     }
 
     private void destroy() {

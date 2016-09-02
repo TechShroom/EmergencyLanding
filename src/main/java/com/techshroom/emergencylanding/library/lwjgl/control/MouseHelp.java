@@ -46,22 +46,17 @@ public final class MouseHelp {
         VBAO display = null;
 
         public FakeCursor(ELTexture image, int hotx, int hoty) {
-            this.display = Shapes.getQuad(
-                    new VertexData().setXYZ(-hotx, -hoty, 0), new VertexData()
-                            .setXYZ(image.getWidth(), image.getHeight(), 0),
-                    Shapes.XY);
+            this.display = Shapes.getQuad(new VertexData().setXYZ(-hotx, -hoty, 0),
+                    new VertexData().setXYZ(image.getWidth(), image.getHeight(), 0), Shapes.XY);
             this.display.setTexture(image);
             this.display.setStatic(false);
             this.scaleX = 1;
             this.scaleY = 1;
         }
 
-        public FakeCursor(ELTexture image, int hotx, int hoty, int width,
-                int height) {
-            this.display = Shapes.getQuad(
-                    new VertexData().setXYZ(-hotx, -hoty, 0), new VertexData()
-                            .setXYZ(image.getWidth(), image.getHeight(), 0),
-                    Shapes.XY);
+        public FakeCursor(ELTexture image, int hotx, int hoty, int width, int height) {
+            this.display = Shapes.getQuad(new VertexData().setXYZ(-hotx, -hoty, 0),
+                    new VertexData().setXYZ(image.getWidth(), image.getHeight(), 0), Shapes.XY);
             this.display.setTexture(image);
             this.display.setStatic(false);
             this.scaleX = image.getWidth() / (double) width;
@@ -90,14 +85,13 @@ public final class MouseHelp {
     // GLFWMouseButtonCallback.create(this);
     // private final GLFWCursorEnterCallback thisCECB =
     // GLFWCursorEnterCallback.create(this);
-    private final GLFWCursorPosCallback thisCPCB =
-            GLFWCursorPosCallback.create((window, xpos, ypos) -> {
-                ypos = DrawableUtils.getWindowHeight() - ypos;
-                double oldX = this.x;
-                double oldY = this.y;
-                this.x = xpos;
-                this.y = ypos;
-            });
+    private final GLFWCursorPosCallback thisCPCB = GLFWCursorPosCallback.create((window, xpos, ypos) -> {
+        ypos = DrawableUtils.getWindowHeight() - ypos;
+        double oldX = this.x;
+        double oldY = this.y;
+        this.x = xpos;
+        this.y = ypos;
+    });
     @SuppressWarnings("unused")
     // Used to keep a strong ref to the images, etc.
     private Cursor currentCursor;
@@ -168,8 +162,7 @@ public final class MouseHelp {
      * @see {@link MouseHelp#createFollowCursor(BufferedImage, int, int)
      *      createFollowCursor(BufferedImage, int, int)}
      */
-    public void createFollowCursor(ELTexture texture, int width, int height,
-            int hotx, int hoty) {
+    public void createFollowCursor(ELTexture texture, int width, int height, int hotx, int hoty) {
         replaceCursor(ELTexture.invisible, 0, 0);
         this.fake = new FakeCursor(texture, hotx, hoty, width, height);
     }

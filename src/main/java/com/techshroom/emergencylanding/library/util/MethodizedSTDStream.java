@@ -78,8 +78,7 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
             // skip LUtils.print() because we want the method that called that
             // one.
             if (!s.getClassName().matches("^(java|sun)(.+?)")
-                    && !(s.getClassName().equals(LUtils.class.getName())
-                            && s.getMethodName().equals("print"))) {
+                    && !(s.getClassName().equals(LUtils.class.getName()) && s.getMethodName().equals("print"))) {
                 break;
             }
         }
@@ -88,9 +87,8 @@ public class MethodizedSTDStream extends ByteArrayOutputStream {
             throw new IllegalStateException("No stack!");
         }
         String[] classsplit = s.getClassName().split("\\.");
-        return "[" + classsplit[classsplit.length - 1] + "." + s.getMethodName()
-                + "(" + s.getFileName() + ":" + s.getLineNumber() + ")@"
-                + Thread.currentThread().getName() + "] ";
+        return "[" + classsplit[classsplit.length - 1] + "." + s.getMethodName() + "(" + s.getFileName() + ":"
+                + s.getLineNumber() + ")@" + Thread.currentThread().getName() + "] ";
     }
 
     @Override

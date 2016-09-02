@@ -50,8 +50,7 @@ public class ColorTexture extends ELTexture {
 
     @Override
     public void setup() {
-        this.buf = BufferUtils
-                .createByteBuffer(4 * this.dim.getX() * this.dim.getY());
+        this.buf = BufferUtils.createByteBuffer(4 * this.dim.getX() * this.dim.getY());
         for (int i = 0; i < this.buf.capacity(); i += 4) {
             this.c.writeRGBA(this.buf);
         }
@@ -60,8 +59,7 @@ public class ColorTexture extends ELTexture {
     @Override
     public boolean isLookAlike(ELTexture t) {
         if (t instanceof ColorTexture) {
-            return this.c.equals(((ColorTexture) t).c)
-                    && this.dim.equals(t.dim);
+            return this.c.equals(((ColorTexture) t).c) && this.dim.equals(t.dim);
         } else {
             return super.isLookAlike(t);
         }

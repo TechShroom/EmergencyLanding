@@ -30,8 +30,7 @@ import com.techshroom.emergencylanding.library.util.Maths;
 
 public abstract class EntityCollide extends ELEntity {
 
-    public EntityCollide(World w, float posX, float posY, float posZ,
-            ELTexture texture) {
+    public EntityCollide(World w, float posX, float posY, float posZ, ELTexture texture) {
         super(w, posX, posY, posZ, texture);
     }
 
@@ -55,10 +54,10 @@ public abstract class EntityCollide extends ELEntity {
 
         double angleToOther = Math.atan2(gapY, gapX);
 
-        double xGapBetweenObjs = Maths.projectLineAlongSurface(this.getRoll(),
-                Math.pow(gapX * gapX + gapY * gapY, .5), gapX, false);
-        double yGapBetweenObjs = Maths.projectLineAlongSurface(this.getRoll(),
-                Math.pow(gapX * gapX + gapY * gapY, .5), gapY, false);
+        double xGapBetweenObjs =
+                Maths.projectLineAlongSurface(this.getRoll(), Math.pow(gapX * gapX + gapY * gapY, .5), gapX, false);
+        double yGapBetweenObjs =
+                Maths.projectLineAlongSurface(this.getRoll(), Math.pow(gapX * gapX + gapY * gapY, .5), gapY, false);
 
         double thisXLenOnNewGrid = this.getTex().getWidth();
         double thisYLenOnNewGrid = this.getTex().getHeight();

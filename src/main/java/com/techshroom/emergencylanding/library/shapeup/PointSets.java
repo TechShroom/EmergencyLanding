@@ -33,8 +33,7 @@ import com.techshroom.emergencylanding.library.shapeup.generated.PointSet;
 
 public final class PointSets {
 
-    public static <V extends Vectord> Collection<V>
-            getCollection(PointSet<V> set) {
+    public static <V extends Vectord> Collection<V> getCollection(PointSet<V> set) {
         Collection<V> ret = set.getPoints();
         checkState(set.getPointCount() == ret.size(),
                 "A PointSet must return a collection of size equal to what it claims.");

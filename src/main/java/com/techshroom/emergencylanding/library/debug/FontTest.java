@@ -49,8 +49,7 @@ public class FontTest extends KMain {
 
     public static void main(String[] args) throws Exception {
         try {
-            layer = DisplayLayer.initDisplay(0, 800, 600, "Fonts!", false, true,
-                    args);
+            layer = DisplayLayer.initDisplay(0, 800, 600, "Fonts!", false, true, args);
             layer.getDisplayFPSTracker().enable(layer.getWindow());
             while (!layer.shouldClose()) {
                 layer.loop(120);
@@ -80,8 +79,7 @@ public class FontTest extends KMain {
             }
         }
         strrend.renderString("A", new Vector2f(200, 200));
-        strrend.renderString("Font is TNR Bold!!\nlorem ipsum",
-                new Vector2f(100, 100));
+        strrend.renderString("Font is TNR Bold!!\nlorem ipsum", new Vector2f(100, 100));
     }
 
     @Override
@@ -89,8 +87,7 @@ public class FontTest extends KMain {
     }
 
     private Path getFontPath() {
-        URL url =
-                getClass().getProtectionDomain().getCodeSource().getLocation();
+        URL url = getClass().getProtectionDomain().getCodeSource().getLocation();
         try {
             return Paths.get(url.toURI()).resolve("fonts/anonpro.ttf");
         } catch (URISyntaxException e) {

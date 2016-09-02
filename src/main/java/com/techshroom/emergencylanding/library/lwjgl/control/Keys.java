@@ -56,8 +56,7 @@ public final class Keys implements GLFWKeyCallbackI {
     }
 
     @Override
-    public void invoke(long window, int key, int scancode, int action,
-            int mods) {
+    public void invoke(long window, int key, int scancode, int action, int mods) {
     }
 
 }

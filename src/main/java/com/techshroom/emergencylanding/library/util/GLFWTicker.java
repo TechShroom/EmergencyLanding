@@ -33,8 +33,7 @@ import com.google.common.base.Ticker;
 public final class GLFWTicker extends Ticker {
 
     public static final GLFWTicker INSTANCE = new GLFWTicker();
-    private static final double SECONDS_TO_NANOSECONDS =
-            TimeUnit.SECONDS.toNanos(1);
+    private static final double SECONDS_TO_NANOSECONDS = TimeUnit.SECONDS.toNanos(1);
 
     private GLFWTicker() {
     }
