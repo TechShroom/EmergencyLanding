@@ -86,9 +86,7 @@ public class VBAO implements Cloneable {
     /**
      * An empty VBAO for returning valid values for invalid input.
      */
-    public static final VBAO EMPTY =
-            new VBAO(new VertexData[] { new VertexData() },
-                    new byte[] { 0, 1, 2 }, true);
+    public static final VBAO EMPTY = new VBAO(new VertexData[] { new VertexData() }, new byte[] { 0, 1, 2 }, true);
 
     /**
      * The vertex data
@@ -140,11 +138,10 @@ public class VBAO implements Cloneable {
         this(verts, indexControl, null, stat);
     }
 
-    public VBAO(VertexData[] verts, byte[] indexControl, ELTexture t,
-            boolean stat) {
+    public VBAO(VertexData[] verts, byte[] indexControl, ELTexture t, boolean stat) {
         this.data = verts;
         this.icdata = indexControl;
-        this.vertData = VertexData.toFB(verts);
+        this.vertData = VertexData.toFB(verts, null);
         this.indexData = BufferUtils.createByteBuffer(indexControl.length);
         this.indexData.put(indexControl);
         this.indexData.flip();
@@ -185,10 +182,8 @@ public class VBAO implements Cloneable {
         for (int i = 0; i < newDataTemp.length; i++) {
             VertexData old = this.data[i];
             VertexData v = new VertexData()
-                    .setXYZW(old.verts[0] + pos.x, old.verts[1] + pos.y,
-                            old.verts[2] + pos.z, old.verts[3])
-                    .setRGBA(old.colors[0], old.colors[1], old.colors[2],
-                            old.colors[3])
+                    .setXYZW(old.verts[0] + pos.x, old.verts[1] + pos.y, old.verts[2] + pos.z, old.verts[3])
+                    .setRGBA(old.colors[0], old.colors[1], old.colors[2], old.colors[3])
                     .setUV(old.texCoords[0], old.texCoords[1]);
             newDataTemp[i] = v;
         }
@@ -200,7 +195,7 @@ public class VBAO implements Cloneable {
         if (this.staticdata) {
             throw new IllegalStateException("static data");
         }
-        this.vertData = VertexData.toFB(verts);
+        this.vertData = VertexData.toFB(verts, (FloatBuffer) this.vertData.rewind());
         this.indexData = BufferUtils.createByteBuffer(indexControl.length);
         this.indexData.put(indexControl);
         this.indexData.flip();
@@ -255,8 +250,7 @@ public class VBAO implements Cloneable {
                 // Create the IC VBO
                 createIndexControlVBO();
                 if (LUtils.debugLevel >= 1) {
-                    GLData.notifyOnGLError(
-                            StackTraceInfo.getCurrentMethodName());
+                    GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
                 }
             }
         };
@@ -268,18 +262,15 @@ public class VBAO implements Cloneable {
         // A VBO is a collection of Vectors used to represent data
         this.vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, this.vbo);
-        glBufferData(GL_ARRAY_BUFFER, this.vertData,
-                (this.staticdata ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW));
+        glBufferData(GL_ARRAY_BUFFER, this.vertData, (this.staticdata ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW));
         // Put the VBO in the attributes list at index 0 (position)
-        glVertexAttribPointer(POS_VBO_INDEX, VertexData.FLOATS_PER_POSTITON,
-                GL_FLOAT, false, VertexData.VERTEX_SIZE, 0);
+        glVertexAttribPointer(POS_VBO_INDEX, VertexData.FLOATS_PER_POSTITON, GL_FLOAT, false, VertexData.VERTEX_SIZE,
+                0);
         // Put the VBO in the attributes list at index 1 (color)
-        glVertexAttribPointer(COLOR_VBO_INDEX, VertexData.FLOATS_PER_COLOR,
-                GL_FLOAT, false, VertexData.VERTEX_SIZE,
+        glVertexAttribPointer(COLOR_VBO_INDEX, VertexData.FLOATS_PER_COLOR, GL_FLOAT, false, VertexData.VERTEX_SIZE,
                 VertexData.POSITION_SIZE);
         // Put the VBO in the attributes list at index 2 (tex)
-        glVertexAttribPointer(TEX_VBO_INDEX, VertexData.FLOATS_PER_TEXTURE,
-                GL_FLOAT, false, VertexData.VERTEX_SIZE,
+        glVertexAttribPointer(TEX_VBO_INDEX, VertexData.FLOATS_PER_TEXTURE, GL_FLOAT, false, VertexData.VERTEX_SIZE,
                 VertexData.POSITION_SIZE + VertexData.COLOR_SIZE);
         // Deselect (bind to 0) the VBO
         glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
@@ -291,8 +282,7 @@ public class VBAO implements Cloneable {
     private void createIndexControlVBO() {
         this.vbo_i = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.vbo_i);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indexData,
-                (this.staticdata ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW));
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indexData, (this.staticdata ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW));
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
@@ -301,8 +291,7 @@ public class VBAO implements Cloneable {
 
     public VBAO draw() {
 
-        if (this.vaoId == GLData.NONE || this.vbo == GLData.NONE
-                || this.vbo_i == GLData.NONE) {
+        if (this.vaoId == GLData.NONE || this.vbo == GLData.NONE || this.vbo_i == GLData.NONE) {
             // no longer valid!
             destroy();
             return null;
@@ -322,8 +311,7 @@ public class VBAO implements Cloneable {
         glBindVertexArray(this.vaoId);
         glBindBuffer(GL_ARRAY_BUFFER, this.vbo);
         glEnableVertexAttribArray(POS_VBO_INDEX);
-        glEnableVertexAttribArray(
-                (this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
+        glEnableVertexAttribArray((this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.vbo_i);
 
@@ -333,8 +321,7 @@ public class VBAO implements Cloneable {
 
         // Put everything back to default (deselect)
         glDisableVertexAttribArray(POS_VBO_INDEX);
-        glDisableVertexAttribArray(
-                (this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
+        glDisableVertexAttribArray((this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
         glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
         glBindVertexArray(GLData.NONE);
 
@@ -360,9 +347,9 @@ public class VBAO implements Cloneable {
             GLData.notifyOnGLError("destroy-itsnotmyfault");
         }
         // Disable the VBO index from the VAO attributes list
-//        glDisableVertexAttribArray(POS_VBO_INDEX);
-//        glDisableVertexAttribArray(COLOR_VBO_INDEX);
-//        glDisableVertexAttribArray(TEX_VBO_INDEX);
+        // glDisableVertexAttribArray(POS_VBO_INDEX);
+        // glDisableVertexAttribArray(COLOR_VBO_INDEX);
+        // glDisableVertexAttribArray(TEX_VBO_INDEX);
 
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError("destroy-DVAA");
@@ -392,8 +379,8 @@ public class VBAO implements Cloneable {
 
     @Override
     public String toString() {
-        return Arrays.toString(this.data) + "->" + Arrays.toString(this.icdata)
-                + " (" + (this.staticdata ? "static" : "dynamic") + ")";
+        return Arrays.toString(this.data) + "->" + Arrays.toString(this.icdata) + " ("
+                + (this.staticdata ? "static" : "dynamic") + ")";
     }
 
     @Override

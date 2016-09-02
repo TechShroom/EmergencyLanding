@@ -26,6 +26,8 @@ package com.techshroom.emergencylanding.library.lwjgl.render;
 
 import java.nio.FloatBuffer;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
@@ -42,11 +44,9 @@ public class VertexData implements Cloneable {
     public static final int POSITION_SIZE = FLOATS_PER_POSTITON * FLOAT_SIZE;
     public static final int COLOR_SIZE = FLOATS_PER_COLOR * FLOAT_SIZE;
     public static final int TEXTURE_SIZE = FLOATS_PER_TEXTURE * FLOAT_SIZE;
-    public static final int VERTEX_SIZE =
-            POSITION_SIZE + COLOR_SIZE + TEXTURE_SIZE;
+    public static final int VERTEX_SIZE = POSITION_SIZE + COLOR_SIZE + TEXTURE_SIZE;
 
-    public static final int NO_DATA = -1, COLOR_FIRST = 0, COORDS_FIRST = 1,
-            TEX_FIRST = 2;
+    public static final int NO_DATA = -1, COLOR_FIRST = 0, COORDS_FIRST = 1, TEX_FIRST = 2;
 
     /**
      * Default vertex is origin
@@ -142,8 +142,7 @@ public class VertexData implements Cloneable {
      *            - the floats to use
      */
     public VertexData(int order, float... floats) {
-        float x = 0f, y = 0f, z = 0f, w = 1f, r = 1f, g = 1f, b = 1f, a = 1f,
-                u = -1f, v = 0f;
+        float x = 0f, y = 0f, z = 0f, w = 1f, r = 1f, g = 1f, b = 1f, a = 1f, u = -1f, v = 0f;
         switch (floats.length) {
             case 0:
                 break;
@@ -362,10 +361,9 @@ public class VertexData implements Cloneable {
 
     @Override
     public String toString() {
-        return String.format("{%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", this.verts[0],
-                this.verts[1], this.verts[2], this.verts[3], this.colors[0],
-                this.colors[1], this.colors[2], this.colors[3],
-                this.texCoords[0], this.texCoords[1]);
+        return String.format("{%s:%s:%s:%s:%s:%s:%s:%s:%s:%s}", this.verts[0], this.verts[1], this.verts[2],
+                this.verts[3], this.colors[0], this.colors[1], this.colors[2], this.colors[3], this.texCoords[0],
+                this.texCoords[1]);
     }
 
     /**
@@ -375,8 +373,8 @@ public class VertexData implements Cloneable {
      *            - the {@link VertexData} to use
      * @return a FloatBuffer with the data
      */
-    public static FloatBuffer toFB(VertexData[] vds) {
-        return toFB(vds, false);
+    public static FloatBuffer toFB(VertexData[] vds, @Nullable FloatBuffer reuse) {
+        return toFB(vds, reuse, false);
     }
 
     /**
@@ -388,15 +386,14 @@ public class VertexData implements Cloneable {
      *            - does this FB need the textures enabled?
      * @return a FloatBuffer with the data
      */
-    public static FloatBuffer toFB(VertexData[] vds, boolean tex) {
-        FloatBuffer ret =
-                BufferUtils.createFloatBuffer(VERTEX_SIZE * vds.length);
+    public static FloatBuffer toFB(VertexData[] vds, @Nullable FloatBuffer reuse, boolean tex) {
+        FloatBuffer ret = reuse != null ? reuse : BufferUtils.createFloatBuffer(VERTEX_SIZE * vds.length);
+        DisplayLayer layer = DisplayLayer.CREATED.get(GLFW.glfwGetCurrentContext());
+        Vector3f win2fb = layer.convertFromWindowToFramebuffer(Vector3f.ONE);
         for (VertexData vd : vds) {
             float[] f = vd.verts.clone();
             Vector3f v = new Vector3f(f[0], f[1], f[2]);
-            Vector3f newV = PreShaderOps.apply(v)[0];
-            newV = DisplayLayer.CREATED.get(GLFW.glfwGetCurrentContext())
-                    .convertFromWindowToFramebuffer(newV);
+            Vector3f newV = PreShaderOps.apply(v).mul(win2fb);
             f[0] = newV.getX();
             f[1] = newV.getY();
             f[2] = newV.getZ();
