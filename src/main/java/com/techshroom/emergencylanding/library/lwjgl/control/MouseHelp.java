@@ -24,7 +24,6 @@
  */
 package com.techshroom.emergencylanding.library.lwjgl.control;
 
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -130,8 +129,6 @@ public final class MouseHelp {
      * @param hoty
      *            - the hotspotY of the mouse (where the user will click
      *            relative to the top left corner)
-     * @see {@link MouseHelp#createFollowCursor(BufferedImage, int, int)
-     *      createFollowCursor(BufferedImage, int, int)}
      */
     public void createFollowCursor(ELTexture texture, int hotx, int hoty) {
         replaceCursor(ELTexture.invisible, 0, 0);
@@ -159,8 +156,6 @@ public final class MouseHelp {
      * @param hoty
      *            - the hotspotY of the mouse (where the user will click
      *            relative to the top left corner)
-     * @see {@link MouseHelp#createFollowCursor(BufferedImage, int, int)
-     *      createFollowCursor(BufferedImage, int, int)}
      */
     public void createFollowCursor(ELTexture texture, int width, int height, int hotx, int hoty) {
         replaceCursor(ELTexture.invisible, 0, 0);

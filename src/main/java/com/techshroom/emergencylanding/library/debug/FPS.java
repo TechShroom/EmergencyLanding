@@ -64,9 +64,6 @@ public final class FPS {
     /**
      * Calculate how many milliseconds have passed since last frame.
      * 
-     * @param index
-     *            - index of the FPS counter
-     * 
      * @return milliseconds passed since last frame
      */
     public int getDelta() {
@@ -81,9 +78,7 @@ public final class FPS {
     }
 
     /**
-     * Get the accurate system time
-     * 
-     * @param index
+     * Get the accurate system time.
      * 
      * @return The system time in milliseconds
      */

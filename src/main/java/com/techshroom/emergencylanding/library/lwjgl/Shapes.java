@@ -36,9 +36,20 @@ import com.techshroom.emergencylanding.library.util.LUtils;
 public class Shapes {
 
     /**
-     * Tells {@link Shapes#getQuad(VertexData)} how to use the two data points
+     * Tells {@link Shapes#getQuad(VertexData, VertexData, int)} how to use the
+     * two data points
      */
-    public static final int XY = 0x01, XZ = 0x02, YZ = 0x03;
+    public static final int XY = 0x01;
+    /**
+     * Tells {@link Shapes#getQuad(VertexData, VertexData, int)} how to use the
+     * two data points
+     */
+    public static final int XZ = 0x02;
+    /**
+     * Tells {@link Shapes#getQuad(VertexData, VertexData, int)} how to use the
+     * two data points
+     */
+    public static final int YZ = 0x03;
 
     private static final byte[] TRI_IC = { 0, 1, 2 };
     private static final byte[] QUAD_IC = { 0, 1, 2, 2, 3, 0 };
@@ -60,7 +71,7 @@ public class Shapes {
     /**
      * Triangles do not care about vertex order.
      * 
-     * @param verticies
+     * @param vertices
      *            - the vertices to use
      * @return a {@link VBAO} for use in drawing.
      */
@@ -201,8 +212,10 @@ public class Shapes {
      * Deprecated due to non-working state
      * 
      * @param center
+     *            - Center point vertex data
      * @param radius
-     * @return
+     *            - Radius of the sphere
+     * @return a VBAO representing the sphere
      */
     @Deprecated
     public static VBAO getSphere(VertexData center, float radius) {
@@ -216,9 +229,9 @@ public class Shapes {
     /**
      * Deprecated due to non-working state
      * 
-     * @param center
-     * @param radius
-     * @return
+     * @param vertices
+     *            - Vertex data for the sphere
+     * @return a VBAO representing the sphere
      */
     @Deprecated
     public static VBAO getSphere(VertexData[] vertices) {

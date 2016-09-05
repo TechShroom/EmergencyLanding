@@ -168,9 +168,9 @@ public final class DrawableUtils {
      * WARNING: Scaling may not be work in the opposite direction, as we use 1
      * over the scale values which may not be the direct inverse.
      * 
-     * @param sx
-     * @param sy
-     * @param sz
+     * @param sx - X-axis scale factor
+     * @param sy - Y-axis scale factor
+     * @param sz - Z-axis scale factor
      */
     public static void glBeginScale(double sx, double sy, double sz) {
         GLScaler.glBeginScale(sx, sy, sz);
@@ -179,10 +179,6 @@ public final class DrawableUtils {
     /**
      * WARNING: Scaling may not be work in the opposite direction, as we use 1
      * over the scale values which may not be the direct inverse.
-     * 
-     * @param sx
-     * @param sy
-     * @param sz
      */
     public static void glEndScale() {
         GLScaler.glEndScale();

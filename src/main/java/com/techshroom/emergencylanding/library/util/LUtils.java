@@ -42,7 +42,6 @@ import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiDevice.Info;
 
 import org.lwjgl.BufferUtils;
@@ -142,6 +141,7 @@ public final class LUtils {
      * @param pathToAdd
      *            the path to add
      * @throws Exception
+     *             if the library path couldn't be added
      */
     public static void addLibraryPath(String pathToAdd) throws Exception {
         final Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");
@@ -266,6 +266,8 @@ public final class LUtils {
      *            - the index of the wanted argument
      * @param def
      *            - a default value to fallback on
+     * @param <T>
+     *            - The type of the argument
      * @return the wanted argument value, or the default value
      */
     public static <T> T getArg(T[] src, int index, T def) {
@@ -321,7 +323,7 @@ public final class LUtils {
     }
 
     /**
-     * Turns a {@link MidiDevice.Info} list into a list of user friendly strings
+     * Turns a {@link Info} list into a list of user friendly strings
      * 
      * @param info
      *            - the list of MidiDevice.Infos to use
@@ -386,6 +388,10 @@ public final class LUtils {
      * 
      * @param path
      *            - the path, must be absolute
+     * @param consumer
+     *            - the stream consumer, shouldn't close resource
+     * @param <R>
+     *            - The return type of the consumer
      * @return the input stream, or null if not possible to get an input stream
      * @throws IOException
      *             if there are I/O errors

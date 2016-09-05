@@ -75,6 +75,7 @@ public abstract class Bounds {
      * Tests the two Bounds objects to see if they intersect each other. May
      * return false for testing different subclasses.
      * 
+     * @param b - the other bounds
      * @return <code>true</code> if the interior of the <code>Shape</code> and
      *         the interior of the rectangular area intersect, or are both
      *         highly likely to intersect and intersection calculations would be

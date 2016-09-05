@@ -47,7 +47,7 @@ public final class Maths {
 
         do
             machEps /= 2.0d;
-        while ((double) (1.0 + (machEps / 2.0)) != 1.0);
+        while (1.0 + (machEps / 2.0) != 1.0);
 
         return machEps;
     }
@@ -132,6 +132,7 @@ public final class Maths {
      * @param getY
      *            - Gets the length of the line when projected along the line
      *            perpendicular to the thetaSurface given (eg, find the y).
+     * @return Projected line length
      */
     public static double
             projectLineAlongSurface(double thetaSurface, double thetaLineToProject, double magnitude, boolean getY) {
@@ -314,6 +315,10 @@ public final class Maths {
 
     /**
      * 1 &rarr; 1st, 2 &rarr; 2nd, 3 &rarr; 3rd, etc.
+     * 
+     * @param i
+     *            - the integer to convert to ordinal text
+     * @return ordinal text for the integer
      */
     public static String toOrdinalNumber(int i) {
         switch (i % 100) {

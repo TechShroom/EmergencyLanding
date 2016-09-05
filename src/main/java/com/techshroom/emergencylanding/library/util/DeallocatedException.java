@@ -32,32 +32,11 @@ public class DeallocatedException extends RuntimeException {
     private static final long serialVersionUID = 6025269979731310031L;
 
     /**
-     * 
-     */
-    public DeallocatedException() {
-        super();
-    }
-
-    /**
      * @param message
-     * @param cause
-     */
-    public DeallocatedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    /**
-     * @param message
+     *            - Returned by {@link #getMessage()}
      */
     public DeallocatedException(String message) {
         super(message);
-    }
-
-    /**
-     * @param cause
-     */
-    public DeallocatedException(Throwable cause) {
-        super(cause);
     }
 
 }

@@ -32,7 +32,8 @@ public abstract class Render<T extends ELEntity> {
     /**
      * Renders the given entity at it's location, yaw, and pitch.
      * 
-     * @param entity
+     * @param entity - the entity to render
+     * @param interpolated - the interpolated position of the entity
      */
     public void doRender(T entity, Victor interpolated) {
         doRender(entity, interpolated.x, interpolated.y, interpolated.z);

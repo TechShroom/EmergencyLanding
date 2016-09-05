@@ -63,7 +63,7 @@ public class SoundPlayer {
     /**
      * Plays .wav file
      * 
-     * @param soundFile
+     * @param soundFile - path to file
      */
     public void playWAV(String soundFile) {
         playWAV(soundFile, 1.0f);
@@ -72,8 +72,8 @@ public class SoundPlayer {
     /**
      * Plays .wav file
      * 
-     * @param soundFile
-     * @param volume
+     * @param soundFile - path to file
+     * @param volume - volume
      */
     public void playWAV(String soundFile, float volume) {
         playWAV(soundFile, volume, 1.0f);
@@ -82,9 +82,9 @@ public class SoundPlayer {
     /**
      * Plays .wav file
      * 
-     * @param soundFile
-     * @param volume
-     * @param pitch
+     * @param soundFile - path to file
+     * @param volume - volume
+     * @param pitch - pitch
      */
     public void playWAV(String soundFile, float volume, float pitch) {
         playWAV(soundFile, volume, pitch, false);
@@ -93,10 +93,10 @@ public class SoundPlayer {
     /**
      * Plays .wav file
      * 
-     * @param soundFile
-     * @param volume
-     * @param pitch
-     * @param loop
+     * @param soundFile - path to file
+     * @param volume - volume
+     * @param pitch - pitch
+     * @param loop - {@code true} to loop instead of stopping
      */
     public void playWAV(String soundFile, float volume, float pitch, boolean loop) {
         checkState(this.startedThread == Thread.currentThread(), "cross-thread AL usage!");

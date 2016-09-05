@@ -37,17 +37,18 @@ public class GravEntity extends ELEntity {
     }
 
     /**
-     * 
+     * @param w
+     *            - the World
      * @param posX
-     *            -x position
+     *            - x position
      * @param posY
-     *            -y position
+     *            - y position
      * @param posZ
-     *            -z position
+     *            - z position
      * @param texture
-     *            -texture, duh.
+     *            - texture, duh.
      * @param gravity
-     *            -Acceleration due to gravity
+     *            - Acceleration due to gravity
      */
     public GravEntity(World w, float posX, float posY, float posZ, ELTexture texture, float gravity) {
         super(w, posX, posY, posZ, texture);

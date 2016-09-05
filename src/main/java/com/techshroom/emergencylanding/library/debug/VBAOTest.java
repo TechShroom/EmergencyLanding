@@ -43,10 +43,6 @@ public class VBAOTest extends KMain {
 
     int t = 0;
 
-    /**
-     * @param args
-     * @throws Exception
-     */
     public static void main(String[] args) throws Exception {
         try {
             layer = DisplayLayer.initDisplay(0, 1000, 600, "VBAO NewElTest", false, false, args);

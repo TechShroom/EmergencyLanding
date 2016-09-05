@@ -162,7 +162,7 @@ public class Slider extends GuiElement {
     }
 
     public static int getPercentClosestToValue(int value, int start, int end) {
-        float vF = (float) value, sF = (float) start, eF = (float) end;
+        float vF = value, sF = start, eF = end;
         float vFF = ((vF + sF) / (eF + sF) * 100);
         return Math.round(vFF);
     }

@@ -30,8 +30,8 @@ import com.techshroom.emergencylanding.library.util.BoundingBox;
  * ICollidable provides an interface over which many different objects can agree
  * on collisions. It can be applied for entities, buttons, and more.
  * 
- * @author Kenzie Togami
- *
+ * @param <T>
+ *            - The collidable type
  */
 public interface ICollidable<T> {
 

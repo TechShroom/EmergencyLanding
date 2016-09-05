@@ -272,6 +272,7 @@ public class VertexData implements Cloneable {
      *            - y
      * @param z
      *            - z
+     * @return this
      */
     public VertexData setXYZ(float x, float y, float z) {
         return setXYZW(x, y, z, 1f);
@@ -288,6 +289,7 @@ public class VertexData implements Cloneable {
      *            - z
      * @param w
      *            - w
+     * @return this
      */
     public VertexData setXYZW(float x, float y, float z, float w) {
         this.verts[0] = x;
@@ -306,6 +308,7 @@ public class VertexData implements Cloneable {
      *            - green
      * @param b
      *            - blue
+     * @return this
      */
     public VertexData setRGB(float r, float g, float b) {
         return setRGBA(r, g, b, 1f);
@@ -322,6 +325,7 @@ public class VertexData implements Cloneable {
      *            - blue
      * @param a
      *            - alpha
+     * @return this
      */
     public VertexData setRGBA(float r, float g, float b, float a) {
         this.colors[0] = r;
@@ -338,6 +342,7 @@ public class VertexData implements Cloneable {
      *            - texture coord u
      * @param v
      *            - texture coord v
+     * @return this
      */
     public VertexData setUV(float u, float v) {
         this.texCoords[0] = u;
@@ -371,6 +376,9 @@ public class VertexData implements Cloneable {
      * 
      * @param vds
      *            - the {@link VertexData} to use
+     * @param reuse
+     *            - A FloatBuffer to reuse for storing the data, or {@code null}
+     *            to create a new one
      * @return a FloatBuffer with the data
      */
     public static FloatBuffer toFB(VertexData[] vds, @Nullable FloatBuffer reuse) {
@@ -382,6 +390,9 @@ public class VertexData implements Cloneable {
      * 
      * @param vds
      *            - the {@link VertexData} to use
+     * @param reuse
+     *            - A FloatBuffer to reuse for storing the data, or {@code null}
+     *            to create a new one
      * @param tex
      *            - does this FB need the textures enabled?
      * @return a FloatBuffer with the data

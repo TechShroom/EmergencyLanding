@@ -131,13 +131,13 @@ public class IconLoader {
         if (src.getWidth() > icon.getWidth())
             ratio = (double) (icon.getWidth()) / src.getWidth();
         else
-            ratio = (int) (icon.getWidth() / src.getWidth());
+            ratio = icon.getWidth() / src.getWidth();
         if (src.getHeight() > icon.getHeight()) {
             double r2 = (double) (icon.getHeight()) / src.getHeight();
             if (r2 < ratio)
                 ratio = r2;
         } else {
-            double r2 = (int) (icon.getHeight() / src.getHeight());
+            double r2 = icon.getHeight() / src.getHeight();
             if (r2 < ratio)
                 ratio = r2;
         }

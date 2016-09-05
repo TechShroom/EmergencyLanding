@@ -34,10 +34,7 @@ public class MouseyTest extends KMain {
 
     private static DisplayLayer layer;
 
-    /**
-     * @param args
-     * @throws Exception
-     */
+    @SuppressWarnings("javadoc")
     public static void main(String[] args) throws Exception {
         try {
             layer = DisplayLayer.initDisplay(0, 800, 500, "Testing MOUSE", false, true, args);

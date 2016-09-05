@@ -111,6 +111,7 @@ public final class Color implements Serializable {
      * 
      * @param src
      *            The source buffer
+     * @return the created color
      */
     public static Color readRGBA(ByteBuffer src) {
         return new Color(src.get(), src.get(), src.get(), src.get());
@@ -121,6 +122,7 @@ public final class Color implements Serializable {
      * 
      * @param src
      *            The source buffer
+     * @return the created color
      */
     public static Color readRGB(ByteBuffer src) {
         return new Color(src.get(), src.get(), src.get());
@@ -131,6 +133,7 @@ public final class Color implements Serializable {
      * 
      * @param src
      *            The source buffer
+     * @return the created color
      */
     public static Color readARGB(ByteBuffer src) {
         byte alpha = src.get();
@@ -145,6 +148,7 @@ public final class Color implements Serializable {
      * 
      * @param src
      *            The source buffer
+     * @return the created color
      */
     public static Color readBGRA(ByteBuffer src) {
         byte blue = src.get();
@@ -159,6 +163,7 @@ public final class Color implements Serializable {
      * 
      * @param src
      *            The source buffer
+     * @return the created color
      */
     public static Color readBGR(ByteBuffer src) {
         byte blue = src.get();
@@ -172,6 +177,7 @@ public final class Color implements Serializable {
      * 
      * @param src
      *            The source buffer
+     * @return the created color
      */
     public static Color readABGR(ByteBuffer src) {
         byte alpha = src.get();
@@ -190,6 +196,7 @@ public final class Color implements Serializable {
      *            (0..1.0f)
      * @param brightness
      *            (0..1.0f)
+     * @return the created color
      */
     public static Color fromHSB(float hue, float saturation, float brightness) {
         byte red = 0, green = 0, blue = 0;
@@ -249,6 +256,10 @@ public final class Color implements Serializable {
 
     /**
      * Constructor for Color. Alpha defaults to 255.
+     * 
+     * @param r - Red [0,255]
+     * @param g - Green [0,255]
+     * @param b - Blue [0,255]
      */
     public Color(int r, int g, int b) {
         this(r, g, b, 255);
@@ -256,6 +267,10 @@ public final class Color implements Serializable {
 
     /**
      * Constructor for Color. Alpha defaults to 255.
+     * 
+     * @param r - Red [0,255]
+     * @param g - Green [0,255]
+     * @param b - Blue [0,255]
      */
     public Color(byte r, byte g, byte b) {
         this(r, g, b, (byte) 255);
@@ -263,6 +278,11 @@ public final class Color implements Serializable {
 
     /**
      * Constructor for Color.
+     * 
+     * @param r - Red [0,255]
+     * @param g - Green [0,255]
+     * @param b - Blue [0,255]
+     * @param a - Alpha [0,255]
      */
     public Color(int r, int g, int b, int a) {
         this((byte) r, (byte) g, (byte) b, (byte) a);
@@ -270,6 +290,11 @@ public final class Color implements Serializable {
 
     /**
      * Constructor for Color.
+     * 
+     * @param r - Red [0,255]
+     * @param g - Green [0,255]
+     * @param b - Blue [0,255]
+     * @param a - Alpha [0,255]
      */
     public Color(byte r, byte g, byte b, byte a) {
         this.red = r;
@@ -279,28 +304,28 @@ public final class Color implements Serializable {
     }
 
     /**
-     * Accessor
+     * @return Red [0,255]
      */
     public int getRed() {
         return this.red & 0xFF;
     }
 
     /**
-     * Accessor
+     * @return Green [0,255]
      */
     public int getGreen() {
         return this.green & 0xFF;
     }
 
     /**
-     * Accessor
+     * @return Blue [0,255]
      */
     public int getBlue() {
         return this.blue & 0xFF;
     }
 
     /**
-     * Accessor
+     * @return Alpha [0,255]
      */
     public int getAlpha() {
         return this.alpha & 0xFF;

@@ -26,8 +26,12 @@ package com.techshroom.emergencylanding.library.internalstate;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.techshroom.emergencylanding.library.exceptions.OutOfBoundsException;
+import com.google.common.annotations.Beta;
 
+/**
+ * This class is not yet ready.
+ */
+@Beta
 public class QuadTree {
 
     private static final int TOP_LEFT = 0;

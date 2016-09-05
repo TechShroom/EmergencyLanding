@@ -67,15 +67,15 @@ import com.techshroom.emergencylanding.library.util.StackTraceInfo;
 public class VBAO implements Cloneable {
 
     /**
-     * Index of the position attribute in the {@link #vbo}
+     * Index of the position attribute in the VBO
      */
     public static final int POS_VBO_INDEX = GLData.POSITION_INDEX;
     /**
-     * Index of the color attribute in the {@link #vbo}
+     * Index of the color attribute in the VBO
      */
     public static final int COLOR_VBO_INDEX = GLData.COLOR_INDEX;
     /**
-     * Index of the texCoord attribute in the {@link #vbo}
+     * Index of the texCoord attribute in the VBO
      */
     public static final int TEX_VBO_INDEX = GLData.TEX_INDEX;
 
@@ -161,6 +161,8 @@ public class VBAO implements Cloneable {
 
     /**
      * 
+     * @param pos - the offset
+     * @return this
      * @deprecated Use
      *             {@link DrawableUtils#glBeginTrans(double, double, double)}
      *             instead.

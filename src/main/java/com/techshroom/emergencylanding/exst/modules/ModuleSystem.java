@@ -50,13 +50,15 @@ public final class ModuleSystem {
     }
 
     /**
-     * Gets the registered modules for the given binary class name.
+     * Gets the registered modules for the given class.
      * 
-     * @param fullBinaryName
-     *            - the full binary name for the parent class
+     * @param moduleClass
+     *            - the parent class
+     * @param <T>
+     *            - The type of the modules to find
      * @return an array of {@link IModule} instances whose getClass() method
-     *         either returns the same class represented by the full binary name
-     *         or a class that extends that class.
+     *         either returns the same class as {@code moduleClass} or a class
+     *         that extends that class.
      */
     public static <T extends IModule> T[] getRegisteredModules(Class<T> moduleClass) {
         @SuppressWarnings("unchecked")

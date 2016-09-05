@@ -41,6 +41,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.MemoryUtil;
 
 import com.flowpowered.math.vector.Vector3f;
 import com.techshroom.emergencylanding.exst.mods.Mods;
@@ -80,8 +81,9 @@ public class DisplayLayer {
      * Initializes the display and KMain instance. Parameter notes are found on
      * the longest argument version.
      * 
-     * @param fullscreen
-     *            - is fullscreen on at start?
+     * @param fullscreenMonitor
+     *            - the monitor to display fullscreen on,
+     *            {@link MemoryUtil#NULL} for windowed mode
      * @param width
      *            - initial width of screen
      * @param height
@@ -92,6 +94,7 @@ public class DisplayLayer {
      *            - is the screen resizeable?
      * @param args
      *            - main() args
+     * @return The created DisplayLayer
      * @throws Exception
      *             any exceptions will be thrown
      */
@@ -105,8 +108,9 @@ public class DisplayLayer {
      * Initializes the display and KMain instance. Parameter notes are found on
      * the longest argument version.
      * 
-     * @param fullscreen
-     *            - is fullscreen on at start?
+     * @param fullscreenMonitor
+     *            - the monitor to display fullscreen on,
+     *            {@link MemoryUtil#NULL} for windowed mode
      * @param width
      *            - initial width of screen
      * @param height
@@ -119,6 +123,7 @@ public class DisplayLayer {
      *            - main() args
      * @param vsync
      *            - overrides default vsync option, true
+     * @return The created DisplayLayer
      * @throws Exception
      *             any exceptions will be thrown
      */
@@ -143,8 +148,9 @@ public class DisplayLayer {
      * Initializes the display and KMain instance. Parameter notes are found on
      * the longest argument version.
      * 
-     * @param fullscreen
-     *            - is fullscreen on at start?
+     * @param fullscreenMonitor
+     *            - the monitor to display fullscreen on,
+     *            {@link MemoryUtil#NULL} for windowed mode
      * @param width
      *            - initial width of screen
      * @param height
@@ -160,10 +166,10 @@ public class DisplayLayer {
      * @param cls
      *            - overrides the default class for KMain, which is the class
      *            that called the method
+     * @return The created DisplayLayer
      * @throws Exception
      *             any exceptions will be thrown
      */
-
     public static DisplayLayer
             initDisplay(long fullscreenMonitor, int width, int height, String title, boolean resizable, boolean vsync, String[] args, Class<? extends KMain> cls)
                     throws Exception {
