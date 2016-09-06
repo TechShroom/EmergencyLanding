@@ -72,7 +72,7 @@ public class FontTest extends KMain {
                     } catch (IOException e) {
                         throw Throwables.propagate(e);
                     }
-                }, 24).getStringRenderer();
+                }, 36).getStringRenderer();
             } catch (IOException e) {
                 e.printStackTrace();
                 GLFW.glfwSetWindowShouldClose(layer.getWindow(), true);

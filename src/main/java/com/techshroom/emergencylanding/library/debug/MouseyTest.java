@@ -64,7 +64,7 @@ public class MouseyTest extends KMain {
 
     @Override
     public void init(DisplayLayer layer, String[] args) {
-        layer.getMouseHelp().createFollowCursor(new ColorTexture(Color.RED, new Vector2i(10, 10)), 0, 0);
+        layer.getMouseHelp().createFollowCursor(new ColorTexture(Color.RED, new Vector2i(30, 10)), 0, 0);
     }
 
 }

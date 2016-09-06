@@ -25,12 +25,21 @@
 package com.techshroom.emergencylanding.library.sound;
 
 import static com.google.common.base.Preconditions.checkState;
+import static org.lwjgl.openal.ALC10.ALC_FREQUENCY;
+import static org.lwjgl.openal.ALC10.ALC_REFRESH;
+import static org.lwjgl.openal.ALC10.ALC_SYNC;
+import static org.lwjgl.openal.ALC10.ALC_TRUE;
+import static org.lwjgl.openal.ALC10.alcGetInteger;
+import static org.lwjgl.openal.ALC11.ALC_MONO_SOURCES;
+import static org.lwjgl.openal.ALC11.ALC_STEREO_SOURCES;
 
-import java.net.MalformedURLException;
+import java.io.File;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.file.Paths;
+import java.nio.ShortBuffer;
+import java.util.function.Supplier;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -38,11 +47,20 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
+import org.lwjgl.stb.STBVorbisInfo;
+import org.lwjgl.system.Configuration;
 
 import com.techshroom.emergencylanding.imported.WaveData;
 import com.techshroom.emergencylanding.library.lwjgl.ErrUtil;
 
 public class SoundPlayer {
+
+    static {
+        // Temporary work-around for AL being broken on OSX
+        // Must run before any OpenAL functions are called!
+        Configuration.OPENAL_LIBRARY_NAME.set("openal.1.17.2");
+        Configuration.LIBRARY_PATH.set(Configuration.LIBRARY_PATH.get() + File.pathSeparator + "./libs");
+    }
 
     private final Thread startedThread = Thread.currentThread();
 
@@ -58,62 +76,48 @@ public class SoundPlayer {
         ALC10.alcMakeContextCurrent(context);
         ALCCapabilities deviceCaps = ALC.createCapabilities(device);
         AL.createCapabilities(deviceCaps);
+        String deviceSpecifier = ALC10.alcGetString(device, ALC10.ALC_DEVICE_SPECIFIER);
+        System.err.println("Using device " + deviceSpecifier);
+        System.out.println("ALC_FREQUENCY: " + alcGetInteger(device, ALC_FREQUENCY) + "Hz");
+        System.out.println("ALC_REFRESH: " + alcGetInteger(device, ALC_REFRESH) + "Hz");
+        System.out.println("ALC_SYNC: " + (alcGetInteger(device, ALC_SYNC) == ALC_TRUE));
+        System.out.println("ALC_MONO_SOURCES: " + alcGetInteger(device, ALC_MONO_SOURCES));
+        System.out.println("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC_STEREO_SOURCES));
     }
 
-    /**
-     * Plays .wav file
-     * 
-     * @param soundFile - path to file
-     */
-    public void playWAV(String soundFile) {
-        playWAV(soundFile, 1.0f);
-    }
-
-    /**
-     * Plays .wav file
-     * 
-     * @param soundFile - path to file
-     * @param volume - volume
-     */
-    public void playWAV(String soundFile, float volume) {
-        playWAV(soundFile, volume, 1.0f);
-    }
-
-    /**
-     * Plays .wav file
-     * 
-     * @param soundFile - path to file
-     * @param volume - volume
-     * @param pitch - pitch
-     */
-    public void playWAV(String soundFile, float volume, float pitch) {
-        playWAV(soundFile, volume, pitch, false);
-    }
-
-    /**
-     * Plays .wav file
-     * 
-     * @param soundFile - path to file
-     * @param volume - volume
-     * @param pitch - pitch
-     * @param loop - {@code true} to loop instead of stopping
-     */
-    public void playWAV(String soundFile, float volume, float pitch, boolean loop) {
+    private void checkCrossThread() {
         checkState(this.startedThread == Thread.currentThread(), "cross-thread AL usage!");
+    }
+
+    public int genBuffers(Supplier<WaveData> waveInput) {
+        checkCrossThread();
         int buffer = AL10.alGenBuffers();
         ErrUtil.checkALError();
 
-        WaveData waveFile;
+        WaveData waveFile = waveInput.get();
         try {
-            waveFile = WaveData.create(Paths.get(soundFile).toUri().toURL())
-                    .orElseThrow(() -> new IllegalStateException("file " + soundFile + " caused errors"));
-        } catch (MalformedURLException e) {
-            throw new IllegalArgumentException("bad file " + e);
+            AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
+            ErrUtil.checkALError();
+        } finally {
+            waveFile.dispose();
         }
-        AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
-        waveFile.dispose();
-        ErrUtil.checkALError();
+        return buffer;
+    }
 
+    public int genBuffersFromVorbis(Supplier<InputStream> vorbis) {
+        checkCrossThread();
+        int buffer = AL10.alGenBuffers();
+        ErrUtil.checkALError();
+        try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
+            ShortBuffer vorbisData = SoundUtil.readVorbis(vorbis, info);
+            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16,
+                    vorbisData, info.sample_rate());
+        }
+        return buffer;
+    }
+
+    public PlayingSound play(int buffer, float volume, float pitch, boolean loop) {
+        checkCrossThread();
         int source = AL10.alGenSources();
         ErrUtil.checkALError();
 
@@ -133,6 +137,7 @@ public class SoundPlayer {
         AL10.alListenerfv(AL10.AL_ORIENTATION, buf);
 
         AL10.alSourcePlay(source);
+        return new PlayingSound(source);
     }
 
 }

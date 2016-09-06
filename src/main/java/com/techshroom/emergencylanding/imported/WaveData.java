@@ -24,6 +24,8 @@
  */
 package com.techshroom.emergencylanding.imported;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,6 +43,9 @@ import javax.sound.sampled.AudioSystem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.openal.AL10;
+import org.lwjgl.system.MemoryUtil;
+
+import com.google.common.io.Resources;
 
 /**
  *
@@ -85,7 +90,7 @@ public class WaveData {
      * Disposes the wavedata
      */
     public void dispose() {
-        this.data.clear();
+        MemoryUtil.memFree(this.data);
     }
 
     /**
@@ -96,10 +101,11 @@ public class WaveData {
      * @return WaveData containing data, or null if a failure occured
      */
     public static Optional<WaveData> create(URL path) {
+        checkNotNull(path);
         try {
             return create(AudioSystem.getAudioInputStream(new BufferedInputStream(path.openStream())));
         } catch (Exception e) {
-            LOGGER.warn("Unable to create from: " + path, e.getMessage());
+            LOGGER.error("Unable to create from: " + path, e);
             return Optional.empty();
         }
     }
@@ -112,7 +118,7 @@ public class WaveData {
      * @return WaveData containing data, or null if a failure occured
      */
     public static Optional<WaveData> create(String path) {
-        return create(Thread.currentThread().getContextClassLoader().getResource(path));
+        return create(Resources.getResource(path));
     }
 
     /**
@@ -126,7 +132,7 @@ public class WaveData {
         try {
             return create(AudioSystem.getAudioInputStream(is));
         } catch (Exception e) {
-            LOGGER.warn("Unable to create from inputstream", e.getMessage());
+            LOGGER.error("Unable to create from inputstream", e.getMessage());
             return Optional.empty();
         }
     }
@@ -142,7 +148,7 @@ public class WaveData {
         try {
             return create(AudioSystem.getAudioInputStream(new BufferedInputStream(new ByteArrayInputStream(buffer))));
         } catch (Exception e) {
-            LOGGER.warn("Unable to create from byte array", e.getMessage());
+            LOGGER.error("Unable to create from byte array", e.getMessage());
             return Optional.empty();
         }
     }
@@ -168,7 +174,7 @@ public class WaveData {
             }
             return create(bytes);
         } catch (Exception e) {
-            LOGGER.warn("Unable to create from ByteBuffer", e.getMessage());
+            LOGGER.error("Unable to create from ByteBuffer", e.getMessage());
             return Optional.empty();
         }
     }
@@ -214,15 +220,19 @@ public class WaveData {
                 available = ais.getFormat().getChannels() * (int) ais.getFrameLength()
                         * ais.getFormat().getSampleSizeInBits() / 8;
             }
-            byte[] buf = new byte[ais.available()];
+            byte[] buf = new byte[available];
             int read = 0, total = 0;
             while ((read = ais.read(buf, total, buf.length - total)) != -1 && total < buf.length) {
                 total += read;
             }
+            if (read != -1) {
+                System.err.println("More to be read!");
+            }
+            System.err.println(audioformat);
             buffer = convertAudioBytes(buf, audioformat.getSampleSizeInBits() == 16,
                     audioformat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
         } catch (IOException ioe) {
-            LOGGER.warn("IO error", ioe);
+            LOGGER.error("IO error", ioe);
             return Optional.empty();
         }
 
@@ -239,18 +249,19 @@ public class WaveData {
     }
 
     private static ByteBuffer convertAudioBytes(byte[] audio_bytes, boolean two_bytes_data, ByteOrder order) {
-        ByteBuffer dest = ByteBuffer.allocateDirect(audio_bytes.length);
-        dest.order(ByteOrder.nativeOrder());
+        ByteBuffer dest = MemoryUtil.memCalloc(audio_bytes.length);
         ByteBuffer src = ByteBuffer.wrap(audio_bytes);
         src.order(order);
         if (two_bytes_data) {
             ShortBuffer dest_short = dest.asShortBuffer();
             ShortBuffer src_short = src.asShortBuffer();
-            while (src_short.hasRemaining())
+            while (src_short.hasRemaining()) {
                 dest_short.put(src_short.get());
+            }
         } else {
-            while (src.hasRemaining())
+            while (src.hasRemaining()) {
                 dest.put(src.get());
+            }
         }
         dest.rewind();
         return dest;

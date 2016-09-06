@@ -24,10 +24,16 @@
  */
 package com.techshroom.emergencylanding.library.debug;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.lwjgl.glfw.GLFW;
+
+import com.google.common.io.Resources;
 import com.techshroom.emergencylanding.library.lwjgl.DisplayLayer;
 import com.techshroom.emergencylanding.library.main.KMain;
+import com.techshroom.emergencylanding.library.sound.PlayingSound;
 import com.techshroom.emergencylanding.library.sound.SoundPlayer;
-import com.techshroom.emergencylanding.library.util.LUtils;
 
 public class TestSound extends KMain {
 
@@ -47,16 +53,48 @@ public class TestSound extends KMain {
         }
     }
 
+    private PlayingSound a;
+    private PlayingSound b;
+    private PlayingSound c;
+    private int elapsed = 0;
+    private int state = 0;
+
     @Override
     public void onDisplayUpdate(int delta) {
+        this.elapsed += delta;
+        if (this.elapsed > 2000) {
+            this.state++;
+            this.elapsed = 0;
+        }
+        switch (this.state) {
+            case 1:
+                this.a.stop();
+                break;
+            case 2:
+                this.b.stop();
+                break;
+            case 3:
+                this.c.stop();
+                break;
+            case 4:
+                GLFW.glfwSetWindowShouldClose(layer.getWindow(), true);
+        }
     }
 
     @Override
     public void init(DisplayLayer layer, String[] args) {
         SoundPlayer player = new SoundPlayer();
-        player.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, .50f, true);
-        player.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, .10f, true);
-        player.playWAV(LUtils.getELTop() + "/wav/test.wav", 1.0f, 2.15f, true);
+        InputStream stream;
+        try {
+            stream = Resources.asByteSource(Resources.getResource("ogg/test.ogg")).openBufferedStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        int buf = player.genBuffersFromVorbis(() -> stream);
+        this.a = player.play(buf, 1.0f, .90f, true);
+        this.b = player.play(buf, 1.0f, .60f, true);
+        this.c = player.play(buf, 1.0f, 2.15f, true);
     }
 
 }

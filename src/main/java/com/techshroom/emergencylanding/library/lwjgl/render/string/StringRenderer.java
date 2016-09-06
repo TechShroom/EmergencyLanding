@@ -27,10 +27,12 @@ package com.techshroom.emergencylanding.library.lwjgl.render.string;
 import static org.lwjgl.nanovg.NanoVG.nvgCreateFontMem;
 import static org.lwjgl.nanovg.NanoVG.nvgFontFaceId;
 import static org.lwjgl.nanovg.NanoVG.nvgFontSize;
-import static org.lwjgl.nanovg.NanoVG.nvgText;
+import static org.lwjgl.nanovg.NanoVG.nvgTextBox;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+
+import org.lwjgl.system.MemoryUtil;
 
 import com.flowpowered.math.vector.Vector2f;
 import com.google.common.cache.RemovalNotification;
@@ -90,6 +92,7 @@ public class StringRenderer {
     public void renderString(String string, Vector2f position) {
         nvgFontFaceId(this.nvgHandle, this.fontMem);
         nvgFontSize(this.nvgHandle, this.data.getFontSize());
-        nvgText(this.nvgHandle, position.getX(), position.getY(), string, 0);
+        nvgTextBox(this.nvgHandle, position.getX(), position.getY(), 1e5f, string, MemoryUtil.NULL);
     }
+
 }
