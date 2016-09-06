@@ -36,9 +36,6 @@ import org.lwjgl.glfw.GLFWKeyCallbackI;
 /**
  * A class that uses the AWT event system for callbacks on {@link KeyEvent
  * KeyEvents}. Does not call the {@link KeyListener#keyTyped(KeyEvent)} method.
- * 
- * @author Kenzie Togami
- * 
  */
 public final class Keys implements GLFWKeyCallbackI {
 

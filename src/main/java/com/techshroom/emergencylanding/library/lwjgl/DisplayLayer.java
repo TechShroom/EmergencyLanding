@@ -28,6 +28,7 @@ import static org.lwjgl.nanovg.NanoVG.nvgBeginFrame;
 import static org.lwjgl.nanovg.NanoVG.nvgEndFrame;
 import static org.lwjgl.nanovg.NanoVGGL3.NVG_ANTIALIAS;
 import static org.lwjgl.nanovg.NanoVGGL3.NVG_DEBUG;
+import static org.lwjgl.nanovg.NanoVGGL3.NVG_STENCIL_STROKES;
 import static org.lwjgl.nanovg.NanoVGGL3.nvgCreateGL3;
 import static org.lwjgl.nanovg.NanoVGGL3.nvgDeleteGL3;
 
@@ -42,6 +43,7 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.util.nfd.NativeFileDialog;
 
 import com.flowpowered.math.vector.Vector3f;
 import com.techshroom.emergencylanding.exst.mods.Mods;
@@ -232,16 +234,20 @@ public class DisplayLayer {
         GLData.initOpenGL(this.window);
         this.displayFPSTracker = new FPS(title);
         GLData.notifyOnGLError(currentMethodName);
-        main.init(this, args);
-        GLData.notifyOnGLError(currentMethodName);
-        LUtils.print("Using OpenGL v" + LUtils.getGLVer());
-
-        int flags = NVG_ANTIALIAS;
+        // Bind VAO around NVG init
+        GLData.bindVAO();
+        int flags = NVG_ANTIALIAS | NVG_STENCIL_STROKES;
         if (Boolean.getBoolean(LUtils.SHORT_LIB_NAME + ".nvg.debug")) {
             flags |= NVG_DEBUG;
         }
         this.nvgHandle = nvgCreateGL3(flags);
         GLData.notifyOnGLError(currentMethodName);
+        GLData.unbindVAO();
+        main.init(this, args);
+        GLData.notifyOnGLError(currentMethodName);
+        LUtils.print("Using OpenGL v" + LUtils.getGLVer());
+        // Initialize NFD here to prevent slow times later
+        NativeFileDialog.NFD_GetError();
     }
 
     public void loop(int dfps) {

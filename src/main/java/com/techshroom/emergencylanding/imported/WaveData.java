@@ -33,7 +33,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
 import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
@@ -46,6 +45,8 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.system.MemoryUtil;
 
 import com.google.common.io.Resources;
+import com.techshroom.emergencylanding.library.sound.SoundUtil;
+import com.techshroom.emergencylanding.library.util.LUtils;
 
 /**
  *
@@ -215,21 +216,8 @@ public class WaveData {
         // read data into buffer
         ByteBuffer buffer = null;
         try {
-            int available = ais.available();
-            if (available <= 0) {
-                available = ais.getFormat().getChannels() * (int) ais.getFrameLength()
-                        * ais.getFormat().getSampleSizeInBits() / 8;
-            }
-            byte[] buf = new byte[available];
-            int read = 0, total = 0;
-            while ((read = ais.read(buf, total, buf.length - total)) != -1 && total < buf.length) {
-                total += read;
-            }
-            if (read != -1) {
-                System.err.println("More to be read!");
-            }
-            System.err.println(audioformat);
-            buffer = convertAudioBytes(buf, audioformat.getSampleSizeInBits() == 16,
+            buffer = LUtils.inputStreamToDirectByteBuffer(() -> ais);
+            buffer = SoundUtil.convertAudioBytes(buffer, audioformat.getSampleSizeInBits() == 16,
                     audioformat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN);
         } catch (IOException ioe) {
             LOGGER.error("IO error", ioe);
@@ -248,22 +236,4 @@ public class WaveData {
         return Optional.of(wavedata);
     }
 
-    private static ByteBuffer convertAudioBytes(byte[] audio_bytes, boolean two_bytes_data, ByteOrder order) {
-        ByteBuffer dest = MemoryUtil.memCalloc(audio_bytes.length);
-        ByteBuffer src = ByteBuffer.wrap(audio_bytes);
-        src.order(order);
-        if (two_bytes_data) {
-            ShortBuffer dest_short = dest.asShortBuffer();
-            ShortBuffer src_short = src.asShortBuffer();
-            while (src_short.hasRemaining()) {
-                dest_short.put(src_short.get());
-            }
-        } else {
-            while (src.hasRemaining()) {
-                dest.put(src.get());
-            }
-        }
-        dest.rewind();
-        return dest;
-    }
 }

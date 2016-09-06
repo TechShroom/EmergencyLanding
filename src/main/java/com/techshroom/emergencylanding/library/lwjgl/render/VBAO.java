@@ -41,8 +41,6 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -51,8 +49,8 @@ import java.util.Arrays;
 import org.lwjgl.BufferUtils;
 
 import com.techshroom.emergencylanding.library.internalstate.Victor;
-import com.techshroom.emergencylanding.library.lwjgl.tex.Texture;
 import com.techshroom.emergencylanding.library.lwjgl.tex.ELTexture;
+import com.techshroom.emergencylanding.library.lwjgl.tex.Texture;
 import com.techshroom.emergencylanding.library.util.DrawableUtils;
 import com.techshroom.emergencylanding.library.util.LUtils;
 import com.techshroom.emergencylanding.library.util.StackTraceInfo;
@@ -100,10 +98,6 @@ public class VBAO implements Cloneable {
      * The amount of vertices
      */
     private int verticesCount = 0;
-    /**
-     * The ID of the VAO array
-     */
-    private int vaoId = GLData.NONE;
     /**
      * The VBO id that holds the interleaved data.
      */
@@ -161,7 +155,8 @@ public class VBAO implements Cloneable {
 
     /**
      * 
-     * @param pos - the offset
+     * @param pos
+     *            - the offset
      * @return this
      * @deprecated Use
      *             {@link DrawableUtils#glBeginTrans(double, double, double)}
@@ -202,8 +197,6 @@ public class VBAO implements Cloneable {
         this.indexData.put(indexControl);
         this.indexData.flip();
         this.verticesCount = indexControl.length;
-        // Overwrite data
-        glBindVertexArray(this.vaoId);
         glBindBuffer(GL_ARRAY_BUFFER, this.vbo);
         // null pointer the original data (disabled until LWJGL 3)
         /*
@@ -236,18 +229,8 @@ public class VBAO implements Cloneable {
 
             @Override
             public void run() {
-                // Create a new Vertex Array Object in memory and select it
-                // (bind)
-                // A VAO can have up to 16 attributes (VBO's) assigned to it by
-                // default
-                VBAO.this.vaoId = glGenVertexArrays();
-                glBindVertexArray(VBAO.this.vaoId);
-
                 // Create the vertex VBO
                 createVertexVBO();
-
-                // Deselect (bind to 0) the VAO
-                glBindVertexArray(GLData.NONE);
 
                 // Create the IC VBO
                 createIndexControlVBO();
@@ -292,8 +275,7 @@ public class VBAO implements Cloneable {
     }
 
     public VBAO draw() {
-
-        if (this.vaoId == GLData.NONE || this.vbo == GLData.NONE || this.vbo_i == GLData.NONE) {
+        if (this.vbo == GLData.NONE || this.vbo_i == GLData.NONE) {
             // no longer valid!
             destroy();
             return null;
@@ -309,8 +291,6 @@ public class VBAO implements Cloneable {
 
         glUniform1f(GLData.uniformTexEnabler, (this.tex == null ? 0 : 1));
 
-        // Bind to the VAO that has all the information about the vertices
-        glBindVertexArray(this.vaoId);
         glBindBuffer(GL_ARRAY_BUFFER, this.vbo);
         glEnableVertexAttribArray(POS_VBO_INDEX);
         glEnableVertexAttribArray((this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
@@ -325,7 +305,6 @@ public class VBAO implements Cloneable {
         glDisableVertexAttribArray(POS_VBO_INDEX);
         glDisableVertexAttribArray((this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
         glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
-        glBindVertexArray(GLData.NONE);
 
         if (this.tex != null) {
             this.tex.unbind();
@@ -361,7 +340,6 @@ public class VBAO implements Cloneable {
 
         // Delete the VAO
         glBindVertexArray(GLData.NONE);
-        glDeleteVertexArrays(this.vaoId);
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         }
@@ -394,7 +372,6 @@ public class VBAO implements Cloneable {
             c.icdata = this.icdata.clone();
             c.indexData = this.indexData.duplicate();
             c.tex = this.tex;
-            c.vaoId = this.vaoId;
             c.vbo = this.vbo;
             c.vbo_i = this.vbo_i;
             c.vertData = this.vertData.duplicate();

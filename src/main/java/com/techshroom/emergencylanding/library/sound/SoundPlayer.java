@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 import java.util.function.Supplier;
 
 import org.lwjgl.BufferUtils;
@@ -47,13 +46,12 @@ import org.lwjgl.openal.AL10;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
-import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.Configuration;
 
 import com.techshroom.emergencylanding.imported.WaveData;
 import com.techshroom.emergencylanding.library.lwjgl.ErrUtil;
 
-public class SoundPlayer {
+public class SoundPlayer implements AutoCloseable {
 
     static {
         // Temporary work-around for AL being broken on OSX
@@ -63,56 +61,66 @@ public class SoundPlayer {
     }
 
     private final Thread startedThread = Thread.currentThread();
+    private final long device;
+    private final long context;
 
     public SoundPlayer() {
-        long device = ALC10.alcOpenDevice((ByteBuffer) null);
-        if (device == 0) {
+        this.device = ALC10.alcOpenDevice((ByteBuffer) null);
+        if (this.device == 0) {
             throw new IllegalStateException("Failed to open the default device.");
         }
-        long context = ALC10.alcCreateContext(device, (IntBuffer) null);
-        if (context == 0) {
+        this.context = ALC10.alcCreateContext(this.device, (IntBuffer) null);
+        if (this.context == 0) {
             throw new IllegalStateException("no context?");
         }
-        ALC10.alcMakeContextCurrent(context);
-        ALCCapabilities deviceCaps = ALC.createCapabilities(device);
+        ALC10.alcMakeContextCurrent(this.context);
+        ALCCapabilities deviceCaps = ALC.createCapabilities(this.device);
         AL.createCapabilities(deviceCaps);
-        String deviceSpecifier = ALC10.alcGetString(device, ALC10.ALC_DEVICE_SPECIFIER);
+        String deviceSpecifier = ALC10.alcGetString(this.device, ALC10.ALC_DEVICE_SPECIFIER);
         System.err.println("Using device " + deviceSpecifier);
-        System.out.println("ALC_FREQUENCY: " + alcGetInteger(device, ALC_FREQUENCY) + "Hz");
-        System.out.println("ALC_REFRESH: " + alcGetInteger(device, ALC_REFRESH) + "Hz");
-        System.out.println("ALC_SYNC: " + (alcGetInteger(device, ALC_SYNC) == ALC_TRUE));
-        System.out.println("ALC_MONO_SOURCES: " + alcGetInteger(device, ALC_MONO_SOURCES));
-        System.out.println("ALC_STEREO_SOURCES: " + alcGetInteger(device, ALC_STEREO_SOURCES));
+        System.out.println("ALC_FREQUENCY: " + alcGetInteger(this.device, ALC_FREQUENCY) + "Hz");
+        System.out.println("ALC_REFRESH: " + alcGetInteger(this.device, ALC_REFRESH) + "Hz");
+        System.out.println("ALC_SYNC: " + (alcGetInteger(this.device, ALC_SYNC) == ALC_TRUE));
+        System.out.println("ALC_MONO_SOURCES: " + alcGetInteger(this.device, ALC_MONO_SOURCES));
+        System.out.println("ALC_STEREO_SOURCES: " + alcGetInteger(this.device, ALC_STEREO_SOURCES));
     }
 
     private void checkCrossThread() {
         checkState(this.startedThread == Thread.currentThread(), "cross-thread AL usage!");
     }
 
-    public int genBuffers(Supplier<WaveData> waveInput) {
+    public int genBuffersFromWav(Supplier<WaveData> waveInput) {
         checkCrossThread();
-        int buffer = AL10.alGenBuffers();
-        ErrUtil.checkALError();
-
         WaveData waveFile = waveInput.get();
         try {
-            AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
-            ErrUtil.checkALError();
+            return genBuffers(ALBufferData.create(waveFile.format, waveFile.data, waveFile.samplerate));
         } finally {
             waveFile.dispose();
         }
-        return buffer;
     }
 
     public int genBuffersFromVorbis(Supplier<InputStream> vorbis) {
         checkCrossThread();
+        return genBuffers(SoundUtil.readVorbis(vorbis));
+    }
+
+    public int genBuffersFromMp3(Supplier<InputStream> mp3) {
+        checkCrossThread();
+        return genBuffers(SoundUtil.readMp3(mp3));
+    }
+
+    public int genBuffers(ALBufferData data) {
+        checkCrossThread();
         int buffer = AL10.alGenBuffers();
         ErrUtil.checkALError();
-        try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
-            ShortBuffer vorbisData = SoundUtil.readVorbis(vorbis, info);
-            AL10.alBufferData(buffer, info.channels() == 1 ? AL10.AL_FORMAT_MONO16 : AL10.AL_FORMAT_STEREO16,
-                    vorbisData, info.sample_rate());
+        if (data instanceof ALBufferData.Short) {
+            AL10.alBufferData(buffer, data.getFormat(), ((ALBufferData.Short) data).getData(), data.getSampleRate());
+        } else if (data instanceof ALBufferData.Byte) {
+            AL10.alBufferData(buffer, data.getFormat(), ((ALBufferData.Byte) data).getData(), data.getSampleRate());
+        } else {
+            throw new IllegalArgumentException("unknown ALBufferData class " + data.getClass());
         }
+        ErrUtil.checkALError();
         return buffer;
     }
 
@@ -138,6 +146,12 @@ public class SoundPlayer {
 
         AL10.alSourcePlay(source);
         return new PlayingSound(source);
+    }
+
+    @Override
+    public void close() {
+        ALC10.alcDestroyContext(this.context);
+        ALC10.alcCloseDevice(this.device);
     }
 
 }

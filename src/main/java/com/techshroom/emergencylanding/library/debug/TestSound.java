@@ -58,6 +58,7 @@ public class TestSound extends KMain {
     private PlayingSound c;
     private int elapsed = 0;
     private int state = 0;
+    private SoundPlayer player;
 
     @Override
     public void onDisplayUpdate(int delta) {
@@ -77,13 +78,14 @@ public class TestSound extends KMain {
                 this.c.stop();
                 break;
             case 4:
+                this.player.close();
                 GLFW.glfwSetWindowShouldClose(layer.getWindow(), true);
         }
     }
 
     @Override
     public void init(DisplayLayer layer, String[] args) {
-        SoundPlayer player = new SoundPlayer();
+        this.player = new SoundPlayer();
         InputStream stream;
         try {
             stream = Resources.asByteSource(Resources.getResource("ogg/test.ogg")).openBufferedStream();
@@ -91,10 +93,10 @@ public class TestSound extends KMain {
             e.printStackTrace();
             return;
         }
-        int buf = player.genBuffersFromVorbis(() -> stream);
-        this.a = player.play(buf, 1.0f, .90f, true);
-        this.b = player.play(buf, 1.0f, .60f, true);
-        this.c = player.play(buf, 1.0f, 2.15f, true);
+        int buf = this.player.genBuffersFromVorbis(() -> stream);
+        this.a = this.player.play(buf, 1.0f, .90f, true);
+        this.b = this.player.play(buf, 1.0f, .60f, true);
+        this.c = this.player.play(buf, 1.0f, 2.15f, true);
     }
 
 }

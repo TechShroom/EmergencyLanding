@@ -27,6 +27,7 @@ package com.techshroom.emergencylanding.library.lwjgl.render;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -38,6 +39,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_INFO_LOG_LENGTH;
+import static org.lwjgl.opengl.GL20.GL_VALIDATE_STATUS;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 import static org.lwjgl.opengl.GL20.glAttachShader;
 import static org.lwjgl.opengl.GL20.glBindAttribLocation;
@@ -47,6 +49,8 @@ import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glDeleteShader;
 import static org.lwjgl.opengl.GL20.glDetachShader;
+import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
+import static org.lwjgl.opengl.GL20.glGetProgrami;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glGetShaderi;
 import static org.lwjgl.opengl.GL20.glGetUniformLocation;
@@ -55,6 +59,9 @@ import static org.lwjgl.opengl.GL20.glShaderSource;
 import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glValidateProgram;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
+import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -85,10 +92,12 @@ public class GLData {
     private static int comboShaderProgram = 0;
     private static ArrayList<Integer> shaders = new ArrayList<Integer>();
     private static int orthoMatrixLocation = 0;
+    private static int globalVao;
     public static int uniformTexEnabler = 0;
 
     public static void clearAndLoad() {
         notifyOnGLError("clearAndLoad-notOurFault");
+        bindVAO();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         notifyOnGLError("clearAndLoad-afterClear");
         glUseProgram(comboShaderProgram);
@@ -100,6 +109,7 @@ public class GLData {
     public static void unload() {
         // glUseProgram(NONE); // generates INVALID OPERATION, may be needed
         // however?
+        unbindVAO();
         try {
             notifyOnGLError("unload");
         } catch (OpenGLException ogle) {
@@ -108,19 +118,33 @@ public class GLData {
         }
     }
 
+    public static void bindVAO() {
+        glBindVertexArray(globalVao);
+        notifyOnGLError("bindVAO");
+    }
+
+    public static void unbindVAO() {
+        glBindVertexArray(NONE);
+        notifyOnGLError("unbindVAO");
+    }
+    
     public static void initOpenGL(long window) {
         GLData.resizedRefresh(window);
         init();
+        // bind VAO around shader/program init
+        bindVAO();
         addVertexAndFragmentShaders();
         comboShaders();
         getLocations();
         RenderManager.registerRenders();
-        notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        notifyOnGLError("init-prebindVertexArray");
+        unbindVAO();
     }
 
     private static void init() {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        globalVao = glGenVertexArrays();
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -129,6 +153,7 @@ public class GLData {
         detachShaders();
         removeShaders();
         destroyComboShader();
+        glDeleteVertexArrays(globalVao);
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -142,6 +167,8 @@ public class GLData {
     }
 
     private static void comboShaders() {
+        // glvertexar
+        // glBindVertexArray(0);
         comboShaderProgram = glCreateProgram();
         for (int shader : shaders) {
             glAttachShader(comboShaderProgram, shader);
@@ -151,6 +178,10 @@ public class GLData {
         glBindAttribLocation(comboShaderProgram, TEX_INDEX, "in_texCoord");
         glLinkProgram(comboShaderProgram);
         glValidateProgram(comboShaderProgram);
+        if (glGetProgrami(comboShaderProgram, GL_VALIDATE_STATUS) == GL_FALSE) {
+            String progInfo = glGetProgramInfoLog(comboShaderProgram).trim();
+            throw new IllegalStateException(progInfo);
+        }
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
