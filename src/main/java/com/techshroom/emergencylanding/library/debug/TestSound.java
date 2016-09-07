@@ -24,7 +24,6 @@
  */
 package com.techshroom.emergencylanding.library.debug;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,6 +31,9 @@ import org.lwjgl.glfw.GLFW;
 
 import com.google.common.io.Resources;
 import com.techshroom.emergencylanding.library.lwjgl.DisplayLayer;
+import com.techshroom.emergencylanding.library.lwjgl.Shapes;
+import com.techshroom.emergencylanding.library.lwjgl.render.VBAO;
+import com.techshroom.emergencylanding.library.lwjgl.render.VertexData;
 import com.techshroom.emergencylanding.library.main.KMain;
 import com.techshroom.emergencylanding.library.sound.ALSound;
 import com.techshroom.emergencylanding.library.sound.Sound;
@@ -55,6 +57,9 @@ public class TestSound extends KMain {
         }
     }
 
+    private VBAO timeA;
+    private VBAO timeB;
+    private VBAO timeC;
     private Sound a;
     private Sound b;
     private Sound c;
@@ -64,6 +69,9 @@ public class TestSound extends KMain {
 
     @Override
     public void onDisplayUpdate(int delta) {
+        this.timeA.draw();
+        this.timeB.draw();
+        this.timeC.draw();
         this.elapsed += delta;
         if (this.elapsed > 2000) {
             this.state++;
@@ -103,8 +111,11 @@ public class TestSound extends KMain {
             return;
         }
         this.a = base.requiredCopy().setVolume(.5f).setPitch(.99f).setLooping(true).play();
+//        this.timeA = Shapes.getQuad(new VertexData().setXYZ(50, 10, 0).setXYZ(x, y, z), new VertexData().setXYZ(50, 20, 0), Shapes.XY);
         this.b = base.requiredCopy().setVolume(.5f).setPitch(.98f).setLooping(true).play();
+        this.timeB = Shapes.getQuad(new VertexData().setXYZ(50, 30, 0), new VertexData().setXYZ(50, 40, 0), Shapes.XY);
         this.c = base.requiredCopy().setVolume(.5f).setPitch(1).setLooping(true).play();
+        this.timeC = Shapes.getQuad(new VertexData().setXYZ(50, 50, 0), new VertexData().setXYZ(50, 60, 0), Shapes.XY);
     }
 
 }

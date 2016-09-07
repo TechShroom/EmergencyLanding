@@ -24,6 +24,9 @@
  */
 package com.techshroom.emergencylanding.library.lwjgl;
 
+import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_DEBUG_CONTEXT;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.glfwWindowHint;
 import static org.lwjgl.nanovg.NanoVG.nvgBeginFrame;
 import static org.lwjgl.nanovg.NanoVG.nvgEndFrame;
 import static org.lwjgl.nanovg.NanoVGGL3.NVG_ANTIALIAS;
@@ -42,6 +45,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWFramebufferSizeCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Callback;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.nfd.NativeFileDialog;
 
@@ -78,6 +83,7 @@ public class DisplayLayer {
     private final MouseHelp mouseHelp;
     private final Keys keys;
     private final long nvgHandle;
+    private final Callback dbgCb;
 
     /**
      * Initializes the display and KMain instance. Parameter notes are found on
@@ -201,6 +207,7 @@ public class DisplayLayer {
         }
         GLFW.glfwDefaultWindowHints();
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, resizable ? GLFW.GLFW_TRUE : GLFW.GLFW_FALSE);
+        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
         GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GLFW.GLFW_TRUE);
@@ -213,6 +220,8 @@ public class DisplayLayer {
 
         GLFW.glfwMakeContextCurrent(this.window);
         GL.createCapabilities(true);
+        // NOFREE4U
+        this.dbgCb = GLUtil.setupDebugMessageCallback();
 
         createdMap.put(this.window, this);
 
@@ -242,8 +251,9 @@ public class DisplayLayer {
         }
         this.nvgHandle = nvgCreateGL3(flags);
         GLData.notifyOnGLError(currentMethodName);
-        GLData.unbindVAO();
         main.init(this, args);
+        GLData.notifyOnGLError(currentMethodName);
+        GLData.unbindVAO();
         GLData.notifyOnGLError(currentMethodName);
         LUtils.print("Using OpenGL v" + LUtils.getGLVer());
         // Initialize NFD here to prevent slow times later
@@ -262,10 +272,13 @@ public class DisplayLayer {
         GLFW.glfwGetFramebufferSize(this.window, width, null);
         // eh...hack
         nvgBeginFrame(this.nvgHandle, windowWidth, height.get(0), width.get(0) / windowWidth);
+        GLData.notifyOnGLError("nvgBeginFrame");
         KMain.getInst().onDisplayUpdate(delta);
-        nvgEndFrame(this.nvgHandle);
         GLData.notifyOnGLError("postImplementationDisplayUpdate");
+        nvgEndFrame(this.nvgHandle);
+        GLData.notifyOnGLError("nvgEndFrame");
         this.mouseHelp.onDisplayUpdate();
+        GLData.notifyOnGLError("mouseHelpDisplayUpdate");
         GLData.unload();
         GLFW.glfwSwapBuffers(this.window);
         GLFW.glfwPollEvents();
@@ -280,6 +293,7 @@ public class DisplayLayer {
     }
 
     public void destroy() {
+        this.dbgCb.free();
         nvgDeleteGL3(this.nvgHandle);
         GLFW.glfwDestroyWindow(this.window);
     }

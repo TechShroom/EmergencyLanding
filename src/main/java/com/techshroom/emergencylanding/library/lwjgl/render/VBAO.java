@@ -28,6 +28,7 @@ import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glDrawElements;
+import static org.lwjgl.opengl.GL11.glGetInteger;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.GL_DYNAMIC_DRAW;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
@@ -40,7 +41,7 @@ import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glUniform1f;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL30.GL_VERTEX_ARRAY_BINDING;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -197,6 +198,7 @@ public class VBAO implements Cloneable {
         this.indexData.put(indexControl);
         this.indexData.flip();
         this.verticesCount = indexControl.length;
+        System.err.println("Binding vbo with " + glGetInteger(GL_VERTEX_ARRAY_BINDING));
         glBindBuffer(GL_ARRAY_BUFFER, this.vbo);
         // null pointer the original data (disabled until LWJGL 3)
         /*
@@ -206,7 +208,7 @@ public class VBAO implements Cloneable {
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError("updateData -> overwrite vertData");
         }
-        glBindVertexArray(GLData.NONE);
+        System.err.println("Binding IC with " + glGetInteger(GL_VERTEX_ARRAY_BINDING));
         // IC
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.vbo_i);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indexData, GL_DYNAMIC_DRAW);
@@ -229,6 +231,7 @@ public class VBAO implements Cloneable {
 
             @Override
             public void run() {
+                System.err.println("Binding vbo with " + glGetInteger(GL_VERTEX_ARRAY_BINDING));
                 // Create the vertex VBO
                 createVertexVBO();
 
@@ -259,22 +262,21 @@ public class VBAO implements Cloneable {
                 VertexData.POSITION_SIZE + VertexData.COLOR_SIZE);
         // Deselect (bind to 0) the VBO
         glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
-        if (LUtils.debugLevel >= 1) {
-            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
-        }
+        GLData.notifyOnGLError("createVertexVBO");
     }
 
     private void createIndexControlVBO() {
+        GLData.unbindVAO();
         this.vbo_i = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.vbo_i);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, this.indexData, (this.staticdata ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW));
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
-        if (LUtils.debugLevel >= 1) {
-            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
-        }
+        GLData.bindVAO();
+        GLData.notifyOnGLError("createIndexControlVBO");
     }
 
     public VBAO draw() {
+        System.err.println("Drawing with " + glGetInteger(GL_VERTEX_ARRAY_BINDING));
         if (this.vbo == GLData.NONE || this.vbo_i == GLData.NONE) {
             // no longer valid!
             destroy();
@@ -290,21 +292,36 @@ public class VBAO implements Cloneable {
         }
 
         glUniform1f(GLData.uniformTexEnabler, (this.tex == null ? 0 : 1));
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
 
         glBindBuffer(GL_ARRAY_BUFFER, this.vbo);
         glEnableVertexAttribArray(POS_VBO_INDEX);
         glEnableVertexAttribArray((this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.vbo_i);
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
 
         vertexDraw();
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GLData.NONE);
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
 
         // Put everything back to default (deselect)
         glDisableVertexAttribArray(POS_VBO_INDEX);
         glDisableVertexAttribArray((this.tex == null) ? COLOR_VBO_INDEX : TEX_VBO_INDEX);
         glBindBuffer(GL_ARRAY_BUFFER, GLData.NONE);
+        if (LUtils.debugLevel >= 1) {
+            GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
+        }
 
         if (this.tex != null) {
             this.tex.unbind();
@@ -324,22 +341,7 @@ public class VBAO implements Cloneable {
     }
 
     public void destroy() {
-        if (LUtils.debugLevel >= 1) {
-            GLData.notifyOnGLError("destroy-itsnotmyfault");
-        }
-        // Disable the VBO index from the VAO attributes list
-        // glDisableVertexAttribArray(POS_VBO_INDEX);
-        // glDisableVertexAttribArray(COLOR_VBO_INDEX);
-        // glDisableVertexAttribArray(TEX_VBO_INDEX);
-
-        if (LUtils.debugLevel >= 1) {
-            GLData.notifyOnGLError("destroy-DVAA");
-        }
-
         deleteVertexVBO();
-
-        // Delete the VAO
-        glBindVertexArray(GLData.NONE);
         if (LUtils.debugLevel >= 1) {
             GLData.notifyOnGLError(StackTraceInfo.getCurrentMethodName());
         }

@@ -176,6 +176,7 @@ public final class LUtils {
             Integer.parseInt(System.getProperty(LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
 
     static {
+        System.err.println("get debug level");
         System.err.println(LOWER_SHORT_LIB_NAME + ".debug.level" + ": " + debugLevel);
     }
 

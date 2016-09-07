@@ -57,12 +57,18 @@ public class WorldAndEntityTest extends KMain {
                 layer.loop(FRAMES_PER_SECOND);
             }
         } catch (Exception e) {
+            WorldAndEntityTest.run = false;
             e.printStackTrace();
         } finally {
             if (layer != null) {
                 layer.destroy();
             }
-            DisplayLayer.finalExitCall();
+            try {
+                DisplayLayer.finalExitCall();
+            } catch (NoClassDefFoundError e) {
+                // Occurs if LUtils throws an error during init
+                // Just pass over this and throw the real error.
+            }
         }
     }
 

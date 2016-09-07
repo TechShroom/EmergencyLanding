@@ -55,9 +55,9 @@ def addLWJGL(ext, natives) {
     project.dependencies {
         compile group: 'org.lwjgl', name: lwjgl, version: ver
         if (natives) {
-            compileOnly group: 'org.lwjgl', name: lwjgl, version: ver, classifier: 'natives-macos'
-            compileOnly group: 'org.lwjgl', name: lwjgl, version: ver, classifier: 'natives-linux'
-            compileOnly group: 'org.lwjgl', name: lwjgl, version: ver, classifier: 'natives-windows'
+            compile group: 'org.lwjgl', name: lwjgl, version: ver, classifier: 'natives-macos'
+            compile group: 'org.lwjgl', name: lwjgl, version: ver, classifier: 'natives-linux'
+            compile group: 'org.lwjgl', name: lwjgl, version: ver, classifier: 'natives-windows'
         }
     }
 }
@@ -154,3 +154,6 @@ task detokenizeSource(type: Copy) {
 
 compileJava.dependsOn(detokenizeSource)
 compileJava.source = fileTree(dir: 'build/detokenizedSource')
+apply plugin: 'application'
+mainClassName = 'com.techshroom.emergencylanding.library.debug.WorldAndEntityTest'
+applicationDefaultJvmArgs = ['-XstartOnFirstThread', '-Del.debug.level=5', '-Dorg.lwjgl.opengl.libname=/Users/kenzietogami/Documents/GitHub/apitrace/build/wrappers/OpenGL.framework/Versions/A/OpenGL']
