@@ -24,6 +24,7 @@
  */
 package com.techshroom.emergencylanding.library.debug;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -32,7 +33,8 @@ import org.lwjgl.glfw.GLFW;
 import com.google.common.io.Resources;
 import com.techshroom.emergencylanding.library.lwjgl.DisplayLayer;
 import com.techshroom.emergencylanding.library.main.KMain;
-import com.techshroom.emergencylanding.library.sound.PlayingSound;
+import com.techshroom.emergencylanding.library.sound.ALSound;
+import com.techshroom.emergencylanding.library.sound.Sound;
 import com.techshroom.emergencylanding.library.sound.SoundPlayer;
 
 public class TestSound extends KMain {
@@ -53,9 +55,9 @@ public class TestSound extends KMain {
         }
     }
 
-    private PlayingSound a;
-    private PlayingSound b;
-    private PlayingSound c;
+    private Sound a;
+    private Sound b;
+    private Sound c;
     private int elapsed = 0;
     private int state = 0;
     private SoundPlayer player;
@@ -93,10 +95,16 @@ public class TestSound extends KMain {
             e.printStackTrace();
             return;
         }
-        int buf = this.player.genBuffersFromVorbis(() -> stream);
-        this.a = this.player.play(buf, 1.0f, .90f, true);
-        this.b = this.player.play(buf, 1.0f, .60f, true);
-        this.c = this.player.play(buf, 1.0f, 2.15f, true);
+        ALSound base;
+        try {
+            base = this.player.getSoundClipFactory().create(() -> stream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        this.a = base.requiredCopy().setVolume(.5f).setPitch(.99f).setLooping(true).play();
+        this.b = base.requiredCopy().setVolume(.5f).setPitch(.98f).setLooping(true).play();
+        this.c = base.requiredCopy().setVolume(.5f).setPitch(1).setLooping(true).play();
     }
 
 }

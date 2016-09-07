@@ -24,26 +24,47 @@
  */
 package com.techshroom.emergencylanding.library.sound;
 
-import org.lwjgl.openal.AL10;
+import static org.lwjgl.openal.AL10.alGenSources;
 
-public class PlayingSound {
+import java.io.IOException;
+import java.util.Optional;
 
-    private final int source;
+import com.techshroom.emergencylanding.library.util.LUtils;
 
-    public PlayingSound(int source) {
-        this.source = source;
+/**
+ * Sounds created by this factory buffer all the audio from the source when it
+ * is created. Use this type for short audio, like a coin pickup or explosion.
+ */
+public class SoundClip implements ALSoundFactory {
+
+    private final SoundPlayer player;
+
+    SoundClip(SoundPlayer player) {
+        this.player = player;
     }
 
-    public boolean isPlaying() {
-        return AL10.alGetSourcei(this.source, AL10.AL_SOURCE_STATE) == AL10.AL_PLAYING;
+    @Override
+    public ALSound create(ALInfo info) throws IOException {
+        LUtils.print("Loading ALInfo: " + info);
+        // Load now
+        ALBufferData data = ALBufferData.create(info.getFormat(),
+                LUtils.inputStreamToDirectByteBuffer(info.getStream()), info.getSampleRate());
+        int buffer = this.player.genBuffers(data);
+        LUtils.print("Returning sound clip");
+        return new ALSoundClip(buffer);
     }
 
-    public int getSource() {
-        return this.source;
-    }
+    private static final class ALSoundClip extends ALSound {
 
-    public void stop() {
-        AL10.alSourceStop(this.source);
+        protected ALSoundClip(int alBuffer) {
+            super(alGenSources(), alBuffer);
+        }
+
+        @Override
+        public Optional<ALSound> copy() {
+            return Optional.of(new ALSoundClip(getAlBuffer()));
+        }
+
     }
 
 }

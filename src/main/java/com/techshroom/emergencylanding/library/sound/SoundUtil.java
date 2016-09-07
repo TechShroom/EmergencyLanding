@@ -30,17 +30,18 @@ import static org.lwjgl.stb.STBVorbis.stb_vorbis_get_samples_short_interleaved;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_open_memory;
 import static org.lwjgl.stb.STBVorbis.stb_vorbis_stream_length_in_samples;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import java.util.function.Supplier;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL10;
@@ -48,11 +49,14 @@ import org.lwjgl.stb.STBVorbisInfo;
 import org.lwjgl.system.MemoryUtil;
 
 import com.google.common.base.Throwables;
+import com.google.common.io.ByteSource;
+import com.google.common.io.ByteStreams;
 import com.techshroom.emergencylanding.library.util.LUtils;
+import com.techshroom.emergencylanding.library.util.interfaces.InputStreamSupplier;
 
 public class SoundUtil {
 
-    public static ALBufferData readVorbis(Supplier<InputStream> resource) {
+    private static ALBufferData readVorbis(InputStreamSupplier resource) {
         try (STBVorbisInfo info = STBVorbisInfo.malloc()) {
             ByteBuffer vorbis;
             try {
@@ -82,7 +86,7 @@ public class SoundUtil {
         }
     }
 
-    public static ALBufferData readMp3(Supplier<InputStream> streamCons) {
+    private static ALInfo readAudioInputStream(InputStreamSupplier streamCons) throws UnsupportedAudioFileException {
         try (InputStream stream = streamCons.get()) {
             AudioInputStream ais = AudioSystem.getAudioInputStream(stream);
             // Reload in a new format
@@ -115,10 +119,8 @@ public class SoundUtil {
                 throw new IllegalStateException("Only mono or stereo is supported: " + audioformat.getChannels());
             }
 
-            // read data into buffer
-            AudioInputStream aisCap = ais;
-            ByteBuffer buffer = LUtils.inputStreamToDirectByteBuffer(() -> aisCap);
-            return ALBufferData.create(channels, buffer, (int) audioformat.getSampleRate());
+            AudioInputStream ret = ais;
+            return ALInfo.create(channels, (int) audioformat.getSampleRate(), () -> ret);
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
@@ -140,6 +142,82 @@ public class SoundUtil {
         }
         dest.rewind();
         return dest;
+    }
+
+    public static ALInfo createALInfo(InputStreamSupplier supplier) throws IOException {
+        // This stream will be closed here in only some cases.
+        @SuppressWarnings("resource")
+        // Wrap stream in buffer to ensure mark support
+        InputStream stream = new BufferedInputStream(supplier.get());
+        try {
+            // Try OGG
+            if (isVorbis(stream)) {
+                ALBufferData data = readVorbis(() -> stream);
+                return alBufferDataToInfo(data);
+            }
+            // Try reading with AIS
+            UnsupportedAudioFileException noJavaAudio;
+            try {
+                return readAudioInputStream(() -> stream);
+            } catch (UnsupportedAudioFileException e) {
+                noJavaAudio = e;
+            }
+            // TODO: FFmpeg? something else?
+            RuntimeException e = new IllegalArgumentException("Don't know what the stream contains");
+            e.addSuppressed(noJavaAudio);
+            throw e;
+        } catch (RuntimeException | IOException e) {
+            // only close stream on exceptions -- it might be used otherwise
+            stream.close();
+            throw e;
+        }
+    }
+
+    private static ALInfo alBufferDataToInfo(ALBufferData data) {
+        return ALInfo.create(data.getFormat(), data.getSampleRate(), () -> {
+            ByteBuffer buf;
+            if (data instanceof ALBufferData.Short) {
+                ShortBuffer s = ((ALBufferData.Short) data).getData();
+                if (!s.hasRemaining()) {
+                    return ByteSource.empty().openStream();
+                }
+                buf = BufferUtils.createByteBuffer(s.capacity() * Short.BYTES);
+                while (s.hasRemaining()) {
+                    buf.putShort(s.get());
+                }
+                buf.flip();
+            } else {
+                buf = ((ALBufferData.Byte) data).getData();
+                if (!buf.hasRemaining()) {
+                    return ByteSource.empty().openStream();
+                }
+            }
+            return new InputStream() {
+
+                @Override
+                public int read() throws IOException {
+                    if (!buf.hasRemaining()) {
+                        return -1;
+                    }
+                    return buf.get() & 0xFF;
+                }
+            };
+        });
+    }
+
+    private static boolean isVorbis(InputStream stream) throws IOException {
+        byte[] fourBytes = new byte[4];
+        int read = -1;
+        try {
+            stream.mark(4);
+            read = ByteStreams.read(stream, fourBytes, 0, 4);
+            if (read < 4) {
+                return false;
+            }
+            return fourBytes[0] == 'O' && fourBytes[1] == 'g' && fourBytes[2] == 'g' && fourBytes[3] == 'S';
+        } finally {
+            stream.reset();
+        }
     }
 
 }

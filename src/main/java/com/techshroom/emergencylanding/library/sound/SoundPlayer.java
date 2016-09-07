@@ -34,11 +34,9 @@ import static org.lwjgl.openal.ALC11.ALC_MONO_SOURCES;
 import static org.lwjgl.openal.ALC11.ALC_STEREO_SOURCES;
 
 import java.io.File;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.function.Supplier;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
@@ -48,8 +46,8 @@ import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 import org.lwjgl.system.Configuration;
 
-import com.techshroom.emergencylanding.imported.WaveData;
 import com.techshroom.emergencylanding.library.lwjgl.ErrUtil;
+import com.techshroom.emergencylanding.library.util.LUtils;
 
 public class SoundPlayer implements AutoCloseable {
 
@@ -63,6 +61,8 @@ public class SoundPlayer implements AutoCloseable {
     private final Thread startedThread = Thread.currentThread();
     private final long device;
     private final long context;
+    // factories
+    private final SoundClip soundClipFactory = new SoundClip(this);
 
     public SoundPlayer() {
         this.device = ALC10.alcOpenDevice((ByteBuffer) null);
@@ -75,6 +75,9 @@ public class SoundPlayer implements AutoCloseable {
         }
         ALC10.alcMakeContextCurrent(this.context);
         ALCCapabilities deviceCaps = ALC.createCapabilities(this.device);
+        if (!deviceCaps.OpenALC11) {
+            throw new IllegalStateException("OpenAL 1.1 is required.");
+        }
         AL.createCapabilities(deviceCaps);
         String deviceSpecifier = ALC10.alcGetString(this.device, ALC10.ALC_DEVICE_SPECIFIER);
         System.err.println("Using device " + deviceSpecifier);
@@ -85,34 +88,28 @@ public class SoundPlayer implements AutoCloseable {
         System.out.println("ALC_STEREO_SOURCES: " + alcGetInteger(this.device, ALC_STEREO_SOURCES));
     }
 
+    public SoundClip getSoundClipFactory() {
+        return this.soundClipFactory;
+    }
+
+    public void setupListener() {
+        AL10.alListener3f(AL10.AL_POSITION, 0, 0, 0);
+        AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
+        FloatBuffer buf = BufferUtils.createFloatBuffer(6);
+        buf.put(new float[] { 0, 0, -1, 0, 1, 0 });
+        buf.flip();
+        AL10.alListenerfv(AL10.AL_ORIENTATION, buf);
+    }
+
     private void checkCrossThread() {
         checkState(this.startedThread == Thread.currentThread(), "cross-thread AL usage!");
-    }
-
-    public int genBuffersFromWav(Supplier<WaveData> waveInput) {
-        checkCrossThread();
-        WaveData waveFile = waveInput.get();
-        try {
-            return genBuffers(ALBufferData.create(waveFile.format, waveFile.data, waveFile.samplerate));
-        } finally {
-            waveFile.dispose();
-        }
-    }
-
-    public int genBuffersFromVorbis(Supplier<InputStream> vorbis) {
-        checkCrossThread();
-        return genBuffers(SoundUtil.readVorbis(vorbis));
-    }
-
-    public int genBuffersFromMp3(Supplier<InputStream> mp3) {
-        checkCrossThread();
-        return genBuffers(SoundUtil.readMp3(mp3));
     }
 
     public int genBuffers(ALBufferData data) {
         checkCrossThread();
         int buffer = AL10.alGenBuffers();
         ErrUtil.checkALError();
+        LUtils.print("genBuffers from " + data);
         if (data instanceof ALBufferData.Short) {
             AL10.alBufferData(buffer, data.getFormat(), ((ALBufferData.Short) data).getData(), data.getSampleRate());
         } else if (data instanceof ALBufferData.Byte) {
@@ -122,30 +119,6 @@ public class SoundPlayer implements AutoCloseable {
         }
         ErrUtil.checkALError();
         return buffer;
-    }
-
-    public PlayingSound play(int buffer, float volume, float pitch, boolean loop) {
-        checkCrossThread();
-        int source = AL10.alGenSources();
-        ErrUtil.checkALError();
-
-        AL10.alSourcei(source, AL10.AL_BUFFER, buffer);
-        AL10.alSourcef(source, AL10.AL_PITCH, pitch);
-        AL10.alSourcef(source, AL10.AL_GAIN, volume);
-        AL10.alSource3f(source, AL10.AL_POSITION, 0, 0, 0);
-        AL10.alSource3f(source, AL10.AL_VELOCITY, 0, 0, 0);
-        AL10.alSourcei(source, AL10.AL_LOOPING, loop ? AL10.AL_TRUE : AL10.AL_FALSE);
-        ErrUtil.checkALError();
-
-        AL10.alListener3f(AL10.AL_POSITION, 0, 0, 0);
-        AL10.alListener3f(AL10.AL_VELOCITY, 0, 0, 0);
-        FloatBuffer buf = BufferUtils.createFloatBuffer(6);
-        buf.put(new float[] { 0, 0, -1, 0, 1, 0 });
-        buf.flip();
-        AL10.alListenerfv(AL10.AL_ORIENTATION, buf);
-
-        AL10.alSourcePlay(source);
-        return new PlayingSound(source);
     }
 
     @Override
