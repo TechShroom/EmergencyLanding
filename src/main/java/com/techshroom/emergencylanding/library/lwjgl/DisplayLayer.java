@@ -32,8 +32,8 @@ import static org.lwjgl.nanovg.NanoVG.nvgEndFrame;
 import static org.lwjgl.nanovg.NanoVGGL3.NVG_ANTIALIAS;
 import static org.lwjgl.nanovg.NanoVGGL3.NVG_DEBUG;
 import static org.lwjgl.nanovg.NanoVGGL3.NVG_STENCIL_STROKES;
-import static org.lwjgl.nanovg.NanoVGGL3.nvgCreateGL3;
-import static org.lwjgl.nanovg.NanoVGGL3.nvgDeleteGL3;
+import static org.lwjgl.nanovg.NanoVGGL3.nvgCreate;
+import static org.lwjgl.nanovg.NanoVGGL3.nvgDelete;
 
 import java.lang.instrument.IllegalClassFormatException;
 import java.nio.IntBuffer;
@@ -249,7 +249,7 @@ public class DisplayLayer {
         if (Boolean.getBoolean(LUtils.SHORT_LIB_NAME + ".nvg.debug")) {
             flags |= NVG_DEBUG;
         }
-        this.nvgHandle = nvgCreateGL3(flags);
+        this.nvgHandle = nvgCreate(flags);
         GLData.notifyOnGLError(currentMethodName);
         main.init(this, args);
         GLData.notifyOnGLError(currentMethodName);
@@ -294,7 +294,7 @@ public class DisplayLayer {
 
     public void destroy() {
         this.dbgCb.free();
-        nvgDeleteGL3(this.nvgHandle);
+        nvgDelete(this.nvgHandle);
         GLFW.glfwDestroyWindow(this.window);
     }
 
