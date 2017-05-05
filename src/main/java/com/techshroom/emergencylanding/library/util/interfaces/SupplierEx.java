@@ -22,45 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.techshroom.emergencylanding.library.sound;
+package com.techshroom.emergencylanding.library.util.interfaces;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import java.util.function.Supplier;
 
-import com.google.auto.value.AutoValue;
+/**
+ * Variant of {@link Supplier} that can throw exceptions.
+ * 
+ * @param <R>
+ *            - The return type
+ * @param <E>
+ *            - The exception type
+ */
+@FunctionalInterface
+public interface SupplierEx<R, E extends Exception> {
 
-public interface ALBufferData {
-
-    public static Short create(int format, ShortBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Short(format, sampleRate, data);
-    }
-
-    public static Byte create(int format, ByteBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Byte(format, sampleRate, data);
-    }
-
-    @AutoValue
-    abstract class Short implements ALBufferData {
-
-        public abstract ShortBuffer getData();
-
-        Short() {
-        }
-
-    }
-
-    @AutoValue
-    abstract class Byte implements ALBufferData {
-
-        public abstract ByteBuffer getData();
-
-        Byte() {
-        }
-
-    }
-
-    int getFormat();
-
-    int getSampleRate();
+    /**
+     * Return the value created by the supplier.
+     * 
+     * @return the created value
+     * @throws E
+     *             if an error occurs
+     */
+    R get() throws E;
 
 }

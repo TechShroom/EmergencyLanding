@@ -63,18 +63,17 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 
 import com.flowpowered.math.matrix.Matrix4f;
+import com.google.common.io.Resources;
 import com.techshroom.emergencylanding.library.exceptions.lwjgl.OpenGLException;
 import com.techshroom.emergencylanding.library.util.LUtils;
 import com.techshroom.emergencylanding.library.util.Maths;
@@ -109,6 +108,12 @@ public class GLData {
     public static void unload() {
         // glUseProgram(NONE); // generates INVALID OPERATION, may be needed
         // however?
+        try {
+            notifyOnGLError("preUnload");
+        } catch (OpenGLException ogle) {
+            System.err.println("Warning: OGLE in something prior to unload:");
+            ogle.printStackTrace();
+        }
         unbindVAO();
         try {
             notifyOnGLError("unload");
@@ -127,7 +132,7 @@ public class GLData {
         glBindVertexArray(NONE);
         notifyOnGLError("unbindVAO");
     }
-    
+
     public static void initOpenGL(long window) {
         GLData.resizedRefresh(window);
         init();
@@ -186,10 +191,8 @@ public class GLData {
     }
 
     private static void addVertexAndFragmentShaders() {
-        shaders.add(loadShader(LUtils.getELTop() + "/shaders/vertex.glsl".replace('/', File.separatorChar),
-                GL_VERTEX_SHADER));
-        shaders.add(loadShader(LUtils.getELTop() + "/shaders/texture.glsl".replace('/', File.separatorChar),
-                GL_FRAGMENT_SHADER));
+        shaders.add(loadShader("shaders/vertex.glsl", GL_VERTEX_SHADER));
+        shaders.add(loadShader("shaders/texture.glsl", GL_FRAGMENT_SHADER));
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
@@ -220,19 +223,17 @@ public class GLData {
         notifyOnGLError(StackTraceInfo.getCurrentMethodName());
     }
 
-    public static int loadShader(String filename, int type) {
-        StringBuilder shaderSource = new StringBuilder();
+    public static int loadShader(String resource, int type) {
+        String shaderSource;
         int shaderID = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                shaderSource.append(line).append("\n");
-            }
+        try {
+            shaderSource = Resources.toString(Resources.getResource(resource), StandardCharsets.UTF_8);
         } catch (IOException e) {
             LUtils.print("Could not read file.");
             e.printStackTrace();
             System.exit(-1);
+            return 0;
         }
 
         shaderID = glCreateShader(type);

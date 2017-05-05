@@ -32,8 +32,6 @@ import static org.lwjgl.nanovg.NanoVG.nvgTextBox;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import org.lwjgl.system.MemoryUtil;
-
 import com.flowpowered.math.vector.Vector2f;
 import com.google.common.cache.RemovalNotification;
 import com.google.common.cache.Weigher;
@@ -92,7 +90,7 @@ public class StringRenderer {
     public void renderString(String string, Vector2f position) {
         nvgFontFaceId(this.nvgHandle, this.fontMem);
         nvgFontSize(this.nvgHandle, this.data.getFontSize());
-        nvgTextBox(this.nvgHandle, position.getX(), position.getY(), 1e5f, string, MemoryUtil.NULL);
+        nvgTextBox(this.nvgHandle, position.getX(), position.getY(), 1e5f, string);
     }
 
 }

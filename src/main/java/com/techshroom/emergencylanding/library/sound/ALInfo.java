@@ -24,43 +24,20 @@
  */
 package com.techshroom.emergencylanding.library.sound;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
-
 import com.google.auto.value.AutoValue;
+import com.techshroom.emergencylanding.library.util.interfaces.InputStreamSupplier;
 
-public interface ALBufferData {
+@AutoValue
+public abstract class ALInfo {
 
-    public static Short create(int format, ShortBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Short(format, sampleRate, data);
+    public static ALInfo create(int format, int sampleRate, InputStreamSupplier stream) {
+        return new AutoValue_ALInfo(format, sampleRate, stream);
     }
 
-    public static Byte create(int format, ByteBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Byte(format, sampleRate, data);
-    }
+    public abstract int getFormat();
 
-    @AutoValue
-    abstract class Short implements ALBufferData {
+    public abstract int getSampleRate();
 
-        public abstract ShortBuffer getData();
-
-        Short() {
-        }
-
-    }
-
-    @AutoValue
-    abstract class Byte implements ALBufferData {
-
-        public abstract ByteBuffer getData();
-
-        Byte() {
-        }
-
-    }
-
-    int getFormat();
-
-    int getSampleRate();
+    public abstract InputStreamSupplier getStream();
 
 }

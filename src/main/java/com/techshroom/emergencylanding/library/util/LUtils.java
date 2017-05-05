@@ -38,7 +38,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -53,6 +52,7 @@ import org.lwjgl.system.Platform;
 
 import com.google.common.io.ByteStreams;
 import com.techshroom.emergencylanding.library.util.interfaces.IOConsumer;
+import com.techshroom.emergencylanding.library.util.interfaces.InputStreamSupplier;
 
 public final class LUtils {
 
@@ -176,6 +176,7 @@ public final class LUtils {
             Integer.parseInt(System.getProperty(LOWER_SHORT_LIB_NAME + ".debug.level", "0"));
 
     static {
+        System.err.println("get debug level");
         System.err.println(LOWER_SHORT_LIB_NAME + ".debug.level" + ": " + debugLevel);
     }
 
@@ -472,10 +473,10 @@ public final class LUtils {
          */
     }
 
-    public static ByteBuffer inputStreamToDirectByteBuffer(Supplier<InputStream> streamSupplier) throws IOException {
+    public static ByteBuffer inputStreamToDirectByteBuffer(InputStreamSupplier streamSupplier) throws IOException {
         try (InputStream stream = streamSupplier.get()) {
             byte[] data = ByteStreams.toByteArray(stream);
-            return (ByteBuffer) BufferUtils.createByteBuffer(data.length).put(data).rewind();
+            return (ByteBuffer) BufferUtils.createByteBuffer(data.length).put(data).flip();
         }
     }
 

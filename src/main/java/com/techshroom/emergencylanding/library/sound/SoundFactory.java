@@ -24,43 +24,20 @@
  */
 package com.techshroom.emergencylanding.library.sound;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import java.io.IOException;
 
-import com.google.auto.value.AutoValue;
+import com.techshroom.emergencylanding.library.util.interfaces.InputStreamSupplier;
 
-public interface ALBufferData {
+/**
+ * SoundFactories are ways to create different sounds. A SoundPlayer will let
+ * you create factories.
+ */
+public interface SoundFactory {
 
-    public static Short create(int format, ShortBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Short(format, sampleRate, data);
+    default Sound create(InputStreamSupplier supplier) throws IOException {
+        return create(SoundUtil.createALInfo(supplier));
     }
 
-    public static Byte create(int format, ByteBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Byte(format, sampleRate, data);
-    }
-
-    @AutoValue
-    abstract class Short implements ALBufferData {
-
-        public abstract ShortBuffer getData();
-
-        Short() {
-        }
-
-    }
-
-    @AutoValue
-    abstract class Byte implements ALBufferData {
-
-        public abstract ByteBuffer getData();
-
-        Byte() {
-        }
-
-    }
-
-    int getFormat();
-
-    int getSampleRate();
+    Sound create(ALInfo info) throws IOException;
 
 }

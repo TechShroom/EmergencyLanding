@@ -24,43 +24,51 @@
  */
 package com.techshroom.emergencylanding.library.sound;
 
-import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
+import java.util.Optional;
 
-import com.google.auto.value.AutoValue;
+public interface Sound {
 
-public interface ALBufferData {
+    float getVolume();
 
-    public static Short create(int format, ShortBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Short(format, sampleRate, data);
+    Sound setVolume(float volume);
+
+    float getPitch();
+
+    Sound setPitch(float pitch);
+
+    boolean isLooping();
+
+    Sound setLooping(boolean looping);
+
+    int getTime();
+
+    Sound setTime(int time);
+
+    boolean isPlaying();
+
+    boolean isPaused();
+
+    Sound play();
+
+    Sound pause();
+
+    Sound stop();
+
+    /**
+     * Copies this sound if possible. A copied sound will share the content of
+     * the audio, but none of the characteristics, including play/pause/stop.
+     * 
+     * @return a copy of the sound, if applicable
+     */
+    Optional<? extends Sound> copy();
+
+    /**
+     * Copies this Sound if possible. Throws an exception if not possible.
+     * 
+     * @return the copy
+     */
+    default Sound requiredCopy() {
+        return copy().orElseThrow(() -> new IllegalStateException("A copy is required here."));
     }
-
-    public static Byte create(int format, ByteBuffer data, int sampleRate) {
-        return new AutoValue_ALBufferData_Byte(format, sampleRate, data);
-    }
-
-    @AutoValue
-    abstract class Short implements ALBufferData {
-
-        public abstract ShortBuffer getData();
-
-        Short() {
-        }
-
-    }
-
-    @AutoValue
-    abstract class Byte implements ALBufferData {
-
-        public abstract ByteBuffer getData();
-
-        Byte() {
-        }
-
-    }
-
-    int getFormat();
-
-    int getSampleRate();
 
 }

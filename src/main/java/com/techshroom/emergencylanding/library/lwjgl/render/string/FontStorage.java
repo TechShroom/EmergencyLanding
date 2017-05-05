@@ -25,11 +25,9 @@
 package com.techshroom.emergencylanding.library.lwjgl.render.string;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Throwables;
@@ -38,6 +36,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableSet;
 import com.techshroom.emergencylanding.library.util.GLFWTicker;
+import com.techshroom.emergencylanding.library.util.interfaces.InputStreamSupplier;
 
 public final class FontStorage {
 
@@ -63,31 +62,30 @@ public final class FontStorage {
         }
 
         public static FontRenderingData
-                create(String fontId, Supplier<InputStream> fontData, int fontSize, Style... style) {
+                create(String fontId, InputStreamSupplier fontData, int fontSize, Style... style) {
             return create(fontId, fontData, fontSize, ImmutableSet.copyOf(style));
         }
 
-        public static FontRenderingData
-                create(String fontId, Supplier<InputStream> fontData, int fontSize, Style style) {
+        public static FontRenderingData create(String fontId, InputStreamSupplier fontData, int fontSize, Style style) {
             return create(fontId, fontData, fontSize, ImmutableSet.of(style));
         }
 
         public static FontRenderingData
-                create(String fontId, Supplier<InputStream> fontData, int fontSize, Style styleA, Style styleB) {
+                create(String fontId, InputStreamSupplier fontData, int fontSize, Style styleA, Style styleB) {
             return create(fontId, fontData, fontSize, ImmutableSet.of(styleA, styleB));
         }
 
-        public static FontRenderingData create(String fontId, Supplier<InputStream> fontData, int fontSize) {
+        public static FontRenderingData create(String fontId, InputStreamSupplier fontData, int fontSize) {
             return create(fontId, fontData, fontSize, ImmutableSet.of());
         }
 
         public static FontRenderingData
-                create(String fontId, Supplier<InputStream> fontData, int fontSize, Collection<Style> style) {
+                create(String fontId, InputStreamSupplier fontData, int fontSize, Collection<Style> style) {
             return new AutoValue_FontStorage_FontRenderingData(fontData, ImmutableSet.copyOf(style),
                     fontId + Style.stringify(style), fontSize);
         }
 
-        public abstract Supplier<InputStream> getInputStream();
+        public abstract InputStreamSupplier getInputStream();
 
         public abstract ImmutableSet<Style> getStyle();
 
