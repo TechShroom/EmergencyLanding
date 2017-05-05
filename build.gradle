@@ -46,7 +46,7 @@ repositories {
     }
 }
 
-ext.lwjglVersion = '3.0.1-SNAPSHOT'
+ext.lwjglVersion = '3.1.2-SNAPSHOT'
 
 def addLWJGL(ext, natives) {
     // "lwjgl" or "lwjgl-ext"
